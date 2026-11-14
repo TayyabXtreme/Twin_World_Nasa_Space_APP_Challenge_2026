@@ -3,6 +3,8 @@ import { BookOpen, Compass, Database, Gamepad2, MoonStar, Scale, ScanSearch, typ
 export interface NavItem {
   href: string;
   label: string;
+  /** Shorter label for the phone tab bar; falls back to label. */
+  short?: string;
   /** Tooltip heading in the rail; falls back to label. */
   title?: string;
   hint: string;
@@ -33,5 +35,5 @@ export const NAV_ITEMS: NavItem[] = [
     hint: "Five missions: spot the world, scout a base, land, drive and launch",
     icon: Gamepad2,
   },
-  { href: "/data", label: "Data Lab", hint: "Every NASA, CSA, ESA and JAXA dataset we use", icon: Database },
+  { href: "/data", label: "Data Lab", short: "Data", hint: "Every NASA, CSA, ESA and JAXA dataset we use", icon: Database },
 ];
