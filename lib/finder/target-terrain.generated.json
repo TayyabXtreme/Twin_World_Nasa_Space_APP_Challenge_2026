@@ -1,0 +1,77 @@
+{
+ "mars-jezero": {
+  "elev": -2356,
+  "slope": 0.59,
+  "source": "MGS MOLA MEGDR 16 ppd (height above the areoid)"
+ },
+ "mars-gale": {
+  "elev": -4117,
+  "slope": 0.61,
+  "source": "MGS MOLA MEGDR 16 ppd (height above the areoid)"
+ },
+ "mars-utopia-viking2": {
+  "elev": -4508,
+  "slope": 0.08,
+  "source": "MGS MOLA MEGDR 16 ppd (height above the areoid)"
+ },
+ "mars-arcadia": {
+  "elev": -4038,
+  "slope": 0.03,
+  "source": "MGS MOLA MEGDR 16 ppd (height above the areoid)"
+ },
+ "mars-mawrth-vallis": {
+  "elev": -2578,
+  "slope": 0.32,
+  "source": "MGS MOLA MEGDR 16 ppd (height above the areoid)"
+ },
+ "mars-hellas": {
+  "elev": -6139,
+  "slope": 0.64,
+  "source": "MGS MOLA MEGDR 16 ppd (height above the areoid)"
+ },
+ "mars-phoenix": {
+  "elev": -4103,
+  "slope": 0.17,
+  "source": "MGS MOLA MEGDR 16 ppd (height above the areoid)"
+ },
+ "moon-shackleton-rim": {
+  "elev": 102,
+  "slope": 0.68,
+  "source": "LRO LOLA south-polar DEM 240 m (height above the 1,737.4 km reference sphere)"
+ },
+ "moon-malapert-massif": {
+  "elev": -1443,
+  "slope": 4.91,
+  "source": "LRO LOLA south-polar DEM 240 m (height above the 1,737.4 km reference sphere)"
+ },
+ "moon-haworth": {
+  "elev": -3009,
+  "slope": 3.37,
+  "source": "LRO LOLA south-polar DEM 240 m (height above the 1,737.4 km reference sphere)"
+ },
+ "moon-nobile-rim-1": {
+  "elev": 305,
+  "slope": 5.16,
+  "source": "LRO LOLA south-polar DEM 240 m (height above the 1,737.4 km reference sphere)"
+ },
+ "moon-de-gerlache-rim-2": {
+  "elev": -646,
+  "slope": 1.17,
+  "source": "LRO LOLA south-polar DEM 240 m (height above the 1,737.4 km reference sphere)"
+ },
+ "moon-mons-mouton": {
+  "elev": 5330,
+  "slope": 2.24,
+  "source": "LRO LOLA south-polar DEM 240 m (height above the 1,737.4 km reference sphere)"
+ },
+ "moon-peak-near-cabeus-b": {
+  "elev": -3787,
+  "slope": 0.94,
+  "source": "LRO LOLA south-polar DEM 240 m (height above the 1,737.4 km reference sphere)"
+ },
+ "moon-slater-plain": {
+  "elev": -966,
+  "slope": 1.02,
+  "source": "LRO LOLA south-polar DEM 240 m (height above the 1,737.4 km reference sphere)"
+ }
+}

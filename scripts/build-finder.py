@@ -25,6 +25,8 @@ Outputs (public/data/finder):
                      percentile, absolute values with units and sources
 
 Every uint8 channel: 0 = no data, 1..255 = value. value = offset + (q - 1) * scale (log10 channels say so).
+
+Afterwards run scripts/build-finder-conditions.py for the site-vs-target breakdown (slope, isolation, target terrain).
 """
 
 import json

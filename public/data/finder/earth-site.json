@@ -1,0 +1,26 @@
+{
+ "version": 1,
+ "cells": 354342,
+ "channels": [
+  {
+   "key": "slope",
+   "units": "deg",
+   "log": false,
+   "offset": 0.0,
+   "scale": 0.05905511811023622,
+   "byteOffset": 0,
+   "label": "Regional slope between neighbouring 0.25 deg cells (~28 km baseline)",
+   "source": "JAXA ALOS AW3D30 v3.2 DSM (0.2 deg level), resampled to 0.25 deg"
+  },
+  {
+   "key": "isolation",
+   "units": "km",
+   "log": true,
+   "offset": 0.0,
+   "scale": 0.01456692913385827,
+   "byteOffset": 354342,
+   "label": "Distance to the nearest town, city or research station",
+   "source": "Natural Earth 10m populated places (7,342 places, public domain)"
+  }
+ ]
+}

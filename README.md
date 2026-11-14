@@ -258,8 +258,11 @@ from LOLA and MOLA, and a **cinematic tour**. **Challenge fit:** the map and vis
 <img src="docs/screenshots/finder.webp" alt="Analog Finder: 'Where on Earth is most like Jezero Crater?' with target chips, the 'No Earth site can match these on Mars' panel and the weight controls" width="100%" />
 
 The core of the project. Pick one of 16 Moon or Mars targets, weigh the 7 dimensions, and watch every land cell on
-Earth re-score instantly on a heat map. Top places, the 30 known sites ranked as a sanity check, a per-dimension
-breakdown for any point, a Hand-set ↔ Learned weights switch, and an **Analogue Space** chart from the ML model.
+Earth re-score instantly on a heat map. Top places, the known sites ranked as a sanity check, a **site vs target**
+breakdown of 13 conditions for any point (temperature, range, radiation, slope, sand, pressure, daylight, rain,
+humidity, dust, isolation, elevation, water-formed minerals; climate loads live from **NASA POWER**, soil from
+SoilGrids, with every source shown and the conditions no Earth place can reach flagged), a Hand-set ↔ Learned
+weights switch, and an **Analogue Space** chart from the ML model.
 **Challenge fit:** systematic global search + similarity metric + "what is and isn't analogous".
 
 ### 4. Bases `/bases`
