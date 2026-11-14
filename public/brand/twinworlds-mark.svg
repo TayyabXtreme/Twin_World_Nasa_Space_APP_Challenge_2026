@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="t d">
+  <title id="t">TwinWorlds</title>
+  <desc id="d">Earth and Mars as twin worlds joined by one orbit, with the Moon riding the orbit.</desc>
+  <defs>
+    <radialGradient id="earth" cx="0.36" cy="0.32" r="0.78">
+      <stop offset="0" stop-color="#b7e1ff"/>
+      <stop offset="0.38" stop-color="#4ea6fb"/>
+      <stop offset="1" stop-color="#123a86"/>
+    </radialGradient>
+    <radialGradient id="mars" cx="0.36" cy="0.32" r="0.8">
+      <stop offset="0" stop-color="#ffc19f"/>
+      <stop offset="0.42" stop-color="#e26239"/>
+      <stop offset="1" stop-color="#6e200d"/>
+    </radialGradient>
+    <radialGradient id="moon" cx="0.35" cy="0.3" r="0.8">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#8d97a3"/>
+    </radialGradient>
+    <linearGradient id="night" x1="0.2" y1="0.15" x2="0.95" y2="0.95">
+      <stop offset="0.45" stop-color="#05070d" stop-opacity="0"/>
+      <stop offset="1" stop-color="#05070d" stop-opacity="0.7"/>
+    </linearGradient>
+    <linearGradient id="orbit" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#4cf5de" stop-opacity="0.35"/>
+      <stop offset="0.5" stop-color="#4cf5de"/>
+      <stop offset="1" stop-color="#4cf5de" stop-opacity="0.55"/>
+    </linearGradient>
+    <clipPath id="earthClip"><circle cx="196" cy="270" r="102"/></clipPath>
+    <clipPath id="marsClip"><circle cx="338" cy="196" r="66"/></clipPath>
+  </defs>
+
+  <!-- back half of the orbit (behind both worlds) -->
+  <path d="M447.8 170.6A210 70 -24 0 0 64.2 341.4" fill="none" stroke="#4cf5de" stroke-opacity="0.4" stroke-width="9" stroke-linecap="round"/>
+
+  <!-- Earth -->
+  <circle cx="196" cy="270" r="112" fill="#4ea6fb" fill-opacity="0.14"/>
+  <circle cx="196" cy="270" r="102" fill="url(#earth)"/>
+  <g clip-path="url(#earthClip)" fill="#2f8f6a" fill-opacity="0.55">
+    <path d="M128 214c18-14 44-12 56 2 9 11-2 24 12 34 16 11 8 30-10 32-20 2-24 22-44 20-18-2-30-24-28-48 1-17 4-31 14-40z"/>
+    <path d="M224 196c14-6 34-2 42 10 6 10-6 18 2 28 10 12 2 26-12 24-12-2-16-14-28-16-12-2-20-14-16-28 2-8 6-14 12-18z"/>
+    <path d="M236 316c12-4 26 2 28 14 2 14-12 24-24 20-10-4-16-18-10-28 2-3 4-5 6-6z"/>
+  </g>
+  <circle cx="196" cy="270" r="102" fill="url(#night)"/>
+
+  <!-- Mars -->
+  <circle cx="338" cy="196" r="66" fill="url(#mars)"/>
+  <g clip-path="url(#marsClip)">
+    <path d="M276 204c22 8 46 4 66-6 18-9 38-8 58 2" fill="none" stroke="#7a2611" stroke-opacity="0.55" stroke-width="9" stroke-linecap="round"/>
+    <ellipse cx="338" cy="134" rx="30" ry="9" fill="#fff4ec" fill-opacity="0.8"/>
+    <circle cx="316" cy="236" r="9" fill="#7a2611" fill-opacity="0.35"/>
+  </g>
+  <circle cx="338" cy="196" r="66" fill="url(#night)"/>
+
+  <!-- front half of the orbit (in front of Earth) -->
+  <path d="M447.8 170.6A210 70 -24 0 1 64.2 341.4" fill="none" stroke="url(#orbit)" stroke-width="13" stroke-linecap="round"/>
+
+  <!-- the Moon riding the orbit -->
+  <circle cx="428" cy="224.5" r="19" fill="url(#moon)"/>
+
+  <!-- star glints -->
+  <path d="M112 92l6 18 18 6-18 6-6 18-6-18-18-6 18-6z" fill="#4cf5de"/>
+  <circle cx="418" cy="402" r="6" fill="#cbd2d9" fill-opacity="0.8"/>
+  <circle cx="452" cy="96" r="4" fill="#cbd2d9" fill-opacity="0.6"/>
+</svg>
