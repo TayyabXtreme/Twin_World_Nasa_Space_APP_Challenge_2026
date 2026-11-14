@@ -13,14 +13,44 @@ const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "sw
 const spaceGrotesk = Space_Grotesk({ variable: "--font-space-grotesk", subsets: ["latin"], display: "swap" });
 const jetbrains = JetBrains_Mono({ variable: "--font-jetbrains", subsets: ["latin"], display: "swap" });
 
+const SITE_URL = "https://nasa-space-app-hazel-three.vercel.app";
+const DESCRIPTION =
+  "Fly between Earth, the Moon and Mars, compare Earth places with lunar and Martian sites, and test mission suitability, all built on NASA data.";
+
+// Icons and share images come from the file conventions in app/: favicon.ico, icon.svg, apple-icon.png,
+// opengraph-image.png and twitter-image.png (all drawn from public/brand/twinworlds-mark.svg).
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "TwinWorlds: Earth analogues for the Moon and Mars",
     template: "%s · TwinWorlds",
   },
-  description:
-    "Fly between Earth, the Moon and Mars, compare Earth places with lunar and Martian sites, and test mission suitability, all built on NASA data.",
+  description: DESCRIPTION,
   applicationName: "TwinWorlds",
+  keywords: [
+    "NASA Space Apps Challenge 2026",
+    "planetary analogues",
+    "Moon base",
+    "Mars landing sites",
+    "Artemis",
+    "LRO",
+    "MODIS",
+    "Earth observation",
+  ],
+  category: "science",
+  openGraph: {
+    type: "website",
+    siteName: "TwinWorlds",
+    url: "/",
+    title: "TwinWorlds: Earth analogues for the Moon and Mars",
+    description: DESCRIPTION,
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TwinWorlds: Earth analogues for the Moon and Mars",
+    description: DESCRIPTION,
+  },
 };
 
 export const viewport: Viewport = {

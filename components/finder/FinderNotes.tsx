@@ -8,13 +8,9 @@ const STEPS: { title: string; body: React.ReactNode; formula?: string }[] = [
     body: "0–100 %, falling off along a bell curve as the Earth value moves away from the target. Values Earth can never reach (−222 °C) are compared by rank within each world.",
   },
   {
-    title: "Weighted score",
-    body: "Move the weights and every site re-scores instantly.",
-    formula: "Σ(weight × similarity) ÷ Σ weight",
-  },
-  {
-    title: "Confidence",
-    body: "The share of the score resting on direct measurements. Proxies and gaps at the site (missing months, polar night, no albedo) count less.",
+    resource: "NASA LRO (Diviner, LOLA)",
+    url: "https://pds-geosciences.wustl.edu/missions/lro/",
+    items: ["Diviner polar resource product: temperatures and ice stability", "LOLA: lunar terrain relief", "Diviner: regolith thermal inertia"],
   },
 ];
 

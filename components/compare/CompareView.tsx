@@ -11,7 +11,6 @@ import { Conditions } from "./Conditions";
 import { MissionScore } from "@/components/score/MissionScore";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger } from "@/components/ui/select";
 import { playCue } from "@/lib/audio";
-import { ENVIRONMENT } from "@/lib/data/environment";
 import landing from "@/lib/data/landing.generated.json";
 import { hardwareForPair } from "@/lib/data/hardware";
 import { SITES, siteById } from "@/lib/data/sites";
@@ -678,6 +677,64 @@ function AnalogFinderCard({ b }: { b: Site }) {
   );
 }
 
+/* ---------- Data behind the page ---------- */
+
+/** One resource from the challenge's own list, and what it gave this page. */
+interface DataRow {
+  resource: string;
+  url: string;
+  items: string[];
+}
+
+/** The open data behind this pair, limited to the challenge's resource list (NASA and its partner agencies). */
+function dataUsed(a: Site, b: Site): DataRow[] {
+  const rows: DataRow[] = [
+    {
+      resource: "NASA Earthdata Search",
+      url: "https://search.earthdata.nasa.gov/",
+      items: ["MODIS MOD11C3, MOD13C2 and MCD43C3: the temperature, vegetation and albedo behind the Analog Finder card"],
+    },
+    {
+      resource: "NASA Worldview / GIBS",
+      url: "https://worldview.earthdata.nasa.gov/",
+      items: ["MODIS and HLS satellite views of Earth places", "Blue Marble imagery on the Earth globe"],
+    },
+  ];
+  if (a.image?.credit.includes("Copernicus")) {
+    rows.push({ resource: "ESA Copernicus Data Space Ecosystem", url: "https://dataspace.copernicus.eu/", items: [`Sentinel-2 view of ${a.name}`] });
+  }
+  rows.push(
+    b.world === "moon"
+      ? {
+          resource: "NASA Planetary Data System",
+          url: "https://pds.nasa.gov/",
+          items: [`Diviner, LOLA and Mini-RF data for ${b.name}, archived at PDS Geosciences`],
+        }
+      : {
+          resource: "NASA Planetary Data System",
+          url: "https://pds.nasa.gov/",
+          items: [`MGS TES thermal inertia and MGS MOLA terrain for ${b.name}`, "Mars Odyssey GRS and neutron spectrometer: water and elements"],
+        },
+    {
+      resource: "NASA Lunar Reconnaissance Orbiter",
+      url: "https://pds-geosciences.wustl.edu/missions/lro/",
+      items: [...(b.world === "moon" ? [`LOLA elevation and slope for ${b.name}`] : []), "Mini-RF radar in Radar Twins"],
+    },
+  );
+  if (b.world === "moon") {
+    rows.push({
+      resource: "NASA LRO Diviner Lunar Data",
+      url: "https://pds-geosciences.wustl.edu/missions/lro/diviner.htm",
+      items: ["Polar resource product: temperatures and ice stability", "Rock abundance and regolith thermal inertia"],
+    });
+  }
+  rows.push(
+    { resource: "CSA RADARSAT Constellation Mission", url: "https://donnees-data.asc-csa.gc.ca/en/dataset/rcm", items: ["Canadian Arctic radar in Radar Twins"] },
+    { resource: "CSA SAR Python Tutorial", url: "https://github.com/asc-csa/Synthetic_Aperture_Radar_Tutorial", items: ["How we read the RCM GeoTIFF bands"] },
+  );
+  return rows;
+}
+
 /* ---------- Page ---------- */
 
 export function CompareView() {
@@ -723,14 +780,7 @@ export function CompareView() {
 
   const twin = TWINS.find((t) => t.earthId === a.id && t.otherId === b.id);
   const overlap = tagOverlap(a.tags, b.tags);
-  const sourceIds = [
-    ...new Set([
-      ...(twin?.sourceIds ?? []),
-      ...a.sourceIds,
-      ...b.sourceIds,
-      ...ENVIRONMENT.flatMap((r) => r.sourceIds),
-    ]),
-  ];
+  const data = dataUsed(a, b);
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -769,25 +819,23 @@ export function CompareView() {
 
       <section className="mt-20 border-t border-white/[0.07] pt-8" aria-labelledby="compare-sources">
         <h2 id="compare-sources" className="font-heading text-lg font-semibold">
-          Sources
+          Data behind this page
         </h2>
-        <ul className="mt-4 grid gap-x-10 gap-y-2 text-sm sm:grid-cols-2">
-          {sourceIds.map((id) => {
-            const s = sourceById(id);
-            return s ? (
-              <li key={id}>
-                <a
-                  href={s.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-start gap-1.5 text-foreground/85 hover:text-primary"
-                >
-                  {s.title} <span className="text-muted-foreground">· {s.org}</span>
-                  <ExternalLink className="mt-1 size-3 shrink-0 opacity-60" aria-hidden />
-                </a>
-              </li>
-            ) : null;
-          })}
+        <p className="mt-1 text-sm text-muted-foreground">Only open data from the challenge&apos;s resource list: NASA and its partner agencies.</p>
+        <ul className="mt-4 grid gap-x-10 gap-y-4 text-sm sm:grid-cols-2">
+          {data.map((r) => (
+            <li key={r.resource}>
+              <a href={r.url} target="_blank" rel="noreferrer" className="inline-flex items-start gap-1.5 font-medium text-foreground hover:text-primary">
+                {r.resource}
+                <ExternalLink className="mt-1 size-3 shrink-0 opacity-60" aria-hidden />
+              </a>
+              <ul className="mt-1 space-y-0.5 text-[13px] text-muted-foreground">
+                {r.items.map((i) => (
+                  <li key={i}>· {i}</li>
+                ))}
+              </ul>
+            </li>
+          ))}
         </ul>
         <div className="mt-8 flex flex-wrap gap-3 text-sm">
           <Link

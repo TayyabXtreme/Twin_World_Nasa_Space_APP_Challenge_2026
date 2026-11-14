@@ -60,6 +60,7 @@ SITES = {
     "earth-ladakh": ("ladakh", "public/photos/sites-earth/ladakh.webp"),
     "earth-pilbara": ("pilbara", "public/photos/sites-earth/pilbara.webp"),
     "earth-wadi-rum": ("wadi-rum", "public/photos/sites-earth/wadi-rum.webp"),
+    "earth-victoria-land": ("victoria-land", "public/photos/sites-earth/victoria-land.webp"),
 }
 
 # Views that would mislead: Sentinel-2 tiles that are mostly snow glare or no-data wedges, and July MODIS

@@ -25,6 +25,7 @@ const GROUP: Record<SiteGroup, { label: string; cls: string }> = {
   agency: { label: "Space agency site", cls: "bg-ok/15 text-ok" },
   pakistan: { label: "Pakistan", cls: "bg-primary/15 text-primary" },
   known: { label: "Known analogue", cls: "bg-white/[0.06] text-muted-foreground" },
+  finder: { label: "Finder pick", cls: "bg-[oklch(0.76_0.15_305)]/15 text-[oklch(0.82_0.12_305)]" },
 };
 
 type Sort = "score" | "confidence" | "name";
