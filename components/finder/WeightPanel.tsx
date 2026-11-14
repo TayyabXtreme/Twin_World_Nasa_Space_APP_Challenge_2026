@@ -38,6 +38,7 @@ function ask(d: DimId, target: Target) {
 export interface LearnedWeights {
   weights: Record<string, number>;
   recall5: { learnedLOPO: number; learnedLOSO: number; hand: number; equal: number };
+  pairs?: unknown[];
 }
 
 export function WeightPanel({
@@ -62,14 +63,9 @@ export function WeightPanel({
   const shown = focus ?? DIM_IDS.find((d) => target.dims[d]) ?? DIM_IDS[0];
   const shownMode = target.dims[shown]?.mode;
   return (
-    <section
-      aria-labelledby="weights-title"
-      className="rounded-[1.6rem] bg-white/[0.03] p-4 ring-1 ring-white/10 sm:p-5"
-    >
+    <section aria-label="Factor weights">
       <div className="flex items-center justify-between gap-3">
-        <h2 id="weights-title" className="font-heading text-base font-semibold">
-          What matters
-        </h2>
+        <p className="text-[13px] text-muted-foreground">Weight set</p>
         <button
           type="button"
           onClick={onReset}
@@ -79,32 +75,70 @@ export function WeightPanel({
           Reset
         </button>
       </div>
-      <p className="mt-1 text-xs text-muted-foreground">Drag to weigh each dimension. The map re-scores instantly.</p>
       {learned && (
-        <div className="mt-3">
-          <div role="group" aria-label="Weight set" className="flex rounded-xl bg-white/[0.05] p-0.5 ring-1 ring-white/10">
-            {(["default", "learned"] as const).map((m) => (
-              <button
-                key={m}
-                type="button"
-                aria-pressed={mode === m}
-                onClick={() => onMode(m)}
-                className={cn("flex-1 rounded-lg px-2 py-1 text-xs transition-colors duration-150", mode === m ? "bg-white/12 text-foreground" : "text-muted-foreground hover:text-foreground")}
-              >
-                {m === "default" ? "Hand-set" : "Learned"}
-              </button>
-            ))}
-          </div>
-          <p className="mt-1.5 text-[11px] leading-snug text-muted-foreground">
-            Test: held-out NASA analogue in Earth&apos;s top 5 %: learned <span className="hud text-foreground">{Math.round(learned.recall5.learnedLOPO * 100)} %</span> · hand-set{" "}
-            <span className="hud text-foreground">{Math.round(learned.recall5.hand * 100)} %</span> ({Math.round(learned.recall5.learnedLOSO * 100)} % leave-one-site-out).{" "}
+        <div
+          role="group"
+          aria-label="Weight set"
+          className="mt-2 flex rounded-xl bg-white/[0.05] p-0.5 ring-1 ring-white/10"
+        >
+          {(["default", "learned"] as const).map((m) => (
+            <button
+              key={m}
+              type="button"
+              aria-pressed={mode === m}
+              onClick={() => onMode(m)}
+              className={cn(
+                "flex-1 rounded-lg px-2 py-1.5 text-[13px] transition-colors duration-150",
+                mode === m ? "bg-white/12 text-foreground" : "text-muted-foreground hover:text-foreground",
+              )}
+            >
+              {m === "default" ? "Hand-set" : "Learned"}
+            </button>
+          ))}
+        </div>
+      )}
+      <div className="mt-3 rounded-xl bg-white/[0.035] p-3.5 ring-1 ring-white/[0.08]">
+        {mode === "learned" && learned ? (
+          <>
+            <p className="text-[13px] font-semibold">Learned weights</p>
+            <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">
+              Fitted by a small model to {learned.pairs?.length ?? 23} places NASA already uses as analogues (Atacama
+              for Jezero, McMurdo for Phoenix…), so those sites rank as high as possible. One set for both worlds. With
+              so few examples it nearly ignores some factors, such as loose vs rocky ground.
+            </p>
+          </>
+        ) : mode === "custom" ? (
+          <>
+            <p className="text-[13px] font-semibold">Your own weights</p>
+            <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">
+              You moved a slider, so the ranking now follows your priorities. Reset returns to the hand-set weights.
+            </p>
+          </>
+        ) : (
+          <>
+            <p className="text-[13px] font-semibold">Hand-set weights (default)</p>
+            <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">
+              Chosen by the TwinWorlds team from planetary science, with a separate set per world:{" "}
+              {target.world === "moon"
+                ? "for Moon bases, extreme cold and ice count most."
+                : "for Mars sites, barren ground, loose vs rocky soil and frozen ground count most."}
+            </p>
+          </>
+        )}
+        {learned && (
+          <p className="mt-2.5 border-t border-white/[0.07] pt-2.5 text-[12px] leading-snug text-muted-foreground">
+            Test with one NASA analogue hidden: it lands in Earth&apos;s top 5 %{" "}
+            <span className="hud text-foreground">{Math.round(learned.recall5.hand * 100)} %</span> of the time with
+            hand-set weights and{" "}
+            <span className="hud text-foreground">{Math.round(learned.recall5.learnedLOPO * 100)} %</span> with learned
+            ones.{" "}
             <Link href="/models#learned-weights" className="text-primary hover:underline">
               Model card
             </Link>
           </p>
-        </div>
-      )}
-      <ul className="mt-4 space-y-3" onMouseLeave={() => setFocus(null)}>
+        )}
+      </div>
+      <ul className="mt-6 space-y-4" onMouseLeave={() => setFocus(null)}>
         {DIM_IDS.map((d) => {
           const has = Boolean(target.dims[d]);
           const w = weights[d];

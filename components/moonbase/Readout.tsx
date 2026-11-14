@@ -112,7 +112,9 @@ export function Readout({
                   </span>
                 </>
               ) : (
-                <span className="font-sans text-muted-foreground">Point at the map to read every layer here</span>
+                <span className="font-sans text-muted-foreground">
+                  Point at or tap the map to read every layer at that spot
+                </span>
               )}
             </p>
             {near && (
@@ -135,50 +137,52 @@ export function Readout({
         )}
       </div>
 
-      <dl className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-        <div className="rounded-xl bg-primary/[0.08] px-3 py-2 ring-1 ring-primary/25">
-          <dt className="truncate text-[11px] text-muted-foreground">Base suitability</dt>
-          <dd className="mt-0.5 hud text-sm font-semibold text-primary">
-            {s === null ? "—" : `${Math.round(s * 100)} / 100`}
-          </dd>
-          <dd className="truncate text-[10px] text-muted-foreground">your weights</dd>
-        </div>
-        {layers.map((l) => {
-          const g = grids[l.id];
-          const ready = l.status === "ready";
-          const v = p && g ? valueAtXY(g, p.x, p.y) : null;
-          const eg = grids[errKey(l.id)];
-          const err = p && eg && v !== null ? formatError(l, valueAtXY(eg, p.x, p.y)) : "";
-          const text = !ready
-            ? (STATUS_SHORT[l.status] ?? l.status)
-            : !p
-              ? "—"
-              : !g
-                ? "loading…"
-                : formatValue(l, v) + err;
-          return (
-            <div
-              key={l.id}
-              className="rounded-xl bg-white/[0.03] px-3 py-2 ring-1 ring-white/[0.06]"
-              title={`${l.label}: ${l.dataset.name}`}
-            >
-              <dt className="truncate text-[11px] text-muted-foreground">{l.label}</dt>
-              <dd
-                className={cn(
-                  "mt-0.5 truncate hud text-sm",
-                  ready ? "text-foreground" : "text-[12px] text-warn/90",
-                  ready && v === null && p && g && "text-muted-foreground",
-                )}
+      {p && (
+        <dl className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+          <div className="rounded-xl bg-primary/[0.08] px-3 py-2 ring-1 ring-primary/25">
+            <dt className="truncate text-[11px] text-muted-foreground">Base suitability</dt>
+            <dd className="mt-0.5 hud text-sm font-semibold text-primary">
+              {s === null ? "—" : `${Math.round(s * 100)} / 100`}
+            </dd>
+            <dd className="truncate text-[10px] text-muted-foreground">your weights</dd>
+          </div>
+          {layers.map((l) => {
+            const g = grids[l.id];
+            const ready = l.status === "ready";
+            const v = p && g ? valueAtXY(g, p.x, p.y) : null;
+            const eg = grids[errKey(l.id)];
+            const err = p && eg && v !== null ? formatError(l, valueAtXY(eg, p.x, p.y)) : "";
+            const text = !ready
+              ? (STATUS_SHORT[l.status] ?? l.status)
+              : !p
+                ? "—"
+                : !g
+                  ? "loading…"
+                  : formatValue(l, v) + err;
+            return (
+              <div
+                key={l.id}
+                className="rounded-xl bg-white/[0.03] px-3 py-2 ring-1 ring-white/[0.06]"
+                title={`${l.label}: ${l.dataset.name}`}
               >
-                {text}
-              </dd>
-              <dd className="truncate text-[10px] text-muted-foreground">
-                {l.dataset.name.split(" (")[0].replace(/^LRO /, "")}
-              </dd>
-            </div>
-          );
-        })}
-      </dl>
+                <dt className="truncate text-[11px] text-muted-foreground">{l.label}</dt>
+                <dd
+                  className={cn(
+                    "mt-0.5 truncate hud text-sm",
+                    ready ? "text-foreground" : "text-[12px] text-warn/90",
+                    ready && v === null && p && g && "text-muted-foreground",
+                  )}
+                >
+                  {text}
+                </dd>
+                <dd className="truncate text-[10px] text-muted-foreground">
+                  {l.dataset.name.split(" (")[0].replace(/^LRO /, "")}
+                </dd>
+              </div>
+            );
+          })}
+        </dl>
+      )}
     </section>
   );
 }

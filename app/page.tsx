@@ -2,14 +2,11 @@ import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { AgencyStrip } from "@/components/landing/AgencyStrip";
 import { FinderShowcase } from "@/components/landing/FinderShowcase";
-import { HardwareShowcase } from "@/components/landing/HardwareShowcase";
 import { JourneyTrack } from "@/components/landing/JourneyTrack";
-import { MoonShowcase } from "@/components/landing/MoonShowcase";
 import { Reveal, SlideWords } from "@/components/landing/Reveal";
 import { SectionDots } from "@/components/landing/SectionDots";
 import { SpaceHero } from "@/components/landing/SpaceHero";
 import { StatsBand } from "@/components/landing/StatsBand";
-import { TwinPairs } from "@/components/landing/TwinPairs";
 import { PageTransition } from "@/components/motion/PageTransition";
 import { NAV_ITEMS } from "@/components/shell/nav";
 import "./space.css";
@@ -24,9 +21,6 @@ export default function Home() {
           <StatsBand />
           <JourneyTrack />
           <FinderShowcase />
-          <TwinPairs />
-          <MoonShowcase />
-          <HardwareShowcase />
           <AgencyStrip />
 
           {/* Closing call to action */}
@@ -44,15 +38,16 @@ export default function Home() {
                 <SlideWords text="Find the place on Earth that NASA hasn’t found yet." />
               </h2>
               <p className="relative mx-auto mt-5 max-w-[52ch] text-lg leading-relaxed text-[var(--ink-dim)]">
-                Choose a Moon base or a Mars site, set what matters, and let real mission data rank the planet.
+                Spin Earth, the Moon and Mars side by side, open real NASA data layers, and see which places echo each
+                other.
               </p>
               <div className="relative mt-9 flex flex-wrap justify-center gap-3">
                 <Link
-                  href="/finder"
+                  href="/explore/earth"
                   transitionTypes={["warp"]}
                   className="group inline-flex items-center gap-2 rounded-2xl bg-[var(--accent)] px-6 py-3.5 font-medium text-[oklch(0.15_0.02_260)] no-underline shadow-[0_0_40px_-8px_var(--accent)] transition-transform duration-200 ease-(--ease-out) active:scale-[0.98]"
                 >
-                  Open the Analog Finder
+                  Start exploring
                   <ArrowRight
                     className="size-4 transition-transform duration-200 group-hover:translate-x-1"
                     aria-hidden

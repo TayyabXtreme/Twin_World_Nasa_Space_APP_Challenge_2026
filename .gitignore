@@ -61,3 +61,8 @@ next-env.d.ts
 !/assets-raw/nasa/MANUAL-DOWNLOADS.md
 !/assets-raw/nasa/site-samples.json
 ml/__pycache__/
+
+# AI agent skills (installed locally per developer, not part of the app)
+.agents/
+.claude/skills/
+skills-lock.json

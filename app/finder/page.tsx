@@ -12,7 +12,7 @@ export default function FinderPage() {
   return (
     <PageShell>
       {/* The chosen target lives in the URL (?t=), which is request data, so it streams inside Suspense. */}
-      <Suspense fallback={<p className="mx-auto max-w-7xl text-muted-foreground">Loading the Analog Finder…</p>}>
+      <Suspense fallback={<p className="mx-auto max-w-[1680px] text-muted-foreground">Loading the Analog Finder…</p>}>
         <FinderView />
       </Suspense>
     </PageShell>

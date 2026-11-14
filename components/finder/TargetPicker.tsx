@@ -30,11 +30,11 @@ export function TargetPicker({
     if (first) onPick(first.id);
   };
   return (
-    <div className="mt-7">
+    <div className="mt-6 flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-4">
       <div
         role="tablist"
         aria-label="Target world"
-        className="inline-flex rounded-full bg-white/[0.04] p-1 ring-1 ring-white/10"
+        className="inline-flex shrink-0 self-start rounded-full bg-white/[0.04] p-1 ring-1 ring-white/10 lg:self-auto"
       >
         {(["moon", "mars"] as const).map((w) => (
           <button
@@ -60,9 +60,10 @@ export function TargetPicker({
           </button>
         ))}
       </div>
+      <span className="hidden h-6 w-px shrink-0 bg-white/10 lg:block" aria-hidden />
       <nav
         aria-label={`${world === "moon" ? "Moon" : "Mars"} targets`}
-        className="finder-scroll -mx-4 mt-3 overflow-x-auto px-4 pb-2 md:mx-0 md:px-0"
+        className="finder-scroll -mx-4 min-w-0 flex-1 overflow-x-auto px-4 py-1 md:mx-0 md:px-0 lg:[mask-image:linear-gradient(to_right,black_calc(100%-3rem),transparent)] lg:pe-10"
       >
         <ul key={world} className="flex w-max gap-2">
           {list.map((t, i) => {
@@ -75,7 +76,7 @@ export function TargetPicker({
                   onClick={() => onPick(t.id)}
                   aria-pressed={active}
                   className={cn(
-                    "flex items-center gap-2.5 rounded-2xl py-1.5 ps-1.5 pe-3.5 text-start ring-1 transition-[background-color,box-shadow,transform] duration-200 ease-[var(--ease-out)] active:scale-[0.97]",
+                    "flex items-center gap-2.5 rounded-2xl py-1.5 ps-1.5 pe-3.5 text-start ring-1 transition-[background-color,box-shadow,scale] duration-150 ease-out motion-safe:active:scale-[0.96]",
                     active
                       ? "bg-primary/10 ring-primary/55"
                       : "bg-white/[0.035] ring-white/10 hover:bg-white/[0.07] hover:ring-white/20",

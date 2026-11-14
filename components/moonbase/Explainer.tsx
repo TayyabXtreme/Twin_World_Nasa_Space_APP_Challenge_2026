@@ -1,6 +1,16 @@
 "use client";
 
-import { ExternalLink, Mountain, Snowflake, Sun, Thermometer, type LucideIcon } from "lucide-react";
+import {
+  ChevronDown,
+  ExternalLink,
+  Info,
+  Mountain,
+  Snowflake,
+  Sun,
+  Thermometer,
+  TriangleAlert,
+  type LucideIcon,
+} from "lucide-react";
 import { ARTEMIS_REGIONS, REGION_SOURCES } from "@/lib/moonbase/regions";
 import { useMoonbase } from "@/lib/moonbase/store";
 import { FACTORS } from "@/lib/moonbase/suitability";
@@ -189,69 +199,97 @@ export function Explainer({ manifest, siteValues }: { manifest: Manifest | null;
         </p>
       </section>
 
-      <section aria-labelledby="score-title" className="mt-20 grid gap-8 lg:grid-cols-[1.1fr_1fr]">
-        <div>
-          <h2 id="score-title" className="font-heading text-[clamp(1.5rem,2.4vw,2rem)] font-semibold tracking-tight">
-            How the base score works
-          </h2>
-          <p className="mt-4 text-[15px] leading-relaxed text-foreground/90">
-            Each factor turns one layer into a score from 0 to 1 with a straight-line rule. Your weights decide how much
-            each one counts, and the map shows their weighted mean for every 960 m cell. Cells missing any weighted
-            layer stay blank instead of being guessed.
-          </p>
-          <div className="mt-5 overflow-x-auto rounded-2xl bg-black/30 p-4 font-mono text-[12px] leading-relaxed text-foreground/85 ring-1 ring-white/10">
-            <p>score = Σ wᵢ · sᵢ(layerᵢ) / Σ wᵢ</p>
-            {FACTORS.map((f) => (
-              <p key={f.id} className="mt-1 text-muted-foreground">
-                <span className="text-foreground/85">{f.label.toLowerCase()}</span>: {f.rule}
+      <details className="group mt-16 rounded-[1.6rem] bg-white/[0.025] ring-1 ring-white/10 open:bg-white/[0.035]">
+        <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-5 [&::-webkit-details-marker]:hidden">
+          <span>
+            <span className="block font-heading text-lg font-semibold">Method, limits and datasets</span>
+            <span className="block text-[13px] text-muted-foreground">
+              How the base score is calculated, what to know before trusting a number, and every source.
+            </span>
+          </span>
+          <ChevronDown
+            className="size-5 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180"
+            aria-hidden
+          />
+        </summary>
+        <section aria-labelledby="score-title" className="grid items-start gap-4 px-5 pb-5 lg:grid-cols-[1.15fr_1fr]">
+          <div className="space-y-4">
+            <div className="rounded-[1.4rem] bg-white/[0.03] p-5 ring-1 ring-white/10">
+              <h2 id="score-title" className="text-[15px] font-semibold">
+                How the base score works
+              </h2>
+              <p className="mt-2 text-[13.5px] leading-relaxed text-muted-foreground">
+                Each factor turns one layer into a score from 0 to 1 with a straight-line rule. Your weights decide how
+                much each one counts, and the map shows their weighted mean for every 960 m cell. Cells missing any
+                weighted layer stay blank instead of being guessed.
               </p>
-            ))}
+              <p className="mt-4 rounded-xl bg-white/[0.04] px-3.5 py-2.5 hud text-[13px] text-primary ring-1 ring-white/10">
+                score = Σ wᵢ · sᵢ(layerᵢ) / Σ wᵢ
+              </p>
+              <dl className="mt-3 divide-y divide-white/[0.06]">
+                {FACTORS.map((f) => (
+                  <div key={f.id} className="grid gap-x-4 gap-y-0.5 py-2.5 sm:grid-cols-[10rem_1fr]">
+                    <dt className="text-[13.5px] font-medium">{f.label}</dt>
+                    <dd className="text-[13px] text-muted-foreground">{f.rule}</dd>
+                  </div>
+                ))}
+              </dl>
+              <p className="mt-3 flex gap-2 border-t border-white/[0.07] pt-3 text-[12.5px] leading-relaxed text-muted-foreground">
+                <Info className="mt-0.5 size-3.5 shrink-0" aria-hidden />
+                The thresholds are planning rules of thumb, not NASA requirements, except the 8° lander slope limit that
+                Wueller et al. used with 20 m LOLA data. Everything runs in your browser: moving a slider re-scores all
+                908,000 cells at once.
+              </p>
+            </div>
+            <div className="rounded-[1.4rem] bg-white/[0.03] p-5 ring-1 ring-white/10">
+              <h3 className="text-[15px] font-semibold">Datasets</h3>
+              <ul className="mt-2 divide-y divide-white/[0.06]">
+                {[...datasets.map((d) => ({ label: d.name, url: d.url })), ...REGION_SOURCES].map((s) => (
+                  <li key={s.label}>
+                    <a
+                      href={s.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-start justify-between gap-3 py-2.5 text-[13.5px] leading-snug text-foreground/85 transition-colors duration-150 hover:text-primary"
+                    >
+                      {s.label}
+                      <ExternalLink className="mt-0.5 size-3.5 shrink-0 opacity-60" aria-hidden />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-            The thresholds are planning rules of thumb, not NASA requirements, except the 8° lander slope limit that
-            Wueller et al. used with 20 m LOLA data. The whole calculation runs in your browser, so moving a slider
-            re-scores all 908,000 cells at once.
-          </p>
-        </div>
-        <div>
-          <h3 className="font-heading text-lg font-semibold">Read this before trusting a number</h3>
-          <ul className="mt-4 space-y-2.5 text-sm leading-relaxed text-foreground/85">
-            {[
-              "Different sharpness: LOLA elevation is 240 m per pixel (shown at 480 m, read at 960 m). The Diviner polar model works on a 0.5 km grid. The global Diviner and Mini-RF maps are 32 pixels per degree, about 950 m north–south. A lander needs metre-scale safety; none of these layers can show a single boulder.",
-              prp?.coverageNote ?? "The Diviner polar model covers about ±300 km around the pole.",
-              "Ice depth and cold traps come from a thermal model of where ice COULD survive, not from a detection. Whether ice is actually there depends on its delivery history.",
-              ice?.sentinels?.["-1"]
-                ? `Ice-depth special values: −999 (documented) means deeper than 2.87 m and is shown grey. −1 is not in the label; we found it only on the coldest triangles (annual max ≤ 101.3 K) and treat it as ice stable at the surface.`
-                : "Ice depth −999 means deeper than 2.87 m, the model's limit, and is shown grey.",
-              "Mini-RF CPR is ambiguous: high values mean ground rough at the 10 cm scale (blocky rocks, fresh craters) OR possibly ice. The global mosaic also shows orbit-track streaks close to the pole.",
-              "LEND sees hydrogen through neutrons, not ice directly, and only at 10–15 km scale. Its signal is a few per cent, so the readout shows each value ± its uncertainty; cells right at the pole are too sparse and left blank.",
-              rock?.statusNote ?? "Diviner rock abundance does not reach the pole.",
-              "High ground and warm annual average are proxies for sunlight, not an illumination model. Region centres and outlines are approximate (NASA published a map, not coordinates).",
-            ].map((n) => (
-              <li key={n} className="flex gap-2.5">
-                <span className="mt-2 size-1.5 shrink-0 rounded-full bg-warn" aria-hidden />
-                {n}
-              </li>
-            ))}
-          </ul>
-          <h3 className="mt-8 font-heading text-lg font-semibold">Datasets</h3>
-          <ul className="mt-3 space-y-2 text-sm">
-            {[...datasets.map((d) => ({ label: d.name, url: d.url })), ...REGION_SOURCES].map((s) => (
-              <li key={s.label}>
-                <a
-                  href={s.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-start gap-1.5 text-foreground/85 hover:text-primary"
-                >
-                  {s.label}
-                  <ExternalLink className="mt-1 size-3 shrink-0 opacity-60" aria-hidden />
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
+
+          <div className="space-y-4">
+            <div className="rounded-[1.4rem] bg-warn/[0.04] p-5 ring-1 ring-warn/20">
+              <h3 className="flex items-center gap-2 text-[15px] font-semibold text-warn">
+                <TriangleAlert className="size-4" aria-hidden />
+                Read this before trusting a number
+              </h3>
+              <ul className="mt-3 space-y-2.5">
+                {[
+                  "Different sharpness: LOLA elevation is 240 m per pixel (shown at 480 m, read at 960 m). The Diviner polar model works on a 0.5 km grid. The global Diviner and Mini-RF maps are 32 pixels per degree, about 950 m north–south. A lander needs metre-scale safety; none of these layers can show a single boulder.",
+                  prp?.coverageNote ?? "The Diviner polar model covers about ±300 km around the pole.",
+                  "Ice depth and cold traps come from a thermal model of where ice COULD survive, not from a detection. Whether ice is actually there depends on its delivery history.",
+                  ice?.sentinels?.["-1"]
+                    ? `Ice-depth special values: −999 (documented) means deeper than 2.87 m and is shown grey. −1 is not in the label; we found it only on the coldest triangles (annual max ≤ 101.3 K) and treat it as ice stable at the surface.`
+                    : "Ice depth −999 means deeper than 2.87 m, the model's limit, and is shown grey.",
+                  "Mini-RF CPR is ambiguous: high values mean ground rough at the 10 cm scale (blocky rocks, fresh craters) OR possibly ice. The global mosaic also shows orbit-track streaks close to the pole.",
+                  "LEND sees hydrogen through neutrons, not ice directly, and only at 10–15 km scale. Its signal is a few per cent, so the readout shows each value ± its uncertainty; cells right at the pole are too sparse and left blank.",
+                  rock?.statusNote ?? "Diviner rock abundance does not reach the pole.",
+                  "High ground and warm annual average are proxies for sunlight, not an illumination model. Region centres and outlines are approximate (NASA published a map, not coordinates).",
+                ].map((n) => (
+                  <li key={n} className="flex gap-2.5 text-[13.5px] leading-relaxed text-foreground/85">
+                    <span className="mt-2 size-1.5 shrink-0 rounded-full bg-warn" aria-hidden />
+                    {n}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
+      </details>
     </>
   );
 }

@@ -473,6 +473,9 @@ const MISSIONS: {
   image: string;
   isNew?: boolean;
   bestOf?: string;
+  /** How to play, shown when the card is hovered or focused. */
+  how: string[];
+  keys: [string, string][];
 }[] = [
   {
     id: "guess",
@@ -482,6 +485,15 @@ const MISSIONS: {
     minutes: 2,
     image: "card-guess",
     isNew: true,
+    how: [
+      "A real NASA photo appears: Earth, the Moon or Mars.",
+      "Answer within 12 seconds. Faster right answers score more.",
+      "Three right in a row adds a streak bonus.",
+    ],
+    keys: [
+      ["1 · 2 · 3", "Earth · Moon · Mars"],
+      ["Enter", "Next photo"],
+    ],
   },
   {
     id: "scout",
@@ -492,6 +504,12 @@ const MISSIONS: {
     image: "card-scout",
     isNew: true,
     bestOf: " / 300",
+    how: [
+      "Read the brief: each mission weighs slope, sunlight and ice differently.",
+      "Spend your 2 data scans (slope, sunlight, cold traps, hydrogen) to see the ground.",
+      "Drop your base. Real LRO data scores it against the best spot on the map.",
+    ],
+    keys: [["Click / tap", "Scan, then place your base"]],
   },
   {
     id: "land",
@@ -500,6 +518,8 @@ const MISSIONS: {
     tag: "Moon base",
     minutes: 2,
     image: "card-touchdown",
+    how: [GAMES.land.goal, "Pick the Moon or Mars first: gravity and wind change everything."],
+    keys: GAMES.land.controls,
   },
   {
     id: "rover",
@@ -508,6 +528,8 @@ const MISSIONS: {
     tag: "Mars",
     minutes: 3,
     image: "card-rover",
+    how: [GAMES.rover.goal],
+    keys: GAMES.rover.controls,
   },
   {
     id: "launch",
@@ -516,6 +538,8 @@ const MISSIONS: {
     tag: "Spaceflight",
     minutes: 3,
     image: "card-launch",
+    how: [GAMES.launch.goal],
+    keys: GAMES.launch.controls,
   },
 ];
 
@@ -581,8 +605,38 @@ function MissionCard({
           Playing
         </span>
       )}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-10 flex flex-col justify-end bg-[rgb(3_5_11/0.9)] p-4 opacity-0 backdrop-blur-sm transition-opacity duration-200 ease-out group-hover:opacity-100 group-focus-visible:opacity-100 sm:p-5"
+      >
+        <span className="text-[11px] font-semibold tracking-[0.14em] text-primary uppercase">
+          How to play · {m.name}
+        </span>
+        <span className="mt-2.5 flex flex-col gap-1.5 motion-safe:translate-y-1.5 motion-safe:transition-transform motion-safe:duration-200 motion-safe:ease-out motion-safe:group-hover:translate-y-0">
+          {m.how.map((h, i) => (
+            <span key={h} className="flex gap-2.5 text-[13px] leading-snug text-foreground/90">
+              <span className="mt-px w-3 shrink-0 hud text-primary">{i + 1}</span>
+              {h}
+            </span>
+          ))}
+        </span>
+        <span className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5 border-t border-white/10 pt-3">
+          {m.keys.map(([k, v]) => (
+            <span key={k} className="flex items-center gap-1.5 text-[12px] text-muted-foreground">
+              <kbd className="rounded-md bg-white/10 px-1.5 py-0.5 font-mono text-[11px] text-foreground ring-1 ring-white/15">
+                {k}
+              </kbd>
+              {v}
+            </span>
+          ))}
+        </span>
+        <span className="mt-3 text-[12px] font-medium text-primary">{on ? "Playing below ↓" : "Click to play →"}</span>
+      </span>
       <span className={cn("block font-heading font-semibold tracking-tight", wide ? "text-2xl" : "text-xl")}>
         {m.name}
+      </span>
+      <span className="sr-only">
+        How to play: {m.how.join(" ")} Controls: {m.keys.map(([k, v]) => `${k}: ${v}`).join(", ")}.
       </span>
       <span className="mt-1 block max-w-[46ch] text-[13px] leading-snug text-foreground/80">{m.line}</span>
       <span className="mt-3 flex items-center gap-3 text-[11px] text-muted-foreground">
@@ -623,7 +677,10 @@ export function Arcade() {
     startTransition(() => setId(m));
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     // Scroll once the morph has landed; scrolling under a running view transition makes the page jump at the end.
-    window.setTimeout(() => stageRef.current?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }), reduce ? 0 : 500);
+    window.setTimeout(
+      () => stageRef.current?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }),
+      reduce ? 0 : 500,
+    );
   };
   const played = Object.values(bests).filter((b) => b > 0).length;
 

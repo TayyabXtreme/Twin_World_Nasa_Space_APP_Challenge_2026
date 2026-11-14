@@ -27,14 +27,26 @@ interface Clusters {
 
 const BASE = "/data/ml/analogue-space";
 let cache: Promise<[Points, Clusters]> | null = null;
-const load = () => (cache ??= Promise.all([fetch(`${BASE}/points.json`).then((r) => r.json()), fetch(`${BASE}/clusters.json`).then((r) => r.json())]));
+const load = () =>
+  (cache ??= Promise.all([
+    fetch(`${BASE}/points.json`).then((r) => r.json()),
+    fetch(`${BASE}/clusters.json`).then((r) => r.json()),
+  ]));
 
 /**
  * Analogue Space (model M1): every Earth land cell placed by PCA on its measured environment, coloured by k-means
  * type; Moon and Mars targets are stars in the same chart. Click an Earth dot to fly the map there, a star to
  * score for that target.
  */
-export function AnalogueSpace({ currentId, onEarth, onTarget }: { currentId: string; onEarth: (lat: number, lon: number) => void; onTarget: (id: string) => void }) {
+export function AnalogueSpace({
+  currentId,
+  onEarth,
+  onTarget,
+}: {
+  currentId: string;
+  onEarth: (lat: number, lon: number) => void;
+  onTarget: (id: string) => void;
+}) {
   const [data, setData] = useState<[Points, Clusters] | null>(null);
   const [type, setType] = useState<number | null>(null);
   const [hover, setHover] = useState<{ x: number; y: number; label: string } | null>(null);
@@ -48,7 +60,9 @@ export function AnalogueSpace({ currentId, onEarth, onTarget }: { currentId: str
   useEffect(() => {
     const el = box.current;
     if (!el) return;
-    const ro = new ResizeObserver(() => setSize({ w: el.clientWidth, h: Math.min(520, Math.max(320, el.clientWidth * 0.66)) }));
+    const ro = new ResizeObserver(() =>
+      setSize({ w: el.clientWidth, h: Math.min(520, Math.max(320, el.clientWidth * 0.66)) }),
+    );
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
@@ -127,8 +141,9 @@ export function AnalogueSpace({ currentId, onEarth, onTarget }: { currentId: str
   return (
     <div>
       <p className="max-w-[66ch] text-sm text-muted-foreground">
-        Every dot is a 28 km patch of Earth, placed by what was measured there (temperature, plants, ground freezing, thermal inertia, relief, Sun angle). Stars are
-        Moon and Mars targets in the same chart. Click a dot to fly the map to that place, or a star to score Earth for it.
+        Every dot is a 28 km patch of Earth, placed by what was measured there (temperature, plants, ground freezing,
+        thermal inertia, relief, Sun angle). Stars are Moon and Mars targets in the same chart. Click a dot to fly the
+        map to that place, or a star to score Earth for it.
       </p>
       <div ref={box} className="relative mt-4 overflow-hidden rounded-2xl bg-black/30 ring-1 ring-white/10">
         <canvas
@@ -141,7 +156,9 @@ export function AnalogueSpace({ currentId, onEarth, onTarget }: { currentId: str
             if (!n || !data) return setHover(null);
             const r = canvas.current!.getBoundingClientRect();
             const label =
-              n.kind === "t" ? data[1].targets[n.i].name : `${data[1].types[data[0].data[n.i][2]].name} · ${data[0].data[n.i][3].toFixed(1)}°, ${data[0].data[n.i][4].toFixed(1)}°`;
+              n.kind === "t"
+                ? data[1].targets[n.i].name
+                : `${data[1].types[data[0].data[n.i][2]].name} · ${data[0].data[n.i][3].toFixed(1)}°, ${data[0].data[n.i][4].toFixed(1)}°`;
             setHover({ x: e.clientX - r.left, y: e.clientY - r.top, label });
           }}
           onPointerLeave={() => setHover(null)}
@@ -152,9 +169,16 @@ export function AnalogueSpace({ currentId, onEarth, onTarget }: { currentId: str
             else onEarth(data[0].data[n.i][3], data[0].data[n.i][4]);
           }}
         />
-        {!data && <p className="absolute inset-0 flex items-center justify-center text-sm text-muted-foreground">Loading the model output…</p>}
+        {!data && (
+          <p className="absolute inset-0 flex items-center justify-center text-sm text-muted-foreground">
+            Loading the model output…
+          </p>
+        )}
         {hover && (
-          <span className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[130%] rounded-md bg-black/80 px-2 py-1 text-xs whitespace-nowrap ring-1 ring-white/15" style={{ left: hover.x, top: hover.y }}>
+          <span
+            className="pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-[130%] rounded-md bg-black/80 px-2 py-1 text-xs whitespace-nowrap ring-1 ring-white/15"
+            style={{ left: hover.x, top: hover.y }}
+          >
             {hover.label}
           </span>
         )}
@@ -169,7 +193,10 @@ export function AnalogueSpace({ currentId, onEarth, onTarget }: { currentId: str
               aria-pressed={type === t.id}
               onClick={() => setType(type === t.id ? null : t.id)}
               title={t.blurb}
-              className={cn("flex items-center gap-2 rounded-full px-3 py-1 text-xs ring-1 transition-colors duration-150", type === t.id ? "bg-white/10 ring-white/30" : "ring-white/10 hover:bg-white/[0.05]")}
+              className={cn(
+                "flex items-center gap-2 rounded-full px-3 py-1 text-xs ring-1 transition-colors duration-150",
+                type === t.id ? "bg-white/10 ring-white/30" : "ring-white/10 hover:bg-white/[0.05]",
+              )}
             >
               <span className="size-2.5 rounded-full" style={{ background: t.color }} aria-hidden />
               {t.name}
@@ -178,8 +205,12 @@ export function AnalogueSpace({ currentId, onEarth, onTarget }: { currentId: str
           </li>
         ))}
         <li className="flex items-center gap-3 ps-2 text-xs text-muted-foreground">
-          <span>★ <span className="text-[#e8ecf5]">Moon</span></span>
-          <span>★ <span className="text-[#ff7a4d]">Mars</span></span>
+          <span>
+            ★ <span className="text-[#e8ecf5]">Moon</span>
+          </span>
+          <span>
+            ★ <span className="text-[#ff7a4d]">Mars</span>
+          </span>
         </li>
       </ul>
     </div>
