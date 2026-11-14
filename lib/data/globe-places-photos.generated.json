@@ -98,17 +98,6 @@
   "date": "2025-07-22",
   "page": "https://images.nasa.gov/details/PIA26611"
  },
- "jiuquan": {
-  "src": "/photos/places/jiuquan.webp",
-  "w": 800,
-  "h": 530,
-  "pin": "/photos/places/jiuquan-pin.webp",
-  "nasaId": "iss010e14586",
-  "title": "Earth Observations taken by the Expedition 10 crew",
-  "credit": "NASA/JSC (ISS Expedition 10)",
-  "date": "2005-01-23",
-  "page": "https://images.nasa.gov/details/iss010e14586"
- },
  "tanegashima": {
   "src": "/photos/places/tanegashima.webp",
   "w": 800,

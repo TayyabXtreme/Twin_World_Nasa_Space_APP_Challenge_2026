@@ -33,7 +33,7 @@ export const WORLD_LIMITS: Record<Exclude<World, "earth">, { title: string; text
   moon: [
     { title: "Gravity", text: "1.62 m/s², one sixth of Earth's. Dust, regolith mechanics, walking and drilling all behave differently." },
     { title: "Vacuum", text: "No air at all. No wind, no convection, no sound; dust is lifted by electrostatics and rocket plumes, not weather." },
-    { title: "Radiation", text: "No magnetic field or atmosphere: about 1.4 mSv per day on the surface (Chang'e 4, Zhang et al. 2020), some 200× sea level on Earth." },
+    { title: "Radiation", text: "No magnetic field or atmosphere to shield the surface, so galactic cosmic rays and solar storms arrive unblocked (NASA LRO CRaTER)." },
     { title: "Temperature", text: "Lunar polar cold traps fall below −230 °C. The coldest ground ever measured on Earth is about −98 °C (East Antarctica, Scambos et al. 2018)." },
   ],
   mars: [

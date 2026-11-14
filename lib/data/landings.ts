@@ -5,21 +5,20 @@ import photos from "./landings-photos.generated.json";
  * agency, where it came down and a photo (scripts/fetch-landing-photos.py).
  *
  * Coordinates, checked 2026-11-14 (east-positive longitude, planetocentric):
- *  - Apollo, Luna 16/17/20/21/24, Chang'e 3/4/5/6, Chandrayaan-3 and SLIM: positions measured on LRO LROC Narrow
+ *  - Apollo, Luna 16/17/20/21/24, Chandrayaan-3 and SLIM: positions measured on LRO LROC Narrow
  *    Angle Camera images of the hardware (LROC "Spacecraft Related Coordinates" lists and the per-mission LROC
  *    pages), cross-checked with NSSDCA's lunar landing-site table (Apollo, from Wagner et al. 2017) and, where one
- *    exists, the USGS Gazetteer station name (Statio Tranquillitatis, Tianhe, Tianchuan, Tianjiang, Shiv Shakti).
+ *    exists, the USGS Gazetteer station name (Statio Tranquillitatis, Shiv Shakti).
  *  - Luna 9: NSSDCA's position. LRO has not identified the lander, so it is approximate.
  *  - Mars: the mission's NASA fact page or the team's own location paper, as cited per landing.
  */
 
 export type LandingWorld = "moon" | "mars";
-export type Agency = "nasa" | "ussr" | "cnsa" | "isro" | "jaxa";
+export type Agency = "nasa" | "ussr" | "isro" | "jaxa";
 
 export const AGENCIES: Record<Agency, { label: string; short: string; color: string }> = {
   nasa: { label: "NASA", short: "NASA", color: "oklch(0.78 0.13 240)" },
   ussr: { label: "Soviet Union", short: "USSR", color: "oklch(0.68 0.2 25)" },
-  cnsa: { label: "China (CNSA)", short: "CNSA", color: "oklch(0.85 0.16 88)" },
   isro: { label: "India (ISRO)", short: "ISRO", color: "oklch(0.78 0.17 150)" },
   jaxa: { label: "Japan (JAXA)", short: "JAXA", color: "oklch(0.74 0.17 335)" },
 };
@@ -221,44 +220,6 @@ const DRAFTS: Draft[] = [
     coordSources: [LROC_2016],
   },
   {
-    id: "change-3",
-    world: "moon",
-    mission: "Chang'e 3",
-    craft: "Yutu",
-    agency: "cnsa",
-    date: "2013-12-14",
-    lat: 44.1214,
-    lon: -19.5117,
-    site: "Mare Imbrium, near Laplace F",
-    summary: "The first soft landing on the Moon since 1976, and China's first. It delivered the Yutu rover; the lander's telescope kept working for years.",
-    coordSources: [LROC_2016],
-  },
-  {
-    id: "change-4",
-    world: "moon",
-    mission: "Chang'e 4",
-    craft: "Yutu-2",
-    agency: "cnsa",
-    date: "2019-01-03",
-    lat: -45.457,
-    lon: 177.589,
-    site: "Von Kármán crater, far side",
-    summary: "The first landing on the far side of the Moon, talking to Earth through the Queqiao relay satellite. Its Yutu-2 rover became the longest-working rover on the Moon.",
-    coordSources: [{ label: "LROC: Chang'e 4 lander coordinates", url: "https://lroc.im-ldi.com/images/1087" }, gazetteer("Statio Tianhe", 15781)],
-  },
-  {
-    id: "change-5",
-    world: "moon",
-    mission: "Chang'e 5",
-    agency: "cnsa",
-    date: "2020-12-01",
-    lat: 43.0576,
-    lon: -51.9161,
-    site: "Oceanus Procellarum, near Mons Rümker",
-    summary: "Returned 1,731 g of rock and soil from some of the youngest lava on the Moon, about 2 billion years old: the first lunar samples since Luna 24.",
-    coordSources: [{ label: "LROC: First look, Chang'e 5", url: "https://lroc.im-ldi.com/images/1172" }, gazetteer("Statio Tianchuan", 15994)],
-  },
-  {
     id: "chandrayaan-3",
     world: "moon",
     mission: "Chandrayaan-3",
@@ -282,18 +243,6 @@ const DRAFTS: Draft[] = [
     site: "Slope of Shioli crater",
     summary: "Japan's first Moon landing came down within about 55 m of its target, a new standard for precision, but tipped onto its nose. It still woke up for several lunar nights.",
     coordSources: [{ label: "LROC: JAXA SLIM landing", url: "https://lroc.im-ldi.com/images/1358" }],
-  },
-  {
-    id: "change-6",
-    world: "moon",
-    mission: "Chang'e 6",
-    agency: "cnsa",
-    date: "2024-06-01",
-    lat: -41.6385,
-    lon: -153.9852,
-    site: "Apollo basin, far side",
-    summary: "The first samples ever taken from the far side: 1,935 g from the South Pole–Aitken basin, the Moon's largest and oldest impact basin.",
-    coordSources: [{ label: "LROC: First look, Chang'e 6", url: "https://lroc.im-ldi.com/images/1374" }, gazetteer("Statio Tianjiang", 16328)],
   },
 
   /* ---------------- Mars ---------------- */
@@ -405,19 +354,6 @@ const DRAFTS: Draft[] = [
     site: "Jezero crater",
     summary: "Explores an ancient river delta and seals rock cores for a future return to Earth. It carried Ingenuity, the first aircraft to fly on another planet.",
     coordSources: [{ label: "Farley et al. 2022, Science: Jezero crater floor", url: "https://doi.org/10.1126/science.abo2196" }],
-  },
-  {
-    id: "zhurong",
-    world: "mars",
-    mission: "Tianwen-1",
-    craft: "Zhurong",
-    agency: "cnsa",
-    date: "2021-05-14",
-    lat: 25.066,
-    lon: 109.925,
-    site: "Southern Utopia Planitia",
-    summary: "China's first Mars landing. The Zhurong rover drove about 1.9 km and its radar found buried layers that point to water in the region's past.",
-    coordSources: [{ label: "Liu et al. 2022, Nature Astronomy: Zhurong landing site", url: "https://ui.adsabs.harvard.edu/abs/2022NatAs...6...65L/abstract" }],
   },
 ];
 

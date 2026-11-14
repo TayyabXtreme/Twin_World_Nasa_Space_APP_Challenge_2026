@@ -55,7 +55,6 @@ SITES = {
     "earth-teide": ("teide", "public/photos/sites-earth/teide.webp"),
     "earth-dallol": ("dallol-danakil", "public/photos/sites-earth/dallol.webp"),
     "earth-namib": ("namib", "public/photos/sites-earth/namib.webp"),
-    "earth-qaidam": ("qaidam-basin", "public/photos/sites-earth/qaidam.webp"),
     "earth-uyuni": ("salar-de-uyuni", "public/photos/sites-earth/uyuni.webp"),
     "earth-ladakh": ("ladakh", "public/photos/sites-earth/ladakh.webp"),
     "earth-pilbara": ("pilbara", "public/photos/sites-earth/pilbara.webp"),

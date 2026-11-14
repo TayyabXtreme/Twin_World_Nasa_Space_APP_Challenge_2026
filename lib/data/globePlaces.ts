@@ -211,23 +211,6 @@ const DRAFTS: Draft[] = [
     source: { label: "NASA Image Library: NISAR at ISRO's launch site", url: "https://images.nasa.gov/details/PIA26611" },
   },
   {
-    id: "jiuquan",
-    layer: "launch",
-    name: "Jiuquan Satellite Launch Center",
-    region: "Gobi Desert, China",
-    lat: 40.958,
-    lon: 100.291,
-    kicker: "Launch site · since 1970",
-    summary: "China's first spaceport, in the Gobi Desert. Every Shenzhou crew has launched from here, starting with Yang Liwei in 2003.",
-    facts: [
-      { label: "First satellite", value: "Dong Fang Hong 1, 24 April 1970" },
-      { label: "First crew", value: "Shenzhou 5, 15 October 2003" },
-      { label: "Operator", value: "Chinese armed forces, for China's crewed programme" },
-    ],
-    photoNote: "Photographed from the International Space Station in 2005.",
-    source: { label: "NASA Image Library: Jiuquan launch complex from the ISS", url: "https://images.nasa.gov/details/iss010e14586" },
-  },
-  {
     id: "tanegashima",
     layer: "launch",
     name: "Tanegashima Space Center",

@@ -142,14 +142,14 @@ add (it needs an account we could not get in time).
 | Agency | Resource listed in the challenge | Status | How TwinWorlds uses it | Feature |
 |:-:|---|:-:|---|---|
 | NASA | **Earthdata Search** | ✅ | MODIS **MOD11C3** land-surface temperature, **MOD13C2** NDVI, **MCD43C3** albedo (LP DAAC); live **CMR granule search** through our `/api/cmr/granules` route | Finder, Data Lab, Explore |
-| NASA | **Worldview** | ✅ | GIBS tiles for the live Earth map; true-colour, temperature, NDVI and ASTER relief snapshots of **18 analogue sites** | Explore, Compare, Data Lab |
+| NASA | **Worldview** | ✅ | GIBS tiles for the live Earth map; true-colour, temperature, NDVI and ASTER relief snapshots of **17 analogue sites** | Explore, Compare, Data Lab |
 | NASA | **Planetary Data System (PDS)** | ✅ | LOLA DEM and slope, Diviner GDR and polar products, Mini-RF CPR, LEND neutrons, Odyssey GRS/NS, MGS TES thermal inertia, MOLA MEGDR | Finder targets, Bases, Explore layers |
 | NASA | **Lunar Reconnaissance Orbiter (LRO)** | ✅ | **LOLA**, **Diviner**, **Mini-RF**, **LEND** and **LROC** (Moon Trek mosaics, CGI Moon Kit) | Bases, Explore, Compare |
 | NASA | **LRO Diviner lunar data** | ✅ | Polar Resource Product (ice stability depth), max/mean temperature, rock abundance, night regolith temperature | Bases (ice and cold-trap layers), Finder Moon targets |
 | CSA | **RADARSAT Constellation Mission (RCM)** | ✅ | 3 sample scenes processed into **Radar Twins**: Earth radar beside a Mini-RF lunar crater, with histograms | Compare → Radar Twins |
 | CSA | **SAR Python tutorial** | ✅ | Our `scripts/build-radar-twins.py` follows its read → inspect → geolocate → plot steps | Radar Twins |
 | CSA | **RADARSAT-1 archive** | 🔒 | Catalogued in the Data Lab with what it would add (Arctic analogue scenes); needs a free EODMS account | Data Lab |
-| ESA | **Copernicus Data Space Ecosystem** | ✅ | **Sentinel-1** radar over 18 sites, **Sentinel-2** L2A optical over 17 sites | Data Lab, site cards |
+| ESA | **Copernicus Data Space Ecosystem** | ✅ | **Sentinel-1** radar over 17 sites, **Sentinel-2** L2A optical over 16 sites | Data Lab, site cards |
 | ESA | **Open Science Catalog** | 📇 | Searched; matching products listed in the Data Lab | Data Lab |
 | JAXA | **G-Portal / JAXA Earth API** | ✅ | **ALOS AW3D30 v3.2** elevation from the public JAXA Earth API gives the Finder's terrain relief | Finder (relief dimension) |
 
@@ -247,7 +247,7 @@ a rocket launch loader on first visit, a Finder showcase, a Moon pole map, NASA 
 </tr>
 </table>
 
-3D globes and 2D NASA tile maps for all three worlds. Earth layers: **30 analogue sites**, Pakistan, field campaigns
+3D globes and 2D NASA tile maps for all three worlds. Earth layers: **29 analogue sites**, Pakistan, field campaigns
 (Haughton-Mars Project, Desert RATS, PISCES, NEEMO…), launch sites, the Deep Space Network and the **live ISS**.
 Moon and Mars: every landing from 1969/1976 to 2026 on a **timeline slider**. Science layers with legends and click
 readouts (Diviner, Mini-RF, Odyssey GRS/NS, TES, MODIS temperature, NDVI, dust, snow), terrain numbers computed live
@@ -400,7 +400,7 @@ xychart-beta
 |---|---|---|---|
 | **Gravity** | 1.62 m/s² (⅙ g) | 3.71 m/s² (38 %) | Same for every Earth place, so it would lower all scores equally |
 | **Atmosphere** | Vacuum | ~0.6 kPa CO₂ (<1 % of Earth) | No Earth surface has it |
-| **Radiation** | ~1.4 mSv/day (Chang'e 4) | ~0.67 mSv/day (Curiosity RAD) | Earth's field and air block it |
+| **Radiation** | Unshielded: no field or air (LRO CRaTER) | ~0.67 mSv/day (Curiosity RAD) | Earth's field and air block it |
 | **Chemistry** | Reduced, no water-altered minerals | Perchlorates, oxidising soil, no ozone | Not in the 7 climate-and-terrain dimensions |
 
 ---
