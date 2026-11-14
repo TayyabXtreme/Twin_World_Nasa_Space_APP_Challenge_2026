@@ -1,0 +1,1760 @@
+{
+ "version": 1,
+ "dimensions": [
+  {
+   "id": "cold",
+   "label": "Cold",
+   "mode": "role",
+   "earth": "tmean",
+   "blurb": "How cold the ground is compared with the rest of its own world (percentile)."
+  },
+  {
+   "id": "swing",
+   "label": "Day-night swing",
+   "mode": "role",
+   "earth": "swing",
+   "blurb": "How strongly the surface heats by day and cools by night, ranked within each world."
+  },
+  {
+   "id": "bare",
+   "label": "Bare & lifeless",
+   "mode": "absolute",
+   "earth": "ndvi",
+   "blurb": "No plants: Moon and Mars have none, so the Earth target is NDVI 0 (absolute)."
+  },
+  {
+   "id": "inertia",
+   "label": "Loose vs rocky ground",
+   "mode": "role",
+   "earth": "ati",
+   "blurb": "Thermal inertia: fine loose soil heats and cools fast, rock and bedrock slowly (percentile)."
+  },
+  {
+   "id": "ice",
+   "label": "Frozen ground / ice",
+   "mode": "role",
+   "earth": "freeze",
+   "blurb": "Ice-favourable ground: hydrogen on Mars, cold traps on the Moon, frozen months on Earth."
+  },
+  {
+   "id": "sun",
+   "label": "Sun angle",
+   "mode": "absolute",
+   "earth": "lat",
+   "blurb": "Highest noon Sun of the year, in degrees. Set by latitude and axial tilt (absolute)."
+  },
+  {
+   "id": "relief",
+   "label": "Terrain relief",
+   "mode": "absolute",
+   "earth": "relief",
+   "blurb": "Height variation over ~66 km, in metres: plains vs craters and mountains (absolute)."
+  }
+ ],
+ "obliquity": {
+  "earth": 23.44,
+  "moon": 1.54,
+  "mars": 25.19
+ },
+ "targets": [
+  {
+   "id": "mars-jezero",
+   "world": "mars",
+   "name": "Jezero Crater",
+   "lat": 18.445,
+   "lon": 77.451,
+   "dims": {
+    "cold": {
+     "mode": "role",
+     "worldPct": 0.6836,
+     "earthPct": 0.6852,
+     "note": "Mars' average surface temperature is set mainly by latitude, so the share of Mars colder than this site is taken as the area share closer to the poles (approximation)."
+    },
+    "swing": {
+     "mode": "role",
+     "worldPct": 0.3234,
+     "earthPct": 0.3117,
+     "note": "First-order energy balance: daily swing grows with sunlight (cos latitude) and shrinks with thermal inertia. Ranked over the whole TES map.",
+     "value": {
+      "v": 3.1,
+      "units": "cos(lat)/TI x1000",
+      "source": "MGS TES"
+     }
+    },
+    "bare": {
+     "mode": "absolute",
+     "value": {
+      "v": 0,
+      "units": "NDVI",
+      "source": "No vegetation on Mars"
+     },
+     "earthTarget": 0.0,
+     "note": "Mars has no plants; any Earth vegetation is a difference."
+    },
+    "inertia": {
+     "mode": "role",
+     "worldPct": 0.8972,
+     "earthPct": 0.8959,
+     "note": "TES night thermal inertia ranked over Mars, matched to apparent thermal inertia ranked over Earth's land. Different units, same idea: loose fines vs rock.",
+     "value": {
+      "v": 306,
+      "units": "J m-2 K-1 s-1/2 (tiu)",
+      "source": "MGS TES night thermal inertia (Putzig & Mellon 2007)"
+     }
+    },
+    "ice": {
+     "mode": "role",
+     "worldPct": 0.1281,
+     "earthPct": 0.277,
+     "note": "Odyssey neutron counts ranked over Mars (fewer epithermal neutrons = more hydrogen = more ground ice), matched to Earth's freezing index. Near the equator much of this hydrogen sits in hydrated minerals rather than ice, so the ice role there is an upper bound.",
+     "value": {
+      "v": 8.13,
+      "units": "epithermal counts/s (lower = more H)",
+      "source": "Mars Odyssey Neutron Spectrometer"
+     }
+    },
+    "sun": {
+     "mode": "absolute",
+     "earthTarget": 90.0,
+     "value": {
+      "v": 90.0,
+      "units": "deg",
+      "source": "latitude + 25.19 deg axial tilt"
+     },
+     "note": "Mars' tilt (25.2 deg) is close to Earth's (23.4 deg), so the same latitude gives a similar Sun path and seasons."
+    },
+    "relief": {
+     "mode": "absolute",
+     "earthTarget": 237,
+     "value": {
+      "v": 237,
+      "units": "m",
+      "source": "MGS MOLA MEGDR 16 ppd, std over ~66 km"
+     },
+     "note": "Same method as on Earth: 22 km block means, standard deviation over a ~66 km box."
+    }
+   },
+   "facts": [
+    {
+     "label": "TES thermal inertia (night)",
+     "v": 306,
+     "units": "tiu",
+     "source": "MGS TES"
+    },
+    {
+     "label": "Neutron epithermal counts",
+     "v": 8.13,
+     "units": "counts/s",
+     "source": "Odyssey NS"
+    },
+    {
+     "label": "GRS water-equivalent hydrogen",
+     "v": 3.53,
+     "units": "wt %",
+     "source": "Odyssey GRS"
+    },
+    {
+     "label": "Terrain relief (~66 km)",
+     "v": 237,
+     "units": "m",
+     "source": "MGS MOLA"
+    }
+   ],
+   "temps": "Mars ground at low latitudes ranges roughly from −90 °C before dawn to 0–20 °C at midday (Curiosity REMS, Perseverance MEDA)."
+  },
+  {
+   "id": "mars-gale",
+   "world": "mars",
+   "name": "Gale Crater",
+   "lat": -4.589,
+   "lon": 137.441,
+   "dims": {
+    "cold": {
+     "mode": "role",
+     "worldPct": 0.92,
+     "earthPct": 0.9163,
+     "note": "Mars' average surface temperature is set mainly by latitude, so the share of Mars colder than this site is taken as the area share closer to the poles (approximation)."
+    },
+    "swing": {
+     "mode": "role",
+     "worldPct": 0.2427,
+     "earthPct": 0.2443,
+     "note": "First-order energy balance: daily swing grows with sunlight (cos latitude) and shrinks with thermal inertia. Ranked over the whole TES map.",
+     "value": {
+      "v": 2.74,
+      "units": "cos(lat)/TI x1000",
+      "source": "MGS TES"
+     }
+    },
+    "bare": {
+     "mode": "absolute",
+     "value": {
+      "v": 0,
+      "units": "NDVI",
+      "source": "No vegetation on Mars"
+     },
+     "earthTarget": 0.0,
+     "note": "Mars has no plants; any Earth vegetation is a difference."
+    },
+    "inertia": {
+     "mode": "role",
+     "worldPct": 0.9626,
+     "earthPct": 0.9627,
+     "note": "TES night thermal inertia ranked over Mars, matched to apparent thermal inertia ranked over Earth's land. Different units, same idea: loose fines vs rock.",
+     "value": {
+      "v": 364,
+      "units": "J m-2 K-1 s-1/2 (tiu)",
+      "source": "MGS TES night thermal inertia (Putzig & Mellon 2007)"
+     }
+    },
+    "ice": {
+     "mode": "role",
+     "worldPct": 0.6867,
+     "earthPct": 0.6895,
+     "note": "Odyssey neutron counts ranked over Mars (fewer epithermal neutrons = more hydrogen = more ground ice), matched to Earth's freezing index. Near the equator much of this hydrogen sits in hydrated minerals rather than ice, so the ice role there is an upper bound.",
+     "value": {
+      "v": 5.68,
+      "units": "epithermal counts/s (lower = more H)",
+      "source": "Mars Odyssey Neutron Spectrometer"
+     }
+    },
+    "sun": {
+     "mode": "absolute",
+     "earthTarget": 90.0,
+     "value": {
+      "v": 90.0,
+      "units": "deg",
+      "source": "latitude + 25.19 deg axial tilt"
+     },
+     "note": "Mars' tilt (25.2 deg) is close to Earth's (23.4 deg), so the same latitude gives a similar Sun path and seasons."
+    },
+    "relief": {
+     "mode": "absolute",
+     "earthTarget": 1100,
+     "value": {
+      "v": 1100,
+      "units": "m",
+      "source": "MGS MOLA MEGDR 16 ppd, std over ~66 km"
+     },
+     "note": "Same method as on Earth: 22 km block means, standard deviation over a ~66 km box."
+    }
+   },
+   "facts": [
+    {
+     "label": "TES thermal inertia (night)",
+     "v": 364,
+     "units": "tiu",
+     "source": "MGS TES"
+    },
+    {
+     "label": "Neutron epithermal counts",
+     "v": 5.68,
+     "units": "counts/s",
+     "source": "Odyssey NS"
+    },
+    {
+     "label": "GRS water-equivalent hydrogen",
+     "v": 5.42,
+     "units": "wt %",
+     "source": "Odyssey GRS"
+    },
+    {
+     "label": "Terrain relief (~66 km)",
+     "v": 1100,
+     "units": "m",
+     "source": "MGS MOLA"
+    }
+   ],
+   "temps": "Mars ground at low latitudes ranges roughly from −90 °C before dawn to 0–20 °C at midday (Curiosity REMS, Perseverance MEDA)."
+  },
+  {
+   "id": "mars-utopia-viking2",
+   "world": "mars",
+   "name": "Utopia Planitia",
+   "lat": 47.64,
+   "lon": 134.29,
+   "dims": {
+    "cold": {
+     "mode": "role",
+     "worldPct": 0.2611,
+     "earthPct": 0.2615,
+     "note": "Mars' average surface temperature is set mainly by latitude, so the share of Mars colder than this site is taken as the area share closer to the poles (approximation)."
+    },
+    "swing": {
+     "mode": "role",
+     "worldPct": 0.2475,
+     "earthPct": 0.2443,
+     "note": "First-order energy balance: daily swing grows with sunlight (cos latitude) and shrinks with thermal inertia. Ranked over the whole TES map.",
+     "value": {
+      "v": 2.76,
+      "units": "cos(lat)/TI x1000",
+      "source": "MGS TES"
+     }
+    },
+    "bare": {
+     "mode": "absolute",
+     "value": {
+      "v": 0,
+      "units": "NDVI",
+      "source": "No vegetation on Mars"
+     },
+     "earthTarget": 0.0,
+     "note": "Mars has no plants; any Earth vegetation is a difference."
+    },
+    "inertia": {
+     "mode": "role",
+     "worldPct": 0.6971,
+     "earthPct": 0.6836,
+     "note": "TES night thermal inertia ranked over Mars, matched to apparent thermal inertia ranked over Earth's land. Different units, same idea: loose fines vs rock.",
+     "value": {
+      "v": 244,
+      "units": "J m-2 K-1 s-1/2 (tiu)",
+      "source": "MGS TES night thermal inertia (Putzig & Mellon 2007)"
+     }
+    },
+    "ice": {
+     "mode": "role",
+     "worldPct": 0.7837,
+     "earthPct": 0.7839,
+     "note": "Odyssey neutron counts ranked over Mars (fewer epithermal neutrons = more hydrogen = more ground ice), matched to Earth's freezing index. Near the equator much of this hydrogen sits in hydrated minerals rather than ice, so the ice role there is an upper bound.",
+     "value": {
+      "v": 5.17,
+      "units": "epithermal counts/s (lower = more H)",
+      "source": "Mars Odyssey Neutron Spectrometer"
+     }
+    },
+    "sun": {
+     "mode": "absolute",
+     "earthTarget": 67.5,
+     "value": {
+      "v": 67.5,
+      "units": "deg",
+      "source": "latitude + 25.19 deg axial tilt"
+     },
+     "note": "Mars' tilt (25.2 deg) is close to Earth's (23.4 deg), so the same latitude gives a similar Sun path and seasons."
+    },
+    "relief": {
+     "mode": "absolute",
+     "earthTarget": 30,
+     "value": {
+      "v": 30,
+      "units": "m",
+      "source": "MGS MOLA MEGDR 16 ppd, std over ~66 km"
+     },
+     "note": "Same method as on Earth: 22 km block means, standard deviation over a ~66 km box."
+    }
+   },
+   "facts": [
+    {
+     "label": "TES thermal inertia (night)",
+     "v": 244,
+     "units": "tiu",
+     "source": "MGS TES"
+    },
+    {
+     "label": "Neutron epithermal counts",
+     "v": 5.17,
+     "units": "counts/s",
+     "source": "Odyssey NS"
+    },
+    {
+     "label": "GRS water-equivalent hydrogen",
+     "v": 4.58,
+     "units": "wt %",
+     "source": "Odyssey GRS"
+    },
+    {
+     "label": "Terrain relief (~66 km)",
+     "v": 30,
+     "units": "m",
+     "source": "MGS MOLA"
+    }
+   ],
+   "temps": "Mars ground at low latitudes ranges roughly from −90 °C before dawn to 0–20 °C at midday (Curiosity REMS, Perseverance MEDA)."
+  },
+  {
+   "id": "mars-arcadia",
+   "world": "mars",
+   "name": "Arcadia Planitia",
+   "lat": 49.02,
+   "lon": -171.85,
+   "dims": {
+    "cold": {
+     "mode": "role",
+     "worldPct": 0.2451,
+     "earthPct": 0.2445,
+     "note": "Mars' average surface temperature is set mainly by latitude, so the share of Mars colder than this site is taken as the area share closer to the poles (approximation)."
+    },
+    "swing": {
+     "mode": "role",
+     "worldPct": 0.3121,
+     "earthPct": 0.3117,
+     "note": "First-order energy balance: daily swing grows with sunlight (cos latitude) and shrinks with thermal inertia. Ranked over the whole TES map.",
+     "value": {
+      "v": 3.05,
+      "units": "cos(lat)/TI x1000",
+      "source": "MGS TES"
+     }
+    },
+    "bare": {
+     "mode": "absolute",
+     "value": {
+      "v": 0,
+      "units": "NDVI",
+      "source": "No vegetation on Mars"
+     },
+     "earthTarget": 0.0,
+     "note": "Mars has no plants; any Earth vegetation is a difference."
+    },
+    "inertia": {
+     "mode": "role",
+     "worldPct": 0.5445,
+     "earthPct": 0.5405,
+     "note": "TES night thermal inertia ranked over Mars, matched to apparent thermal inertia ranked over Earth's land. Different units, same idea: loose fines vs rock.",
+     "value": {
+      "v": 215,
+      "units": "J m-2 K-1 s-1/2 (tiu)",
+      "source": "MGS TES night thermal inertia (Putzig & Mellon 2007)"
+     }
+    },
+    "ice": {
+     "mode": "role",
+     "worldPct": 0.8346,
+     "earthPct": 0.8357,
+     "note": "Odyssey neutron counts ranked over Mars (fewer epithermal neutrons = more hydrogen = more ground ice), matched to Earth's freezing index. Near the equator much of this hydrogen sits in hydrated minerals rather than ice, so the ice role there is an upper bound.",
+     "value": {
+      "v": 4.85,
+      "units": "epithermal counts/s (lower = more H)",
+      "source": "Mars Odyssey Neutron Spectrometer"
+     }
+    },
+    "sun": {
+     "mode": "absolute",
+     "earthTarget": 66.2,
+     "value": {
+      "v": 66.2,
+      "units": "deg",
+      "source": "latitude + 25.19 deg axial tilt"
+     },
+     "note": "Mars' tilt (25.2 deg) is close to Earth's (23.4 deg), so the same latitude gives a similar Sun path and seasons."
+    },
+    "relief": {
+     "mode": "absolute",
+     "earthTarget": 12,
+     "value": {
+      "v": 12,
+      "units": "m",
+      "source": "MGS MOLA MEGDR 16 ppd, std over ~66 km"
+     },
+     "note": "Same method as on Earth: 22 km block means, standard deviation over a ~66 km box."
+    }
+   },
+   "facts": [
+    {
+     "label": "TES thermal inertia (night)",
+     "v": 215,
+     "units": "tiu",
+     "source": "MGS TES"
+    },
+    {
+     "label": "Neutron epithermal counts",
+     "v": 4.85,
+     "units": "counts/s",
+     "source": "Odyssey NS"
+    },
+    {
+     "label": "GRS water-equivalent hydrogen",
+     "v": null,
+     "units": "wt %",
+     "source": "Odyssey GRS (masked poleward of ~±60 deg)"
+    },
+    {
+     "label": "Terrain relief (~66 km)",
+     "v": 12,
+     "units": "m",
+     "source": "MGS MOLA"
+    }
+   ],
+   "temps": "Mars ground at low latitudes ranges roughly from −90 °C before dawn to 0–20 °C at midday (Curiosity REMS, Perseverance MEDA)."
+  },
+  {
+   "id": "mars-mawrth-vallis",
+   "world": "mars",
+   "name": "Mawrth Vallis",
+   "lat": 22.43,
+   "lon": -16.97,
+   "dims": {
+    "cold": {
+     "mode": "role",
+     "worldPct": 0.6184,
+     "earthPct": 0.6144,
+     "note": "Mars' average surface temperature is set mainly by latitude, so the share of Mars colder than this site is taken as the area share closer to the poles (approximation)."
+    },
+    "swing": {
+     "mode": "role",
+     "worldPct": 0.4783,
+     "earthPct": 0.4836,
+     "note": "First-order energy balance: daily swing grows with sunlight (cos latitude) and shrinks with thermal inertia. Ranked over the whole TES map.",
+     "value": {
+      "v": 3.78,
+      "units": "cos(lat)/TI x1000",
+      "source": "MGS TES"
+     }
+    },
+    "bare": {
+     "mode": "absolute",
+     "value": {
+      "v": 0,
+      "units": "NDVI",
+      "source": "No vegetation on Mars"
+     },
+     "earthTarget": 0.0,
+     "note": "Mars has no plants; any Earth vegetation is a difference."
+    },
+    "inertia": {
+     "mode": "role",
+     "worldPct": 0.6971,
+     "earthPct": 0.6836,
+     "note": "TES night thermal inertia ranked over Mars, matched to apparent thermal inertia ranked over Earth's land. Different units, same idea: loose fines vs rock.",
+     "value": {
+      "v": 245,
+      "units": "J m-2 K-1 s-1/2 (tiu)",
+      "source": "MGS TES night thermal inertia (Putzig & Mellon 2007)"
+     }
+    },
+    "ice": {
+     "mode": "role",
+     "worldPct": 0.7301,
+     "earthPct": 0.729,
+     "note": "Odyssey neutron counts ranked over Mars (fewer epithermal neutrons = more hydrogen = more ground ice), matched to Earth's freezing index. Near the equator much of this hydrogen sits in hydrated minerals rather than ice, so the ice role there is an upper bound.",
+     "value": {
+      "v": 5.46,
+      "units": "epithermal counts/s (lower = more H)",
+      "source": "Mars Odyssey Neutron Spectrometer"
+     }
+    },
+    "sun": {
+     "mode": "absolute",
+     "earthTarget": 90.0,
+     "value": {
+      "v": 90.0,
+      "units": "deg",
+      "source": "latitude + 25.19 deg axial tilt"
+     },
+     "note": "Mars' tilt (25.2 deg) is close to Earth's (23.4 deg), so the same latitude gives a similar Sun path and seasons."
+    },
+    "relief": {
+     "mode": "absolute",
+     "earthTarget": 278,
+     "value": {
+      "v": 278,
+      "units": "m",
+      "source": "MGS MOLA MEGDR 16 ppd, std over ~66 km"
+     },
+     "note": "Same method as on Earth: 22 km block means, standard deviation over a ~66 km box."
+    }
+   },
+   "facts": [
+    {
+     "label": "TES thermal inertia (night)",
+     "v": 245,
+     "units": "tiu",
+     "source": "MGS TES"
+    },
+    {
+     "label": "Neutron epithermal counts",
+     "v": 5.46,
+     "units": "counts/s",
+     "source": "Odyssey NS"
+    },
+    {
+     "label": "GRS water-equivalent hydrogen",
+     "v": 5.46,
+     "units": "wt %",
+     "source": "Odyssey GRS"
+    },
+    {
+     "label": "Terrain relief (~66 km)",
+     "v": 278,
+     "units": "m",
+     "source": "MGS MOLA"
+    }
+   ],
+   "temps": "Mars ground at low latitudes ranges roughly from −90 °C before dawn to 0–20 °C at midday (Curiosity REMS, Perseverance MEDA)."
+  },
+  {
+   "id": "mars-hellas",
+   "world": "mars",
+   "name": "Hellas Planitia",
+   "lat": -42.43,
+   "lon": 70.5,
+   "dims": {
+    "cold": {
+     "mode": "role",
+     "worldPct": 0.3253,
+     "earthPct": 0.3241,
+     "note": "Mars' average surface temperature is set mainly by latitude, so the share of Mars colder than this site is taken as the area share closer to the poles (approximation)."
+    },
+    "swing": {
+     "mode": "role",
+     "worldPct": 0.4541,
+     "earthPct": 0.4527,
+     "note": "First-order energy balance: daily swing grows with sunlight (cos latitude) and shrinks with thermal inertia. Ranked over the whole TES map.",
+     "value": {
+      "v": 3.67,
+      "units": "cos(lat)/TI x1000",
+      "source": "MGS TES"
+     }
+    },
+    "bare": {
+     "mode": "absolute",
+     "value": {
+      "v": 0,
+      "units": "NDVI",
+      "source": "No vegetation on Mars"
+     },
+     "earthTarget": 0.0,
+     "note": "Mars has no plants; any Earth vegetation is a difference."
+    },
+    "inertia": {
+     "mode": "role",
+     "worldPct": 0.4738,
+     "earthPct": 0.494,
+     "note": "TES night thermal inertia ranked over Mars, matched to apparent thermal inertia ranked over Earth's land. Different units, same idea: loose fines vs rock.",
+     "value": {
+      "v": 201,
+      "units": "J m-2 K-1 s-1/2 (tiu)",
+      "source": "MGS TES night thermal inertia (Putzig & Mellon 2007)"
+     }
+    },
+    "ice": {
+     "mode": "role",
+     "worldPct": 0.2912,
+     "earthPct": 0.277,
+     "note": "Odyssey neutron counts ranked over Mars (fewer epithermal neutrons = more hydrogen = more ground ice), matched to Earth's freezing index. Near the equator much of this hydrogen sits in hydrated minerals rather than ice, so the ice role there is an upper bound.",
+     "value": {
+      "v": 7.27,
+      "units": "epithermal counts/s (lower = more H)",
+      "source": "Mars Odyssey Neutron Spectrometer"
+     }
+    },
+    "sun": {
+     "mode": "absolute",
+     "earthTarget": 72.8,
+     "value": {
+      "v": 72.8,
+      "units": "deg",
+      "source": "latitude + 25.19 deg axial tilt"
+     },
+     "note": "Mars' tilt (25.2 deg) is close to Earth's (23.4 deg), so the same latitude gives a similar Sun path and seasons."
+    },
+    "relief": {
+     "mode": "absolute",
+     "earthTarget": 269,
+     "value": {
+      "v": 269,
+      "units": "m",
+      "source": "MGS MOLA MEGDR 16 ppd, std over ~66 km"
+     },
+     "note": "Same method as on Earth: 22 km block means, standard deviation over a ~66 km box."
+    }
+   },
+   "facts": [
+    {
+     "label": "TES thermal inertia (night)",
+     "v": 201,
+     "units": "tiu",
+     "source": "MGS TES"
+    },
+    {
+     "label": "Neutron epithermal counts",
+     "v": 7.27,
+     "units": "counts/s",
+     "source": "Odyssey NS"
+    },
+    {
+     "label": "GRS water-equivalent hydrogen",
+     "v": 4.16,
+     "units": "wt %",
+     "source": "Odyssey GRS"
+    },
+    {
+     "label": "Terrain relief (~66 km)",
+     "v": 269,
+     "units": "m",
+     "source": "MGS MOLA"
+    }
+   ],
+   "temps": "Mars ground at low latitudes ranges roughly from −90 °C before dawn to 0–20 °C at midday (Curiosity REMS, Perseverance MEDA)."
+  },
+  {
+   "id": "mars-phoenix",
+   "world": "mars",
+   "name": "Phoenix landing site",
+   "lat": 68.22,
+   "lon": -125.75,
+   "dims": {
+    "cold": {
+     "mode": "role",
+     "worldPct": 0.0714,
+     "earthPct": 0.0718,
+     "note": "Mars' average surface temperature is set mainly by latitude, so the share of Mars colder than this site is taken as the area share closer to the poles (approximation)."
+    },
+    "swing": {
+     "mode": "role",
+     "worldPct": 0.4523,
+     "earthPct": 0.4527,
+     "note": "First-order energy balance: daily swing grows with sunlight (cos latitude) and shrinks with thermal inertia. Ranked over the whole TES map.",
+     "value": {
+      "v": 3.67,
+      "units": "cos(lat)/TI x1000",
+      "source": "MGS TES"
+     }
+    },
+    "bare": {
+     "mode": "absolute",
+     "value": {
+      "v": 0,
+      "units": "NDVI",
+      "source": "No vegetation on Mars"
+     },
+     "earthTarget": 0.0,
+     "note": "Mars has no plants; any Earth vegetation is a difference."
+    },
+    "inertia": {
+     "mode": "role",
+     "worldPct": 0.2105,
+     "earthPct": 0.1918,
+     "note": "TES night thermal inertia ranked over Mars, matched to apparent thermal inertia ranked over Earth's land. Different units, same idea: loose fines vs rock.",
+     "value": {
+      "v": 101,
+      "units": "J m-2 K-1 s-1/2 (tiu)",
+      "source": "MGS TES night thermal inertia (Putzig & Mellon 2007)"
+     }
+    },
+    "ice": {
+     "mode": "role",
+     "worldPct": 0.9256,
+     "earthPct": 0.9257,
+     "note": "Odyssey neutron counts ranked over Mars (fewer epithermal neutrons = more hydrogen = more ground ice), matched to Earth's freezing index. Near the equator much of this hydrogen sits in hydrated minerals rather than ice, so the ice role there is an upper bound.",
+     "value": {
+      "v": 3.42,
+      "units": "epithermal counts/s (lower = more H)",
+      "source": "Mars Odyssey Neutron Spectrometer"
+     }
+    },
+    "sun": {
+     "mode": "absolute",
+     "earthTarget": 47.0,
+     "value": {
+      "v": 47.0,
+      "units": "deg",
+      "source": "latitude + 25.19 deg axial tilt"
+     },
+     "note": "Mars' tilt (25.2 deg) is close to Earth's (23.4 deg), so the same latitude gives a similar Sun path and seasons."
+    },
+    "relief": {
+     "mode": "absolute",
+     "earthTarget": 52,
+     "value": {
+      "v": 52,
+      "units": "m",
+      "source": "MGS MOLA MEGDR 16 ppd, std over ~66 km"
+     },
+     "note": "Same method as on Earth: 22 km block means, standard deviation over a ~66 km box."
+    }
+   },
+   "facts": [
+    {
+     "label": "TES thermal inertia (night)",
+     "v": 101,
+     "units": "tiu",
+     "source": "MGS TES"
+    },
+    {
+     "label": "Neutron epithermal counts",
+     "v": 3.42,
+     "units": "counts/s",
+     "source": "Odyssey NS"
+    },
+    {
+     "label": "GRS water-equivalent hydrogen",
+     "v": null,
+     "units": "wt %",
+     "source": "Odyssey GRS (masked poleward of ~±60 deg)"
+    },
+    {
+     "label": "Terrain relief (~66 km)",
+     "v": 52,
+     "units": "m",
+     "source": "MGS MOLA"
+    }
+   ],
+   "temps": "Mars ground at low latitudes ranges roughly from −90 °C before dawn to 0–20 °C at midday (Curiosity REMS, Perseverance MEDA)."
+  },
+  {
+   "id": "moon-shackleton-rim",
+   "world": "moon",
+   "name": "Shackleton crater rim",
+   "lat": -89.67,
+   "lon": 129.78,
+   "dims": {
+    "cold": {
+     "mode": "role",
+     "worldPct": 0.0,
+     "earthPct": 0.0,
+     "note": "Diviner shows lunar average temperature is set mainly by latitude, so the share of the Moon colder than a site is the area share closer to the poles. Earth has nothing as cold: we match the role, not the number."
+    },
+    "swing": {
+     "mode": "role",
+     "worldPct": 0.0,
+     "earthPct": 0.0016,
+     "note": "Polar ground sees a low Sun circling the horizon: one of the smallest day-night swings on the Moon."
+    },
+    "bare": {
+     "mode": "absolute",
+     "value": {
+      "v": 0,
+      "units": "NDVI",
+      "source": "No vegetation on the Moon"
+     },
+     "earthTarget": 0.0,
+     "note": "The Moon has no plants."
+    },
+    "inertia": {
+     "mode": "role",
+     "worldPct": 0.05,
+     "earthPct": 0.0512,
+     "note": "Polar sites lie outside Diviner's rock-abundance map. Lunar regolith (~50 tiu, Hayne et al. 2017) is looser than almost any Earth surface, so the target is Earth's lowest-inertia 5%.",
+     "value": {
+      "v": 55,
+      "units": "tiu (typical regolith)",
+      "source": "LRO Diviner, Hayne et al. 2017"
+     }
+    },
+    "ice": {
+     "mode": "role",
+     "worldPct": 1.0,
+     "earthPct": 0.9998,
+     "note": "Within a few km of permanently shadowed cold traps where Diviner finds water ice can survive; among the most ice-favourable ~1% of the Moon. Diviner PRP: 100% of the ground within 3 km keeps ice stable within 2.87 m."
+    },
+    "sun": {
+     "mode": "absolute",
+     "earthTarget": 1.9,
+     "value": {
+      "v": 1.9,
+      "units": "deg",
+      "source": "latitude + 1.54 deg axial tilt"
+     },
+     "note": "The Sun never rises more than a few degrees here. On Earth even the poles get 23 deg: no Earth place matches this."
+    },
+    "relief": {
+     "mode": "absolute",
+     "earthTarget": 580,
+     "value": {
+      "v": 580,
+      "units": "m",
+      "source": "LRO LOLA south-polar DEM 240 m, std over ~66 km"
+     },
+     "note": "Same method as on Earth: 22 km block means, standard deviation over a ~66 km box."
+    }
+   },
+   "facts": [
+    {
+     "label": "Latitude",
+     "v": -89.67,
+     "units": "deg",
+     "source": "USGS Gazetteer / NASA Artemis III regions"
+    },
+    {
+     "label": "Annual max temperature",
+     "v": 104.6,
+     "units": "K",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Annual average temperature",
+     "v": 51.4,
+     "units": "K",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Ground with ice stable within 2.87 m",
+     "v": 100,
+     "units": "%",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Terrain relief (~66 km)",
+     "v": 580,
+     "units": "m",
+     "source": "LRO LOLA"
+    }
+   ],
+   "temps": "Diviner, within 3 km of the listed coordinate: annual maximum 105 K (-169 °C), annual average 51 K (-222 °C); this spot is a cold trap (never above 110 K). Region coordinates are approximate, and sunlit ridge tops nearby run warmer. No place on Earth gets this cold: the coldest ground measured on Earth is about −98 °C (175 K).",
+   "refs": [
+    "Paige et al. 2010, Science 330:479 (Diviner cold traps)",
+    "Williams et al. 2019, JGR Planets 124:2505 (seasonal polar temperatures)",
+    "LRO Diviner polar resource product (Paige et al., PDS LRO-L-DLRE-5-PRP-V2.0)"
+   ],
+   "measured": true
+  },
+  {
+   "id": "moon-malapert-massif",
+   "world": "moon",
+   "name": "Malapert Massif",
+   "lat": -85.0,
+   "lon": 11.4,
+   "dims": {
+    "cold": {
+     "mode": "role",
+     "worldPct": 0.0038,
+     "earthPct": 0.0038,
+     "note": "Diviner shows lunar average temperature is set mainly by latitude, so the share of the Moon colder than a site is the area share closer to the poles. Earth has nothing as cold: we match the role, not the number."
+    },
+    "swing": {
+     "mode": "role",
+     "worldPct": 0.0038,
+     "earthPct": 0.0037,
+     "note": "Polar ground sees a low Sun circling the horizon: one of the smallest day-night swings on the Moon."
+    },
+    "bare": {
+     "mode": "absolute",
+     "value": {
+      "v": 0,
+      "units": "NDVI",
+      "source": "No vegetation on the Moon"
+     },
+     "earthTarget": 0.0,
+     "note": "The Moon has no plants."
+    },
+    "inertia": {
+     "mode": "role",
+     "worldPct": 0.05,
+     "earthPct": 0.0512,
+     "note": "Polar sites lie outside Diviner's rock-abundance map. Lunar regolith (~50 tiu, Hayne et al. 2017) is looser than almost any Earth surface, so the target is Earth's lowest-inertia 5%.",
+     "value": {
+      "v": 55,
+      "units": "tiu (typical regolith)",
+      "source": "LRO Diviner, Hayne et al. 2017"
+     }
+    },
+    "ice": {
+     "mode": "role",
+     "worldPct": 0.9962,
+     "earthPct": 0.9961,
+     "note": "Within a few km of permanently shadowed cold traps where Diviner finds water ice can survive; among the most ice-favourable ~1% of the Moon. Diviner PRP: 100% of the ground within 3 km keeps ice stable within 2.87 m."
+    },
+    "sun": {
+     "mode": "absolute",
+     "earthTarget": 6.5,
+     "value": {
+      "v": 6.5,
+      "units": "deg",
+      "source": "latitude + 1.54 deg axial tilt"
+     },
+     "note": "The Sun never rises more than a few degrees here. On Earth even the poles get 23 deg: no Earth place matches this."
+    },
+    "relief": {
+     "mode": "absolute",
+     "earthTarget": 1921,
+     "value": {
+      "v": 1921,
+      "units": "m",
+      "source": "LRO LOLA south-polar DEM 240 m, std over ~66 km"
+     },
+     "note": "Same method as on Earth: 22 km block means, standard deviation over a ~66 km box."
+    }
+   },
+   "facts": [
+    {
+     "label": "Latitude",
+     "v": -85.0,
+     "units": "deg",
+     "source": "USGS Gazetteer / NASA Artemis III regions"
+    },
+    {
+     "label": "Annual max temperature",
+     "v": 241.3,
+     "units": "K",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Annual average temperature",
+     "v": 86.1,
+     "units": "K",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Ground with ice stable within 2.87 m",
+     "v": 100,
+     "units": "%",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Terrain relief (~66 km)",
+     "v": 1921,
+     "units": "m",
+     "source": "LRO LOLA"
+    }
+   ],
+   "temps": "Diviner, within 3 km of the listed coordinate: annual maximum 241 K (-32 °C), annual average 86 K (-187 °C). Region coordinates are approximate, and sunlit ridge tops nearby run warmer. No place on Earth gets this cold: the coldest ground measured on Earth is about −98 °C (175 K).",
+   "refs": [
+    "Paige et al. 2010, Science 330:479 (Diviner cold traps)",
+    "Williams et al. 2019, JGR Planets 124:2505 (seasonal polar temperatures)",
+    "LRO Diviner polar resource product (Paige et al., PDS LRO-L-DLRE-5-PRP-V2.0)"
+   ],
+   "measured": true
+  },
+  {
+   "id": "moon-haworth",
+   "world": "moon",
+   "name": "Haworth",
+   "lat": -87.45,
+   "lon": -5.17,
+   "dims": {
+    "cold": {
+     "mode": "role",
+     "worldPct": 0.001,
+     "earthPct": 0.0008,
+     "note": "Diviner shows lunar average temperature is set mainly by latitude, so the share of the Moon colder than a site is the area share closer to the poles. Earth has nothing as cold: we match the role, not the number."
+    },
+    "swing": {
+     "mode": "role",
+     "worldPct": 0.001,
+     "earthPct": 0.0016,
+     "note": "Polar ground sees a low Sun circling the horizon: one of the smallest day-night swings on the Moon."
+    },
+    "bare": {
+     "mode": "absolute",
+     "value": {
+      "v": 0,
+      "units": "NDVI",
+      "source": "No vegetation on the Moon"
+     },
+     "earthTarget": 0.0,
+     "note": "The Moon has no plants."
+    },
+    "inertia": {
+     "mode": "role",
+     "worldPct": 0.05,
+     "earthPct": 0.0512,
+     "note": "Polar sites lie outside Diviner's rock-abundance map. Lunar regolith (~50 tiu, Hayne et al. 2017) is looser than almost any Earth surface, so the target is Earth's lowest-inertia 5%.",
+     "value": {
+      "v": 55,
+      "units": "tiu (typical regolith)",
+      "source": "LRO Diviner, Hayne et al. 2017"
+     }
+    },
+    "ice": {
+     "mode": "role",
+     "worldPct": 0.999,
+     "earthPct": 0.9988,
+     "note": "Within a few km of permanently shadowed cold traps where Diviner finds water ice can survive; among the most ice-favourable ~1% of the Moon. Diviner PRP: 100% of the ground within 3 km keeps ice stable within 2.87 m."
+    },
+    "sun": {
+     "mode": "absolute",
+     "earthTarget": 4.1,
+     "value": {
+      "v": 4.1,
+      "units": "deg",
+      "source": "latitude + 1.54 deg axial tilt"
+     },
+     "note": "The Sun never rises more than a few degrees here. On Earth even the poles get 23 deg: no Earth place matches this."
+    },
+    "relief": {
+     "mode": "absolute",
+     "earthTarget": 1333,
+     "value": {
+      "v": 1333,
+      "units": "m",
+      "source": "LRO LOLA south-polar DEM 240 m, std over ~66 km"
+     },
+     "note": "Same method as on Earth: 22 km block means, standard deviation over a ~66 km box."
+    }
+   },
+   "facts": [
+    {
+     "label": "Latitude",
+     "v": -87.45,
+     "units": "deg",
+     "source": "USGS Gazetteer / NASA Artemis III regions"
+    },
+    {
+     "label": "Annual max temperature",
+     "v": 77.5,
+     "units": "K",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Annual average temperature",
+     "v": 38.4,
+     "units": "K",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Ground with ice stable within 2.87 m",
+     "v": 100,
+     "units": "%",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Terrain relief (~66 km)",
+     "v": 1333,
+     "units": "m",
+     "source": "LRO LOLA"
+    }
+   ],
+   "temps": "Diviner, within 3 km of the listed coordinate: annual maximum 78 K (-196 °C), annual average 38 K (-235 °C); this spot is a cold trap (never above 110 K). Region coordinates are approximate, and sunlit ridge tops nearby run warmer. No place on Earth gets this cold: the coldest ground measured on Earth is about −98 °C (175 K).",
+   "refs": [
+    "Paige et al. 2010, Science 330:479 (Diviner cold traps)",
+    "Williams et al. 2019, JGR Planets 124:2505 (seasonal polar temperatures)",
+    "LRO Diviner polar resource product (Paige et al., PDS LRO-L-DLRE-5-PRP-V2.0)"
+   ],
+   "measured": true
+  },
+  {
+   "id": "moon-nobile-rim-1",
+   "world": "moon",
+   "name": "Nobile Rim",
+   "lat": -85.28,
+   "lon": 53.27,
+   "dims": {
+    "cold": {
+     "mode": "role",
+     "worldPct": 0.0034,
+     "earthPct": 0.0038,
+     "note": "Diviner shows lunar average temperature is set mainly by latitude, so the share of the Moon colder than a site is the area share closer to the poles. Earth has nothing as cold: we match the role, not the number."
+    },
+    "swing": {
+     "mode": "role",
+     "worldPct": 0.0034,
+     "earthPct": 0.0037,
+     "note": "Polar ground sees a low Sun circling the horizon: one of the smallest day-night swings on the Moon."
+    },
+    "bare": {
+     "mode": "absolute",
+     "value": {
+      "v": 0,
+      "units": "NDVI",
+      "source": "No vegetation on the Moon"
+     },
+     "earthTarget": 0.0,
+     "note": "The Moon has no plants."
+    },
+    "inertia": {
+     "mode": "role",
+     "worldPct": 0.05,
+     "earthPct": 0.0512,
+     "note": "Polar sites lie outside Diviner's rock-abundance map. Lunar regolith (~50 tiu, Hayne et al. 2017) is looser than almost any Earth surface, so the target is Earth's lowest-inertia 5%.",
+     "value": {
+      "v": 55,
+      "units": "tiu (typical regolith)",
+      "source": "LRO Diviner, Hayne et al. 2017"
+     }
+    },
+    "ice": {
+     "mode": "role",
+     "worldPct": 0.9966,
+     "earthPct": 0.9966,
+     "note": "Within a few km of permanently shadowed cold traps where Diviner finds water ice can survive; among the most ice-favourable ~1% of the Moon. Diviner PRP: 41% of the ground within 3 km keeps ice stable within 2.87 m."
+    },
+    "sun": {
+     "mode": "absolute",
+     "earthTarget": 6.3,
+     "value": {
+      "v": 6.3,
+      "units": "deg",
+      "source": "latitude + 1.54 deg axial tilt"
+     },
+     "note": "The Sun never rises more than a few degrees here. On Earth even the poles get 23 deg: no Earth place matches this."
+    },
+    "relief": {
+     "mode": "absolute",
+     "earthTarget": 1485,
+     "value": {
+      "v": 1485,
+      "units": "m",
+      "source": "LRO LOLA south-polar DEM 240 m, std over ~66 km"
+     },
+     "note": "Same method as on Earth: 22 km block means, standard deviation over a ~66 km box."
+    }
+   },
+   "facts": [
+    {
+     "label": "Latitude",
+     "v": -85.28,
+     "units": "deg",
+     "source": "USGS Gazetteer / NASA Artemis III regions"
+    },
+    {
+     "label": "Annual max temperature",
+     "v": 270.5,
+     "units": "K",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Annual average temperature",
+     "v": 112.4,
+     "units": "K",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Ground with ice stable within 2.87 m",
+     "v": 41,
+     "units": "%",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Terrain relief (~66 km)",
+     "v": 1485,
+     "units": "m",
+     "source": "LRO LOLA"
+    }
+   ],
+   "temps": "Diviner, within 3 km of the listed coordinate: annual maximum 270 K (-3 °C), annual average 112 K (-161 °C). Region coordinates are approximate, and sunlit ridge tops nearby run warmer. No place on Earth gets this cold: the coldest ground measured on Earth is about −98 °C (175 K).",
+   "refs": [
+    "Paige et al. 2010, Science 330:479 (Diviner cold traps)",
+    "Williams et al. 2019, JGR Planets 124:2505 (seasonal polar temperatures)",
+    "LRO Diviner polar resource product (Paige et al., PDS LRO-L-DLRE-5-PRP-V2.0)"
+   ],
+   "measured": true
+  },
+  {
+   "id": "moon-de-gerlache-rim-2",
+   "world": "moon",
+   "name": "de Gerlache Rim 2",
+   "lat": -88.49,
+   "lon": -88.35,
+   "dims": {
+    "cold": {
+     "mode": "role",
+     "worldPct": 0.0003,
+     "earthPct": 0.0004,
+     "note": "Diviner shows lunar average temperature is set mainly by latitude, so the share of the Moon colder than a site is the area share closer to the poles. Earth has nothing as cold: we match the role, not the number."
+    },
+    "swing": {
+     "mode": "role",
+     "worldPct": 0.0003,
+     "earthPct": 0.0016,
+     "note": "Polar ground sees a low Sun circling the horizon: one of the smallest day-night swings on the Moon."
+    },
+    "bare": {
+     "mode": "absolute",
+     "value": {
+      "v": 0,
+      "units": "NDVI",
+      "source": "No vegetation on the Moon"
+     },
+     "earthTarget": 0.0,
+     "note": "The Moon has no plants."
+    },
+    "inertia": {
+     "mode": "role",
+     "worldPct": 0.05,
+     "earthPct": 0.0512,
+     "note": "Polar sites lie outside Diviner's rock-abundance map. Lunar regolith (~50 tiu, Hayne et al. 2017) is looser than almost any Earth surface, so the target is Earth's lowest-inertia 5%.",
+     "value": {
+      "v": 55,
+      "units": "tiu (typical regolith)",
+      "source": "LRO Diviner, Hayne et al. 2017"
+     }
+    },
+    "ice": {
+     "mode": "role",
+     "worldPct": 0.9997,
+     "earthPct": 0.9996,
+     "note": "Within a few km of permanently shadowed cold traps where Diviner finds water ice can survive; among the most ice-favourable ~1% of the Moon. Diviner PRP: 100% of the ground within 3 km keeps ice stable within 2.87 m."
+    },
+    "sun": {
+     "mode": "absolute",
+     "earthTarget": 3.1,
+     "value": {
+      "v": 3.1,
+      "units": "deg",
+      "source": "latitude + 1.54 deg axial tilt"
+     },
+     "note": "The Sun never rises more than a few degrees here. On Earth even the poles get 23 deg: no Earth place matches this."
+    },
+    "relief": {
+     "mode": "absolute",
+     "earthTarget": 512,
+     "value": {
+      "v": 512,
+      "units": "m",
+      "source": "LRO LOLA south-polar DEM 240 m, std over ~66 km"
+     },
+     "note": "Same method as on Earth: 22 km block means, standard deviation over a ~66 km box."
+    }
+   },
+   "facts": [
+    {
+     "label": "Latitude",
+     "v": -88.49,
+     "units": "deg",
+     "source": "USGS Gazetteer / NASA Artemis III regions"
+    },
+    {
+     "label": "Annual max temperature",
+     "v": 208.3,
+     "units": "K",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Annual average temperature",
+     "v": 46.2,
+     "units": "K",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Ground with ice stable within 2.87 m",
+     "v": 100,
+     "units": "%",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Terrain relief (~66 km)",
+     "v": 512,
+     "units": "m",
+     "source": "LRO LOLA"
+    }
+   ],
+   "temps": "Diviner, within 3 km of the listed coordinate: annual maximum 208 K (-65 °C), annual average 46 K (-227 °C). Region coordinates are approximate, and sunlit ridge tops nearby run warmer. No place on Earth gets this cold: the coldest ground measured on Earth is about −98 °C (175 K).",
+   "refs": [
+    "Paige et al. 2010, Science 330:479 (Diviner cold traps)",
+    "Williams et al. 2019, JGR Planets 124:2505 (seasonal polar temperatures)",
+    "LRO Diviner polar resource product (Paige et al., PDS LRO-L-DLRE-5-PRP-V2.0)"
+   ],
+   "measured": true
+  },
+  {
+   "id": "moon-mons-mouton",
+   "world": "moon",
+   "name": "Mons Mouton",
+   "lat": -84.6,
+   "lon": 31.5,
+   "dims": {
+    "cold": {
+     "mode": "role",
+     "worldPct": 0.0044,
+     "earthPct": 0.0047,
+     "note": "Diviner shows lunar average temperature is set mainly by latitude, so the share of the Moon colder than a site is the area share closer to the poles. Earth has nothing as cold: we match the role, not the number."
+    },
+    "swing": {
+     "mode": "role",
+     "worldPct": 0.0044,
+     "earthPct": 0.0052,
+     "note": "Polar ground sees a low Sun circling the horizon: one of the smallest day-night swings on the Moon."
+    },
+    "bare": {
+     "mode": "absolute",
+     "value": {
+      "v": 0,
+      "units": "NDVI",
+      "source": "No vegetation on the Moon"
+     },
+     "earthTarget": 0.0,
+     "note": "The Moon has no plants."
+    },
+    "inertia": {
+     "mode": "role",
+     "worldPct": 0.05,
+     "earthPct": 0.0512,
+     "note": "Polar sites lie outside Diviner's rock-abundance map. Lunar regolith (~50 tiu, Hayne et al. 2017) is looser than almost any Earth surface, so the target is Earth's lowest-inertia 5%.",
+     "value": {
+      "v": 55,
+      "units": "tiu (typical regolith)",
+      "source": "LRO Diviner, Hayne et al. 2017"
+     }
+    },
+    "ice": {
+     "mode": "role",
+     "worldPct": 0.9956,
+     "earthPct": 0.9957,
+     "note": "Within a few km of permanently shadowed cold traps where Diviner finds water ice can survive; among the most ice-favourable ~1% of the Moon. Diviner PRP: 39% of the ground within 3 km keeps ice stable within 2.87 m."
+    },
+    "sun": {
+     "mode": "absolute",
+     "earthTarget": 6.9,
+     "value": {
+      "v": 6.9,
+      "units": "deg",
+      "source": "latitude + 1.54 deg axial tilt"
+     },
+     "note": "The Sun never rises more than a few degrees here. On Earth even the poles get 23 deg: no Earth place matches this."
+    },
+    "relief": {
+     "mode": "absolute",
+     "earthTarget": 865,
+     "value": {
+      "v": 865,
+      "units": "m",
+      "source": "LRO LOLA south-polar DEM 240 m, std over ~66 km"
+     },
+     "note": "Same method as on Earth: 22 km block means, standard deviation over a ~66 km box."
+    }
+   },
+   "facts": [
+    {
+     "label": "Latitude",
+     "v": -84.6,
+     "units": "deg",
+     "source": "USGS Gazetteer / NASA Artemis III regions"
+    },
+    {
+     "label": "Annual max temperature",
+     "v": 258.1,
+     "units": "K",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Annual average temperature",
+     "v": 117.4,
+     "units": "K",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Ground with ice stable within 2.87 m",
+     "v": 39,
+     "units": "%",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Terrain relief (~66 km)",
+     "v": 865,
+     "units": "m",
+     "source": "LRO LOLA"
+    }
+   ],
+   "temps": "Diviner, within 3 km of the listed coordinate: annual maximum 258 K (-15 °C), annual average 117 K (-156 °C). Region coordinates are approximate, and sunlit ridge tops nearby run warmer. No place on Earth gets this cold: the coldest ground measured on Earth is about −98 °C (175 K).",
+   "refs": [
+    "Paige et al. 2010, Science 330:479 (Diviner cold traps)",
+    "Williams et al. 2019, JGR Planets 124:2505 (seasonal polar temperatures)",
+    "LRO Diviner polar resource product (Paige et al., PDS LRO-L-DLRE-5-PRP-V2.0)"
+   ],
+   "measured": true
+  },
+  {
+   "id": "moon-peak-near-cabeus-b",
+   "world": "moon",
+   "name": "Peak near Cabeus B",
+   "lat": -82.26,
+   "lon": -54.59,
+   "dims": {
+    "cold": {
+     "mode": "role",
+     "worldPct": 0.0091,
+     "earthPct": 0.0097,
+     "note": "Diviner shows lunar average temperature is set mainly by latitude, so the share of the Moon colder than a site is the area share closer to the poles. Earth has nothing as cold: we match the role, not the number."
+    },
+    "swing": {
+     "mode": "role",
+     "worldPct": 0.0091,
+     "earthPct": 0.0105,
+     "note": "Polar ground sees a low Sun circling the horizon: one of the smallest day-night swings on the Moon."
+    },
+    "bare": {
+     "mode": "absolute",
+     "value": {
+      "v": 0,
+      "units": "NDVI",
+      "source": "No vegetation on the Moon"
+     },
+     "earthTarget": 0.0,
+     "note": "The Moon has no plants."
+    },
+    "inertia": {
+     "mode": "role",
+     "worldPct": 0.05,
+     "earthPct": 0.0512,
+     "note": "Polar sites lie outside Diviner's rock-abundance map. Lunar regolith (~50 tiu, Hayne et al. 2017) is looser than almost any Earth surface, so the target is Earth's lowest-inertia 5%.",
+     "value": {
+      "v": 55,
+      "units": "tiu (typical regolith)",
+      "source": "LRO Diviner, Hayne et al. 2017"
+     }
+    },
+    "ice": {
+     "mode": "role",
+     "worldPct": 0.9909,
+     "earthPct": 0.9907,
+     "note": "Within a few km of permanently shadowed cold traps where Diviner finds water ice can survive; among the most ice-favourable ~1% of the Moon. Diviner PRP: 100% of the ground within 3 km keeps ice stable within 2.87 m."
+    },
+    "sun": {
+     "mode": "absolute",
+     "earthTarget": 9.3,
+     "value": {
+      "v": 9.3,
+      "units": "deg",
+      "source": "latitude + 1.54 deg axial tilt"
+     },
+     "note": "The Sun never rises more than a few degrees here. On Earth even the poles get 23 deg: no Earth place matches this."
+    },
+    "relief": {
+     "mode": "absolute",
+     "earthTarget": 1015,
+     "value": {
+      "v": 1015,
+      "units": "m",
+      "source": "LRO LOLA south-polar DEM 240 m, std over ~66 km"
+     },
+     "note": "Same method as on Earth: 22 km block means, standard deviation over a ~66 km box."
+    }
+   },
+   "facts": [
+    {
+     "label": "Latitude",
+     "v": -82.26,
+     "units": "deg",
+     "source": "USGS Gazetteer / NASA Artemis III regions"
+    },
+    {
+     "label": "Annual max temperature",
+     "v": 279.7,
+     "units": "K",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Annual average temperature",
+     "v": 85.4,
+     "units": "K",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Ground with ice stable within 2.87 m",
+     "v": 100,
+     "units": "%",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Terrain relief (~66 km)",
+     "v": 1015,
+     "units": "m",
+     "source": "LRO LOLA"
+    }
+   ],
+   "temps": "Diviner, within 3 km of the listed coordinate: annual maximum 280 K (7 °C), annual average 85 K (-188 °C). Region coordinates are approximate, and sunlit ridge tops nearby run warmer. No place on Earth gets this cold: the coldest ground measured on Earth is about −98 °C (175 K).",
+   "refs": [
+    "Paige et al. 2010, Science 330:479 (Diviner cold traps)",
+    "Williams et al. 2019, JGR Planets 124:2505 (seasonal polar temperatures)",
+    "LRO Diviner polar resource product (Paige et al., PDS LRO-L-DLRE-5-PRP-V2.0)"
+   ],
+   "measured": true
+  },
+  {
+   "id": "moon-slater-plain",
+   "world": "moon",
+   "name": "Slater Plain",
+   "lat": -88.08,
+   "lon": 111.29,
+   "dims": {
+    "cold": {
+     "mode": "role",
+     "worldPct": 0.0006,
+     "earthPct": 0.0004,
+     "note": "Diviner shows lunar average temperature is set mainly by latitude, so the share of the Moon colder than a site is the area share closer to the poles. Earth has nothing as cold: we match the role, not the number."
+    },
+    "swing": {
+     "mode": "role",
+     "worldPct": 0.0006,
+     "earthPct": 0.0016,
+     "note": "Polar ground sees a low Sun circling the horizon: one of the smallest day-night swings on the Moon."
+    },
+    "bare": {
+     "mode": "absolute",
+     "value": {
+      "v": 0,
+      "units": "NDVI",
+      "source": "No vegetation on the Moon"
+     },
+     "earthTarget": 0.0,
+     "note": "The Moon has no plants."
+    },
+    "inertia": {
+     "mode": "role",
+     "worldPct": 0.05,
+     "earthPct": 0.0512,
+     "note": "Polar sites lie outside Diviner's rock-abundance map. Lunar regolith (~50 tiu, Hayne et al. 2017) is looser than almost any Earth surface, so the target is Earth's lowest-inertia 5%.",
+     "value": {
+      "v": 55,
+      "units": "tiu (typical regolith)",
+      "source": "LRO Diviner, Hayne et al. 2017"
+     }
+    },
+    "ice": {
+     "mode": "role",
+     "worldPct": 0.9994,
+     "earthPct": 0.9993,
+     "note": "Within a few km of permanently shadowed cold traps where Diviner finds water ice can survive; among the most ice-favourable ~1% of the Moon. Diviner PRP: 100% of the ground within 3 km keeps ice stable within 2.87 m."
+    },
+    "sun": {
+     "mode": "absolute",
+     "earthTarget": 3.5,
+     "value": {
+      "v": 3.5,
+      "units": "deg",
+      "source": "latitude + 1.54 deg axial tilt"
+     },
+     "note": "The Sun never rises more than a few degrees here. On Earth even the poles get 23 deg: no Earth place matches this."
+    },
+    "relief": {
+     "mode": "absolute",
+     "earthTarget": 561,
+     "value": {
+      "v": 561,
+      "units": "m",
+      "source": "LRO LOLA south-polar DEM 240 m, std over ~66 km"
+     },
+     "note": "Same method as on Earth: 22 km block means, standard deviation over a ~66 km box."
+    }
+   },
+   "facts": [
+    {
+     "label": "Latitude",
+     "v": -88.08,
+     "units": "deg",
+     "source": "USGS Gazetteer / NASA Artemis III regions"
+    },
+    {
+     "label": "Annual max temperature",
+     "v": 78.2,
+     "units": "K",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Annual average temperature",
+     "v": 44.4,
+     "units": "K",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Ground with ice stable within 2.87 m",
+     "v": 100,
+     "units": "%",
+     "source": "LRO Diviner PRP"
+    },
+    {
+     "label": "Terrain relief (~66 km)",
+     "v": 561,
+     "units": "m",
+     "source": "LRO LOLA"
+    }
+   ],
+   "temps": "Diviner, within 3 km of the listed coordinate: annual maximum 78 K (-195 °C), annual average 44 K (-229 °C); this spot is a cold trap (never above 110 K). Region coordinates are approximate, and sunlit ridge tops nearby run warmer. No place on Earth gets this cold: the coldest ground measured on Earth is about −98 °C (175 K).",
+   "refs": [
+    "Paige et al. 2010, Science 330:479 (Diviner cold traps)",
+    "Williams et al. 2019, JGR Planets 124:2505 (seasonal polar temperatures)",
+    "LRO Diviner polar resource product (Paige et al., PDS LRO-L-DLRE-5-PRP-V2.0)"
+   ],
+   "measured": true
+  },
+  {
+   "id": "moon-marius-hills-pit",
+   "world": "moon",
+   "name": "Marius Hills pit",
+   "lat": 14.09,
+   "lon": -56.77,
+   "dims": {
+    "cold": {
+     "mode": "role",
+     "worldPct": 0.7566,
+     "earthPct": 0.7533,
+     "note": "Diviner shows lunar average temperature is set mainly by latitude, so the share of the Moon colder than a site is the area share closer to the poles. Earth has nothing as cold: we match the role, not the number."
+    },
+    "swing": {
+     "mode": "role",
+     "worldPct": 0.97,
+     "earthPct": 0.9713,
+     "note": "Equatorial lunar ground has one of the largest swings in the Solar System (~300 K)."
+    },
+    "bare": {
+     "mode": "absolute",
+     "value": {
+      "v": 0,
+      "units": "NDVI",
+      "source": "No vegetation on the Moon"
+     },
+     "earthTarget": 0.0,
+     "note": "The Moon has no plants."
+    },
+    "inertia": {
+     "mode": "role",
+     "worldPct": 0.8877,
+     "earthPct": 0.8884,
+     "note": "Diviner rock abundance ranked over the Moon (60S-60N); rockier ground has higher thermal inertia.",
+     "value": {
+      "v": 0.5,
+      "units": "% rock cover",
+      "source": "LRO Diviner rock abundance (Bandfield et al. 2011)"
+     }
+    },
+    "ice": {
+     "mode": "role",
+     "worldPct": 0.02,
+     "earthPct": 0.277,
+     "note": "Equatorial ground: too hot by day for surface ice. Ice role near the bottom of the Moon's range."
+    },
+    "sun": {
+     "mode": "absolute",
+     "earthTarget": 77.5,
+     "value": {
+      "v": 77.5,
+      "units": "deg",
+      "source": "latitude + 1.54 deg axial tilt"
+     },
+     "note": "Moon's tiny tilt: the Sun path barely changes over a year."
+    }
+   },
+   "facts": [
+    {
+     "label": "Latitude",
+     "v": 14.09,
+     "units": "deg",
+     "source": "USGS Gazetteer / NASA Artemis III regions"
+    },
+    {
+     "label": "Rock abundance",
+     "v": 0.5,
+     "units": "%",
+     "source": "LRO Diviner"
+    }
+   ],
+   "temps": "Diviner: near the equator the surface swings from about 390 K at noon to about 95 K before dawn (about +120 C to -180 C).",
+   "refs": [
+    "Williams et al. 2017, Icarus 283:300 (global surface temperatures of the Moon)"
+   ],
+   "measured": false
+  }
+ ],
+ "sources": [
+  {
+   "id": "TES",
+   "title": "MGS TES global thermal inertia (Putzig & Mellon 2007), PDS mgst_9001",
+   "url": "https://pds-geosciences.wustl.edu/missions/mgs/tes.html"
+  },
+  {
+   "id": "ODY-NS",
+   "title": "Mars Odyssey GRS suite: neutron spectrometer epithermal map and GRS water map",
+   "url": "https://pds-geosciences.wustl.edu/missions/odyssey/grs.html"
+  },
+  {
+   "id": "MOLA",
+   "title": "MGS MOLA MEGDR 16 ppd",
+   "url": "https://pds-geosciences.wustl.edu/missions/mgs/megdr.html"
+  },
+  {
+   "id": "LOLA",
+   "title": "LRO LOLA south-polar DEM 240 m",
+   "url": "https://pds-geosciences.wustl.edu/missions/lro/lola.htm"
+  },
+  {
+   "id": "DIVINER",
+   "title": "LRO Diviner GDR rock abundance and polar resource product",
+   "url": "https://pds-geosciences.wustl.edu/missions/lro/diviner.htm"
+  }
+ ],
+ "built": {
+  "diviner_prp": true,
+  "minirf": true
+ }
+}

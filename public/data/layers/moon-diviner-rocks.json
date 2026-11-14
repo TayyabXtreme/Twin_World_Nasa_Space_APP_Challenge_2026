@@ -1,0 +1,64 @@
+{
+ "id": "moon-diviner-rocks",
+ "type": "image",
+ "title": "Rock abundance",
+ "units": "%",
+ "unitsLong": "% of the surface covered by rocks ≥ ~1 m",
+ "range": [
+  0.0,
+  2.0
+ ],
+ "scale": "linear",
+ "ramp": [
+  "#000004",
+  "#180f3d",
+  "#440f76",
+  "#721f81",
+  "#9e2f7f",
+  "#cd4071",
+  "#f1605d",
+  "#fd9668",
+  "#feca8d",
+  "#fcfdbf"
+ ],
+ "ticks": [
+  0,
+  0.5,
+  1,
+  1.5,
+  2
+ ],
+ "lowLabel": "smooth regolith",
+ "highLabel": "boulder fields",
+ "decimals": 2,
+ "meaning": "Share of the ground covered by metre-sized rocks, from how slowly the surface cools at night. Higher = harder landing and driving.",
+ "caveat": "Night-time data, 60°S–60°N only (the poles are not in this product). Typical maria and highlands are below 0.5 %; fresh craters reach 10 %+. Thin seams between orbit tracks are interpolated in the picture only.",
+ "dataset": "LRO Diviner Lunar Radiometer · gridded data record (Bandfield et al. 2011)",
+ "datasetId": "LRO-L-DLRE-5-GDR-V1.0 (DGDR_RA_AVG_CYL_032)",
+ "resolution": "32 px/° (~950 m)",
+ "source": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l3/cylindrical/img/",
+ "image": "/data/layers/moon-diviner-rocks.webp",
+ "bounds": [
+  [
+   -60.0,
+   -180
+  ],
+  [
+   60.0,
+   180
+  ]
+ ],
+ "grid": {
+  "url": "/data/layers/moon-diviner-rocks.grid.bin",
+  "width": 720,
+  "height": 240,
+  "offset": 0.082996,
+  "scale": 0.00019902493
+ },
+ "stats": {
+  "p2": 0.0,
+  "median": 0.3,
+  "p98": 1.1
+ },
+ "built": "2026-11-13"
+}

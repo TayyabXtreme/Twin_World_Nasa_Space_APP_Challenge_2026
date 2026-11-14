@@ -1,0 +1,91 @@
+/* Challenge arcade: menu art drifting behind the briefing, staggered entrances, and touch-only controls. */
+
+.arcade-rise {
+  animation: arcade-rise 560ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 80ms);
+}
+@keyframes arcade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(6px);
+  }
+}
+
+.arcade-pop {
+  animation: arcade-pop 500ms var(--ease-out) 400ms both;
+}
+@keyframes arcade-pop {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
+/* The start button breathes a soft glow so the first action is obvious. */
+.arcade-start {
+  animation: arcade-glow 2.4s ease-in-out infinite;
+}
+@keyframes arcade-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 oklch(0.88 0.14 182 / 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 10px oklch(0.88 0.14 182 / 0);
+  }
+}
+
+/* On-screen controls only for touch screens. */
+.touch-pad {
+  display: none;
+}
+@media (pointer: coarse) {
+  .touch-pad {
+    display: flex;
+  }
+}
+
+/* Earth or Elsewhere?: a slow drift into each photo (transform only). */
+.guess-kenburns {
+  animation: guess-drift 14s linear forwards;
+  transform-origin: 55% 45%;
+}
+@keyframes guess-drift {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.08);
+  }
+}
+
+/* Moon Base Scout: a scanner line that sweeps once when a data lens switches on. */
+.scout-sweep {
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    oklch(0.88 0.14 190 / 0.35) 48%,
+    oklch(0.95 0.12 190 / 0.6) 50%,
+    transparent 52%
+  );
+  background-size: 100% 100%;
+  animation: scout-sweep 1.1s var(--ease-out) forwards;
+}
+@keyframes scout-sweep {
+  from {
+    transform: translateY(-55%);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(55%);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guess-kenburns,
+  .scout-sweep {
+    animation: none;
+  }
+}

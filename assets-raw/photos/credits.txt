@@ -1,0 +1,163 @@
+TWINWORLDS PHOTO SOURCE CREDITS
+===============================
+
+IMPORTANT: This source pack contains Internet Shortcut (.url) files and a manifest, NOT downloaded JPG files.
+The runtime used to prepare this archive could inspect source URLs but could not retrieve binary image files into the ZIP.
+Before publishing, open each source page and verify the exact creator, license, required attribution, and any restrictions.
+Do not assume all Wikimedia Commons files have the same license. Credit each Commons file using its own file-page metadata.
+NASA/LROC/HiRISE attribution must follow the exact credit line on the source page; do not imply NASA endorsement.
+
+TWIN IMAGES
+-----------
+atacama_desert: NASA Earth Observatory — Atacama Desert, Chile
+  Source: https://science.nasa.gov/earth/earth-observatory/atacama-desert-chile-4123/
+  Direct image: https://assets.science.nasa.gov/content/dam/science/esd/eo/images/imagerecords/4000/4123/aster_andes_artii_lrg.jpg
+  Credit/license: NASA Earth Observatory; verify NASA media guidelines before redistribution.
+
+mcmurdo_dry_valleys: Wikimedia Commons — Labyrinth, Wright Valley, McMurdo Dry Valleys
+  Source: https://commons.wikimedia.org/wiki/File:Labyrinth,_Wright_Valley,_McMurdo_Dry_Valleys,_Antarctica.jpg
+  Direct image: https://upload.wikimedia.org/wikipedia/commons/f/f7/Labyrinth%2C_Wright_Valley%2C_McMurdo_Dry_Valleys%2C_Antarctica.jpg
+  Credit/license: Author/license must be checked on Commons file page before publication.
+
+sahara_desert: Wikimedia Commons — Caravan in the desert
+  Source: https://commons.wikimedia.org/wiki/File:Caravan_in_the_desert.jpg
+  Direct image: https://upload.wikimedia.org/wikipedia/commons/c/c6/Caravan_in_the_desert.jpg
+  Credit/license: Author/license must be checked on Commons file page before publication.
+
+iceland_volcanic_landscape: Wikimedia Commons — Iceland volcanic landscape
+  Source: https://commons.wikimedia.org/wiki/File:Iceland_volcanic_landscape.jpg
+  Direct image: https://upload.wikimedia.org/wikipedia/commons/b/b5/Iceland_volcanic_landscape.jpg
+  Credit/license: Author/license must be checked on Commons file page before publication.
+
+hawaii_lava_field: Wikimedia Commons — Hawaiʻi Volcanoes National Park
+  Source: https://commons.wikimedia.org/wiki/File:Hawai%CA%BBi_Volcanoes_National_Park,_August_2016.jpg
+  Direct image: https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2e/Hawai%CA%BBi_Volcanoes_National_Park%2C_August_2016.jpg/960px-Hawai%CA%BBi_Volcanoes_National_Park%2C_August_2016.jpg
+  Credit/license: Author/license must be checked on Commons file page before publication.
+
+salar_de_uyuni: NASA Earth Observatory — Salt Flats, Mountains, and Moisture
+  Source: https://science.nasa.gov/earth/earth-observatory/salt-flats-mountains-and-moisture-144826/
+  Direct image: https://assets.science.nasa.gov/content/dam/science/esd/eo/images/imagerecords/144000/144826/iss059e000517_lrg.jpg
+  Credit/license: NASA Earth Observatory; verify NASA media guidelines before redistribution.
+
+danakil_depression: NASA Earth Observatory — Curiosities of the Danakil Depression
+  Source: https://science.nasa.gov/earth/earth-observatory/curiosities-of-the-danakil-depression-84239/
+  Direct image: https://assets.science.nasa.gov/content/dam/science/esd/eo/images/imagerecords/84000/84239/danakill_oli_2014178.jpg
+  Credit/license: NASA Earth Observatory; verify NASA media guidelines before redistribution.
+
+qaidam_basin: NASA Earth Observatory — The Salty Lake of Gas Hure
+  Source: https://science.nasa.gov/earth/earth-observatory/the-salty-lake-of-gas-hure-154538/
+  Direct image: https://assets.science.nasa.gov/content/dam/science/esd/eo/images/imagerecords/154000/154538/iss071e715148.jpg/jcr:content/renditions/cq5dam.web.1280.1280.jpeg
+  Credit/license: NASA Earth Observatory; verify exact location/analogy and media guidelines.
+
+katpana_cold_desert: Katpana Desert — third-party article (rights not verified)
+  Source: https://avantgarde.com.pk/katpana-desert-cold-desert-of-pakistan-2/
+  Direct image: http://avantgarde.com.pk/wp-content/uploads/2021/11/B4NdHNyCAAIDIsW.jpg
+  Credit/license: Copyright/author not verified; do not publish until permission/license is confirmed.
+
+hingol_mud_volcanoes: Wikimedia Commons — Chandragup mud volcano
+  Source: https://commons.wikimedia.org/wiki/File:Chandragup_mud_volcano.jpg
+  Direct image: https://upload.wikimedia.org/wikipedia/commons/4/49/Chandragup_mud_volcano.jpg
+  Credit/license: Author/license must be checked on Commons file page before publication.
+
+cholistan_desert: Cholistan Desert — Darawar Fort photo (landmark, not a desert panorama)
+  Source: https://en.wikipedia.org/wiki/Cholistan_Desert
+  Direct image: https://upload.wikimedia.org/wikipedia/commons/a/ab/Darawar_Fort.jpg
+  Credit/license: Commons attribution/license not verified; image depicts a landmark rather than a wide desert landscape.
+
+thar_desert: Wikimedia Commons — Thar Desert category image
+  Source: https://commons.wikimedia.org/wiki/Category:Thar_Desert
+  Direct image: https://thumb.wikimedia.org/wikipedia/commons/thumb/9/92/Thar_desert_Rajasthan_India.jpg/250px-Thar_desert_Rajasthan_India.jpg
+  Credit/license: Thumbnail source; locate original file and verify author/license before publication.
+
+khewra_salt_mine: Khewra Salt Mine — crystal deposits image
+  Source: https://en.wikipedia.org/wiki/Khewra_Salt_Mine
+  Direct image: https://upload.wikimedia.org/wikipedia/commons/7/72/Khewra_Salt_Mine_-_Crystal_Deposits_on_the_mine_walls.jpg
+  Credit/license: Commons attribution/license not verified; image is underground mine interior.
+
+rio_tinto: Wikimedia Commons — Río Tinto 7
+  Source: https://commons.wikimedia.org/wiki/File:R%C3%ADo_Tinto_7.jpg
+  Direct image: https://upload.wikimedia.org/wikipedia/commons/9/9a/R%C3%ADo_Tinto_7.jpg
+  Credit/license: Author/license must be checked on Commons file page before publication.
+
+MOON / MARS SITE IMAGES
+-----------------------
+site-peak-near-cabeus-b: Moon — Peak near Cabeus B (regional south-pole context)
+  Source: https://lroc.im-ldi.com/images/237
+  Direct image: https://lroc.im-ldi.com/news/uploads/SP_Mosaic.400m.grid1.png
+  Credit/license: LROC/NASA/Arizona State University; regional context image, not a site-specific close-up.
+
+site-malapert-massif: Moon — Malapert Massif
+  Source: https://science.nasa.gov/resource/malapert-massif/
+  Direct image: https://assets.science.nasa.gov/dynamicimage/assets/science/psd/lunar-science/2023/08/MalapertMassif-1.png?w=1100&h=1100&fit=clip&crop=faces%2Cfocalpoint
+  Credit/license: NASA Science resource; verify specific image credit on page.
+
+site-mons-mouton-plateau: Moon — Mons Mouton Plateau (NASA SVS context)
+  Source: https://svs.gsfc.nasa.gov/5074/
+  Direct image: https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005074/earthview.0001_print.jpg
+  Credit/license: NASA Goddard SVS; credit NASA/GSFC as specified on source page.
+
+site-mons-mouton: Moon — Mons Mouton
+  Source: https://svs.gsfc.nasa.gov/5074/
+  Direct image: https://svs.gsfc.nasa.gov/vis/a000000/a005000/a005074/earthview.0001_print.jpg
+  Credit/license: Same NASA SVS regional visual as plateau entry; not a separate close-up.
+
+site-nobile-rim-1: Moon — Nobile Rim 1 (regional south-pole context)
+  Source: https://lroc.im-ldi.com/images/237
+  Direct image: https://lroc.im-ldi.com/news/uploads/SP_Mosaic.400m.grid1.png
+  Credit/license: LROC/NASA/Arizona State University; regional context image.
+
+site-nobile-rim-2: Moon — Nobile Rim 2 (regional south-pole context)
+  Source: https://lroc.im-ldi.com/images/237
+  Direct image: https://lroc.im-ldi.com/news/uploads/SP_Mosaic.400m.grid1.png
+  Credit/license: LROC/NASA/Arizona State University; regional context image.
+
+site-de-gerlache-rim-2: Moon — de Gerlache Rim 2
+  Source: https://lroc.im-ldi.com/images/1247
+  Direct image: https://lroc.im-ldi.com/ckeditor_assets/pictures/1130/content_M1348682369_LRmos.warp.str01.shrunk6x.1100x1100.png
+  Credit/license: LROC/NASA/Arizona State University; verify image credit on page.
+
+site-slater-plain: Moon — Slater Plain (LROC light plains visual)
+  Source: https://lroc.im-ldi.com/images/1016
+  Direct image: https://lroc.im-ldi.com/ckeditor_assets/pictures/654/content_ortho_lp_orientale_ctr1_5n145w_1100x1100.png
+  Credit/license: LROC/NASA/Arizona State University; regional/light-plains context, not confirmed exact site.
+
+site-shackleton-rim: Moon — Shackleton Rim
+  Source: https://lroc.im-ldi.com/images/1105
+  Direct image: https://lroc.im-ldi.com/ckeditor_assets/pictures/776/content_M1195011983LR_shack_1100x1100.png
+  Credit/license: LROC/NASA/Arizona State University; verify image credit on page.
+
+site-marius-hills-pit: Moon — Marius Hills Pit
+  Source: https://lroc.im-ldi.com/images/202
+  Direct image: https://lroc.im-ldi.com/news/uploads/LROCiotw/M114328462R_enlargement.png
+  Credit/license: LROC/NASA/Arizona State University; verify image credit on page.
+
+site-jezero: Mars — Jezero (NASA/HiRISE context)
+  Source: https://science.nasa.gov/photojournal/nasas-hirise-captures-perseverance-marking-a-milestone-on-mars/
+  Direct image: https://assets.science.nasa.gov/content/dam/science/psd/photojournal/pia/pia26/pia26726/figures/PIA26726_figA.png
+  Credit/license: NASA/JPL/University of Arizona; verify specific image credit on source page.
+
+site-gale: Mars — Gale Crater (NASA/JPL visual)
+  Source: https://www.jpl.nasa.gov/images/pia20167-for-a-decade-orbiting-mars-one-recent-view/
+  Direct image: https://d2pn8kiwq2w21t.cloudfront.net/original_images/jpegPIA20167.jpg
+  Credit/license: NASA/JPL/University of Arizona; verify source page for observation/site detail.
+
+site-arcadia-planitia: Mars — Arcadia Planitia (HiRISE)
+  Source: https://www.uahirise.org/ESP_046254_2170
+  Direct image: https://hirise-pds.lpl.arizona.edu/PDS/EXTRAS/RDR/ESP/ORB_046200_046299/ESP_046254_2170/ESP_046254_2170_RED.browse.jpg
+  Credit/license: NASA/JPL/University of Arizona.
+
+site-utopia-planitia: Mars — Utopia Planitia (HiRISE context)
+  Source: https://www.jpl.nasa.gov/images/pia24914-the-zhurong-rover-explores-utopia-planitia/
+  Direct image: https://static.uahirise.org/images/2021/details/cut/ESP_070377_2050.jpg
+  Credit/license: NASA/JPL/University of Arizona; verify image-specific credit.
+
+site-mawrth-vallis: Mars — Mawrth Vallis (NASA/JPL visual)
+  Source: https://www.jpl.nasa.gov/images/pia13726-layers-exposed-in-crater-near-mawrth-vallis/
+  Direct image: https://d2pn8kiwq2w21t.cloudfront.net/original_images/jpegPIA13726.jpg
+  Credit/license: NASA/JPL/University of Arizona; verify image-specific credit.
+
+site-hellas: Mars — Hellas Planitia (HiRISE)
+  Source: https://www.nasa.gov/image-article/hellas-planitia/
+  Direct image: https://www.nasa.gov/wp-content/uploads/2023/03/451054main_mro20100505-full_full.jpg
+  Credit/license: NASA/JPL/University of Arizona; verify image-specific credit.
+

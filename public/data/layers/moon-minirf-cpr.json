@@ -1,0 +1,63 @@
+{
+ "id": "moon-minirf-cpr",
+ "type": "image",
+ "title": "Radar circular polarisation ratio",
+ "units": "CPR",
+ "unitsLong": "circular polarisation ratio (same-sense / opposite-sense echo)",
+ "range": [
+  0.2,
+  1.2
+ ],
+ "scale": "linear",
+ "ramp": [
+  "#00224e",
+  "#123570",
+  "#3b496c",
+  "#575d6d",
+  "#707173",
+  "#8a8779",
+  "#a69d75",
+  "#c4b56c",
+  "#e4cf5b",
+  "#fee838"
+ ],
+ "ticks": [
+  0.4,
+  0.6,
+  0.8,
+  1.0
+ ],
+ "lowLabel": "smooth",
+ "highLabel": "rough or icy",
+ "decimals": 2,
+ "meaning": "S-band radar echo ratio. Values near or above 1 mean rough, blocky ground OR possible buried ice: on its own the signal is ambiguous.",
+ "caveat": "High CPR also occurs on fresh, rough crater ejecta, so it is not proof of ice. Wide coverage gaps stay empty; thin seams are interpolated in the picture only.",
+ "dataset": "LRO Mini-RF · global S-band CPR mosaic",
+ "datasetId": "LRO-L-MRFLRO-5-GLOBAL-MOSAIC-V1.0 (GLOBAL_CPR_32PPD_SIMP_0C)",
+ "resolution": "32 px/° (~950 m)",
+ "source": "https://pds-geosciences.wustl.edu/lro/lro-l-mrflro-5-global-mosaic-v1/lromrf_1001/data/32ppd/",
+ "image": "/data/layers/moon-minirf-cpr.webp",
+ "bounds": [
+  [
+   -90,
+   -180
+  ],
+  [
+   90,
+   180
+  ]
+ ],
+ "grid": {
+  "url": "/data/layers/moon-minirf-cpr.grid.bin",
+  "width": 720,
+  "height": 360,
+  "offset": 0.163293,
+  "scale": 1.6447009e-05
+ },
+ "stats": {
+  "p2": 0.226443,
+  "median": 0.525656,
+  "p98": 1.2183
+ },
+ "built": "2026-11-13"
+}

@@ -1,0 +1,668 @@
+{
+ "generated": "2026-11-13T20:12:45Z",
+ "grid": {
+  "projection": "South polar stereographic on a 1737.4 km sphere, true scale at the pole; 0\u00b0 longitude points up, 90\u00b0E right (LOLA convention).",
+  "radiusM": 1737400.0,
+  "halfWidthM": 457440.0,
+  "size": 953,
+  "pixelM": 960.0,
+  "display": {
+   "size": 1906,
+   "pixelM": 480.0
+  }
+ },
+ "layers": [
+  {
+   "id": "elevation",
+   "label": "Elevation (shaded relief)",
+   "group": "Terrain",
+   "units": "m",
+   "decimals": 0,
+   "range": [
+    -6000.0,
+    6000.0
+   ],
+   "ramp": [
+    "#011959",
+    "#10475f",
+    "#2c6559",
+    "#577a43",
+    "#8a8a2f",
+    "#c29539",
+    "#eda569",
+    "#fdb9ac",
+    "#facdfa"
+   ],
+   "status": "ready",
+   "dataset": {
+    "name": "LRO LOLA polar gridded data (LRO-L-LOLA-4-GDR-V1.0)",
+    "url": "https://pds-geosciences.wustl.edu/missions/lro/lola.htm"
+   },
+   "source": "LDEM_75S_240M",
+   "resolution": "240 m source, 480 m display, 960 m readout",
+   "what": "Height relative to a 1737.4 km sphere. Crater floors near the pole sit 3\u20135 km below the ridges that catch sunlight.",
+   "grid": {
+    "file": "elevation.png",
+    "bits": 16,
+    "scale": 1.0,
+    "offset": -10001.0,
+    "nodata": 0
+   },
+   "stats": {
+    "min": -7713.0,
+    "max": 7004.1875
+   },
+   "image": "elevation.webp"
+  },
+  {
+   "id": "slope",
+   "label": "Slope",
+   "group": "Terrain",
+   "units": "\u00b0",
+   "decimals": 1,
+   "range": [
+    0,
+    30
+   ],
+   "ramp": [
+    "#000004",
+    "#1c1044",
+    "#4f127b",
+    "#812581",
+    "#b5367a",
+    "#e55064",
+    "#fb8761",
+    "#fec287",
+    "#fcfdbf"
+   ],
+   "status": "ready",
+   "dataset": {
+    "name": "LRO LOLA polar gridded data (LRO-L-LOLA-4-GDR-V1.0)",
+    "url": "https://pds-geosciences.wustl.edu/missions/lro/lola.htm"
+   },
+   "source": "derived from LDEM_75S_240M",
+   "resolution": "240 m slope baseline, averaged to 960 m",
+   "what": "How steep the ground is, from the LOLA elevation model over 240 m. Landers and rovers need gentle ground: Wueller et al. 2026 used < 8\u00b0 for the Artemis lander. 240 m averaging hides steeper metre-scale slopes.",
+   "grid": {
+    "file": "slope.png",
+    "bits": 8,
+    "scale": 0.2,
+    "offset": 0.0,
+    "nodata": 255
+   },
+   "stats": {
+    "mean": 8.786412239074707,
+    "pctBelow8": 53.052876595585374
+   },
+   "image": "slope.webp"
+  },
+  {
+   "id": "ruggedness",
+   "label": "Ruggedness",
+   "group": "Terrain",
+   "units": "\u00b0",
+   "decimals": 1,
+   "range": [
+    0,
+    5
+   ],
+   "ramp": [
+    "#440154",
+    "#482878",
+    "#3e4989",
+    "#31688e",
+    "#26828e",
+    "#1f9e89",
+    "#35b779",
+    "#6ece58",
+    "#b5de2b",
+    "#fde725"
+   ],
+   "status": "ready",
+   "dataset": {
+    "name": "LRO LOLA polar gridded data (LRO-L-LOLA-4-GDR-V1.0)",
+    "url": "https://pds-geosciences.wustl.edu/missions/lro/lola.htm"
+   },
+   "source": "derived from LDEM_75S_240M",
+   "resolution": "16 slope values per 960 m cell",
+   "what": "Spread (standard deviation) of the sixteen 240 m slopes inside each cell: broken, lumpy ground scores high, an even plain or a smooth uniform slope scores low. It is km-scale terrain, not a rock count.",
+   "grid": {
+    "file": "ruggedness.png",
+    "bits": 8,
+    "scale": 0.1,
+    "offset": 0.0,
+    "nodata": 255
+   },
+   "image": "ruggedness.webp"
+  },
+  {
+   "id": "relief",
+   "label": "High ground",
+   "group": "Terrain",
+   "units": "m",
+   "decimals": 0,
+   "range": [
+    -2000,
+    2000
+   ],
+   "ramp": [
+    "#001261",
+    "#033e7d",
+    "#1e6f9d",
+    "#71a8c4",
+    "#c9dde7",
+    "#eacebd",
+    "#d39774",
+    "#be6533",
+    "#8b2706",
+    "#590007"
+   ],
+   "status": "ready",
+   "dataset": {
+    "name": "LRO LOLA polar gridded data (LRO-L-LOLA-4-GDR-V1.0)",
+    "url": "https://pds-geosciences.wustl.edu/missions/lro/lola.htm"
+   },
+   "source": "derived from LDEM_75S_240M",
+   "resolution": "960 m cell vs. ~30 km window",
+   "what": "Height above (orange) or below (blue) the surrounding ~30 km. Near the pole the Sun skims the horizon, so high ridges see it most often: a rough proxy for sunlight, not an illumination model.",
+   "grid": {
+    "file": "relief.png",
+    "bits": 8,
+    "scale": 40.0,
+    "offset": -5000.0,
+    "nodata": 255
+   },
+   "image": "relief.webp"
+  },
+  {
+   "id": "rock",
+   "label": "Rock abundance",
+   "group": "Surface",
+   "units": "% area",
+   "decimals": 1,
+   "range": [
+    0,
+    10
+   ],
+   "ramp": [
+    "#000004",
+    "#1b0c41",
+    "#4a0c6b",
+    "#781c6d",
+    "#a52c60",
+    "#cf4446",
+    "#ed6925",
+    "#fb9b06",
+    "#f7d13d",
+    "#fcffa4"
+   ],
+   "dataset": {
+    "name": "LRO Diviner gridded data records (LRO-L-DLRE-5-GDR-V1.0)",
+    "url": "https://pds-geosciences.wustl.edu/missions/lro/diviner.htm"
+   },
+   "source": "DGDR_RA_AVG_CYL_032_IMG",
+   "what": "Fraction of the surface covered by rocks larger than about 1 m, from how slowly the ground cools at night (Bandfield et al. 2011).",
+   "resolution": "32 px/\u00b0 (~950 m)",
+   "coverage": [
+    -60.0,
+    60.0
+   ],
+   "status": "no_coverage",
+   "statusNote": "This global Diviner product covers 60\u00b0S\u201360\u00b0N only (night-time retrievals restricted to low latitudes), so it has no data poleward of 75\u00b0S. Slope, ruggedness and Mini-RF radar stand in for it here."
+  },
+  {
+   "id": "soiltemp",
+   "label": "Regolith temperature anomaly",
+   "group": "Surface",
+   "units": "K",
+   "decimals": 1,
+   "range": [
+    -10,
+    10
+   ],
+   "ramp": [
+    "#001261",
+    "#033e7d",
+    "#1e6f9d",
+    "#71a8c4",
+    "#c9dde7",
+    "#eacebd",
+    "#d39774",
+    "#be6533",
+    "#8b2706",
+    "#590007"
+   ],
+   "dataset": {
+    "name": "LRO Diviner gridded data records (LRO-L-DLRE-5-GDR-V1.0)",
+    "url": "https://pds-geosciences.wustl.edu/missions/lro/diviner.htm"
+   },
+   "source": "DGDR_ST_AVG_CYL_032_IMG",
+   "what": "Night-time temperature of the fine soil relative to a model: warm = younger, more compacted regolith; cold = fluffier soil.",
+   "resolution": "32 px/\u00b0 (~950 m)",
+   "coverage": [
+    -60.0,
+    60.0
+   ],
+   "status": "no_coverage",
+   "statusNote": "This global Diviner product covers 60\u00b0S\u201360\u00b0N only (night-time retrievals restricted to low latitudes), so it has no data poleward of 75\u00b0S. Slope, ruggedness and Mini-RF radar stand in for it here."
+  },
+  {
+   "id": "tmax",
+   "label": "Max temperature",
+   "group": "Ice & temperature",
+   "units": "K",
+   "decimals": 0,
+   "range": [
+    25,
+    350
+   ],
+   "ramp": [
+    "#000004",
+    "#1b0c41",
+    "#4a0c6b",
+    "#781c6d",
+    "#a52c60",
+    "#cf4446",
+    "#ed6925",
+    "#fb9b06",
+    "#f7d13d",
+    "#fcffa4"
+   ],
+   "status": "ready",
+   "dataset": {
+    "name": "LRO Diviner Polar Resource Product (LRO-L-DLRE-5-PRP-V2.0)",
+    "url": "https://pds-geosciences.wustl.edu/missions/lro/diviner.htm"
+   },
+   "source": "DLRE_PRP_SOUTH",
+   "resolution": "2,880,000 model triangles (0.5 km grid, two per cell) binned to 960 m",
+   "what": "Hottest the surface gets in a year. Below about 110 K, water ice can survive at the surface for billions of years.",
+   "grid": {
+    "file": "tmax.png",
+    "bits": 16,
+    "scale": 0.05,
+    "offset": -0.05,
+    "nodata": 0
+   },
+   "coverageNote": "Model grid spans \u00b1300 km around the pole (to about 80\u00b0S along 0\u00b0/90\u00b0/180\u00b0/270\u00b0 and 76\u00b0S at the corners); 44 % of this map has PRP values.",
+   "image": "tmax.webp"
+  },
+  {
+   "id": "tavg",
+   "label": "Average temperature",
+   "group": "Ice & temperature",
+   "units": "K",
+   "decimals": 0,
+   "range": [
+    25,
+    250
+   ],
+   "ramp": [
+    "#000004",
+    "#1b0c41",
+    "#4a0c6b",
+    "#781c6d",
+    "#a52c60",
+    "#cf4446",
+    "#ed6925",
+    "#fb9b06",
+    "#f7d13d",
+    "#fcffa4"
+   ],
+   "status": "ready",
+   "dataset": {
+    "name": "LRO Diviner Polar Resource Product (LRO-L-DLRE-5-PRP-V2.0)",
+    "url": "https://pds-geosciences.wustl.edu/missions/lro/diviner.htm"
+   },
+   "source": "DLRE_PRP_SOUTH",
+   "resolution": "2,880,000 model triangles (0.5 km grid, two per cell) binned to 960 m",
+   "what": "Year-round average 2 cm below the surface. It tracks how much sunlight a spot gets on average: warm = sunlit ridge, very cold = permanent shadow.",
+   "grid": {
+    "file": "tavg.png",
+    "bits": 16,
+    "scale": 0.05,
+    "offset": -0.05,
+    "nodata": 0
+   },
+   "coverageNote": "Model grid spans \u00b1300 km around the pole (to about 80\u00b0S along 0\u00b0/90\u00b0/180\u00b0/270\u00b0 and 76\u00b0S at the corners); 44 % of this map has PRP values.",
+   "image": "tavg.webp"
+  },
+  {
+   "id": "icedepth",
+   "label": "Ice stability depth",
+   "group": "Ice & temperature",
+   "units": "m",
+   "decimals": 2,
+   "range": [
+    0,
+    1.5
+   ],
+   "ramp": [
+    "#e8fbff",
+    "#9be7ff",
+    "#45b8f0",
+    "#1f7fd1",
+    "#1d4fa8",
+    "#1b2f73"
+   ],
+   "status": "ready",
+   "dataset": {
+    "name": "LRO Diviner Polar Resource Product (LRO-L-DLRE-5-PRP-V2.0)",
+    "url": "https://pds-geosciences.wustl.edu/missions/lro/diviner.htm"
+   },
+   "source": "DLRE_PRP_SOUTH",
+   "resolution": "2,880,000 model triangles (0.5 km grid, two per cell) binned to 960 m (cell value = median of its triangles)",
+   "what": "How deep you would dig before buried water ice could survive for a billion years (sublimation < 1 kg/m\u00b2 per Gyr). 0 = stable right at the surface; grey = deeper than 2.87 m, the model's limit. A thermal model of where ice COULD last, not a detection of ice.",
+   "grid": {
+    "file": "icedepth.png",
+    "bits": 8,
+    "scale": 0.0115,
+    "offset": 0.0,
+    "nodata": 255,
+    "none": 253,
+    "noneMeaning": "deeper than 2.87 m (PRP value -999)"
+   },
+   "coverageNote": "Model grid spans \u00b1300 km around the pole (to about 80\u00b0S along 0\u00b0/90\u00b0/180\u00b0/270\u00b0 and 76\u00b0S at the corners); 44 % of this map has PRP values.",
+   "sentinels": {
+    "-999": "documented: deeper than 2.8738 m (1,847,439 triangles, all with annual max >= 203 K); shown grey",
+    "-1": "undocumented: only on the 100,319 coldest triangles (annual max <= 101.3 K); treated as 0 m, stable at the surface"
+   },
+   "image": "icedepth.webp"
+  },
+  {
+   "id": "coldtrap",
+   "label": "Cold traps",
+   "group": "Ice & temperature",
+   "units": "% of cell",
+   "decimals": 0,
+   "range": [
+    0,
+    100
+   ],
+   "ramp": [
+    "#0b1e3d",
+    "#12457a",
+    "#1d78b5",
+    "#3fb0e0",
+    "#8fe3ff",
+    "#e9fdff"
+   ],
+   "status": "ready",
+   "dataset": {
+    "name": "LRO Diviner Polar Resource Product (LRO-L-DLRE-5-PRP-V2.0)",
+    "url": "https://pds-geosciences.wustl.edu/missions/lro/diviner.htm"
+   },
+   "source": "DLRE_PRP_SOUTH",
+   "resolution": "2,880,000 model triangles (0.5 km grid, two per cell) binned to 960 m",
+   "what": "Share of the cell whose annual maximum stays below 110 K: places cold enough to trap water ice at the surface.",
+   "grid": {
+    "file": "coldtrap.png",
+    "bits": 8,
+    "scale": 0.4,
+    "offset": 0.0,
+    "nodata": 255
+   },
+   "coverageNote": "Model grid spans \u00b1300 km around the pole (to about 80\u00b0S along 0\u00b0/90\u00b0/180\u00b0/270\u00b0 and 76\u00b0S at the corners); 44 % of this map has PRP values.",
+   "image": "coldtrap.webp"
+  },
+  {
+   "id": "trapdist",
+   "label": "Distance to cold trap",
+   "group": "Ice & temperature",
+   "units": "km",
+   "decimals": 1,
+   "range": [
+    0,
+    30
+   ],
+   "ramp": [
+    "#e9fdff",
+    "#8fe3ff",
+    "#3fb0e0",
+    "#1d78b5",
+    "#12457a",
+    "#0b1e3d"
+   ],
+   "status": "ready",
+   "dataset": {
+    "name": "LRO Diviner Polar Resource Product (LRO-L-DLRE-5-PRP-V2.0)",
+    "url": "https://pds-geosciences.wustl.edu/missions/lro/diviner.htm"
+   },
+   "source": "derived",
+   "resolution": "960 m, octagonal distance (\u00b18 %)",
+   "hidden": true,
+   "what": "Straight-line distance to the nearest cell containing cold-trap ground (annual max < 110 K).",
+   "grid": {
+    "file": "trapdist.png",
+    "bits": 8,
+    "scale": 0.25,
+    "offset": 0.0,
+    "nodata": 255
+   }
+  },
+  {
+   "id": "icedist",
+   "label": "Distance to shallow ice",
+   "group": "Ice & temperature",
+   "units": "km",
+   "decimals": 1,
+   "range": [
+    0,
+    30
+   ],
+   "ramp": [
+    "#e9fdff",
+    "#8fe3ff",
+    "#3fb0e0",
+    "#1d78b5",
+    "#12457a",
+    "#0b1e3d"
+   ],
+   "status": "ready",
+   "dataset": {
+    "name": "LRO Diviner Polar Resource Product (LRO-L-DLRE-5-PRP-V2.0)",
+    "url": "https://pds-geosciences.wustl.edu/missions/lro/diviner.htm"
+   },
+   "source": "derived",
+   "resolution": "960 m, octagonal distance (\u00b18 %)",
+   "hidden": true,
+   "what": "Straight-line distance to the nearest cell where the model says ice could survive within 1 m of the surface.",
+   "grid": {
+    "file": "icedist.png",
+    "bits": 8,
+    "scale": 0.25,
+    "offset": 0.0,
+    "nodata": 255
+   }
+  },
+  {
+   "id": "cpr",
+   "label": "Radar CPR (Mini-RF)",
+   "group": "Surface",
+   "units": "ratio",
+   "decimals": 2,
+   "range": [
+    0,
+    1.5
+   ],
+   "ramp": [
+    "#440154",
+    "#482878",
+    "#3e4989",
+    "#31688e",
+    "#26828e",
+    "#1f9e89",
+    "#35b779",
+    "#6ece58",
+    "#b5de2b",
+    "#fde725"
+   ],
+   "dataset": {
+    "name": "LRO Mini-RF global mosaic (LRO-L-MRFLRO-5-GLOBAL-MOSAIC-V1.0)",
+    "url": "https://pds-geosciences.wustl.edu/missions/lro/mrf.htm"
+   },
+   "source": "GLOBAL_CPR_32PPD_SIMP_0C",
+   "resolution": "32 px/\u00b0 (~950 m), S-band 12.6 cm",
+   "what": "Circular polarisation ratio of S-band radar echoes. High values (> 1) mean ground rough at the decimetre scale (blocky rocks, fresh craters) OR possibly ice: radar alone cannot tell them apart.",
+   "status": "ready",
+   "grid": {
+    "file": "cpr.png",
+    "bits": 8,
+    "scale": 0.01,
+    "offset": 0.0,
+    "nodata": 255
+   },
+   "stats": {
+    "median": 0.5345258116722107
+   },
+   "image": "cpr.webp"
+  },
+  {
+   "id": "lend",
+   "label": "Hydrogen (LEND)",
+   "group": "Ice & temperature",
+   "units": "% fewer neutrons",
+   "decimals": 1,
+   "range": [
+    -3,
+    3
+   ],
+   "ramp": [
+    "#590007",
+    "#8b2706",
+    "#be6533",
+    "#d39774",
+    "#eacebd",
+    "#c9dde7",
+    "#71a8c4",
+    "#1e6f9d",
+    "#033e7d",
+    "#001261"
+   ],
+   "dataset": {
+    "name": "LRO LEND averaged polar map (LRO-L-LEND-4/5-RDR-V1.0, ALDS, 2011-12-11 to 2016-09-14)",
+    "url": "https://pds-geosciences.wustl.edu/missions/lro/lend.htm"
+   },
+   "source": "LEND_RDR_ALDS_20111211",
+   "ends": [
+    "drier",
+    "more hydrogen"
+   ],
+   "coverageShort": "Covers 80\u00b0S to the pole; blank right at the pole",
+   "resolution": "0.5\u00b0 cells below 80\u00b0S, smoothed over 15 km (LEND's collimated footprint is ~10 km)",
+   "what": "How many fewer epithermal neutrons escape here than on average at 80-83\u00b0S. Hydrogen slows neutrons, so blue (fewer neutrons) means more hydrogen in the top metre, most likely water ice; brown means drier than average. The signal is only a few per cent, so every value comes with its uncertainty.",
+   "status": "ready",
+   "grid": {
+    "file": "lend.png",
+    "bits": 8,
+    "scale": 0.048,
+    "offset": -6.0,
+    "nodata": 255
+   },
+   "errorGrid": {
+    "file": "lend_err.png",
+    "bits": 8,
+    "scale": 0.01,
+    "offset": 0.0,
+    "nodata": 255
+   },
+   "coverageNote": "LEND's averaged polar product covers 80\u00b0S to the pole; cells with an uncertainty above 1.2 % (mostly within ~1\u00b0 of the pole, where LRO spent little time per cell) are left blank.",
+   "stats": {
+    "referenceRate": 4.9528,
+    "p95": 1.6
+   },
+   "image": "lend.webp"
+  }
+ ],
+ "regions": [
+  {
+   "id": "peak-near-cabeus-b",
+   "name": "Peak near Cabeus B",
+   "lat": -83.5759,
+   "lon": -69.0759,
+   "radiusKm": 11.8,
+   "approximate": true
+  },
+  {
+   "id": "haworth",
+   "name": "Haworth",
+   "lat": -86.7996,
+   "lon": -22.8977,
+   "radiusKm": 18.4,
+   "approximate": true
+  },
+  {
+   "id": "malapert-massif",
+   "name": "Malapert Massif",
+   "lat": -86.0467,
+   "lon": 0.1488,
+   "radiusKm": 10.1,
+   "approximate": true
+  },
+  {
+   "id": "mons-mouton-plateau",
+   "name": "Mons Mouton Plateau",
+   "lat": -84.5338,
+   "lon": 30.6556,
+   "radiusKm": 33.8,
+   "approximate": true
+  },
+  {
+   "id": "mons-mouton",
+   "name": "Mons Mouton",
+   "lat": -85.3988,
+   "lon": 31.1805,
+   "radiusKm": 13.4,
+   "approximate": true
+  },
+  {
+   "id": "nobile-rim-1",
+   "name": "Nobile Rim 1",
+   "lat": -85.1876,
+   "lon": 37.2395,
+   "radiusKm": 12.9,
+   "approximate": true
+  },
+  {
+   "id": "nobile-rim-2",
+   "name": "Nobile Rim 2",
+   "lat": -83.8876,
+   "lon": 58.4032,
+   "radiusKm": 11.3,
+   "approximate": true
+  },
+  {
+   "id": "de-gerlache-rim-2",
+   "name": "de Gerlache Rim 2",
+   "lat": -88.1739,
+   "lon": -68.787,
+   "radiusKm": 11.7,
+   "approximate": true
+  },
+  {
+   "id": "slater-plain",
+   "name": "Slater Plain",
+   "lat": -87.207,
+   "lon": 126.6062,
+   "radiusKm": 12.3,
+   "approximate": true
+  }
+ ],
+ "features": [
+  {
+   "id": "south-pole",
+   "name": "South Pole",
+   "lat": -90,
+   "lon": 0,
+   "radiusKm": 0,
+   "note": "Exact pole (90\u00b0S)."
+  },
+  {
+   "id": "shackleton",
+   "name": "Shackleton crater",
+   "lat": -89.67,
+   "lon": 129.78,
+   "radiusKm": 10.5,
+   "note": "21 km crater whose rim touches the pole; its floor is in permanent shadow (IAU/USGS gazetteer centre)."
+  }
+ ]
+}

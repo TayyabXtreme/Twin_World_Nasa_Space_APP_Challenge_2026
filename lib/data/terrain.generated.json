@@ -1,0 +1,121 @@
+{
+  "moon-shackleton-rim": {
+    "elevationM": -2756,
+    "slopeDeg": null,
+    "roughnessM": 218,
+    "pixelKm": 1.9,
+    "source": "LRO LOLA (NASA SVS CGI Moon Kit)"
+  },
+  "moon-malapert-massif": {
+    "elevationM": -2168,
+    "slopeDeg": null,
+    "roughnessM": 22,
+    "pixelKm": 1.9,
+    "source": "LRO LOLA (NASA SVS CGI Moon Kit)"
+  },
+  "moon-haworth": {
+    "elevationM": -3318,
+    "slopeDeg": null,
+    "roughnessM": 53,
+    "pixelKm": 1.9,
+    "source": "LRO LOLA (NASA SVS CGI Moon Kit)"
+  },
+  "moon-nobile-rim-1": {
+    "elevationM": 878,
+    "slopeDeg": null,
+    "roughnessM": 79,
+    "pixelKm": 1.9,
+    "source": "LRO LOLA (NASA SVS CGI Moon Kit)"
+  },
+  "moon-nobile-rim-2": {
+    "elevationM": 878,
+    "slopeDeg": null,
+    "roughnessM": 79,
+    "pixelKm": 1.9,
+    "source": "LRO LOLA (NASA SVS CGI Moon Kit)"
+  },
+  "moon-de-gerlache-rim-2": {
+    "elevationM": -1354,
+    "slopeDeg": null,
+    "roughnessM": 414,
+    "pixelKm": 1.9,
+    "source": "LRO LOLA (NASA SVS CGI Moon Kit)"
+  },
+  "moon-mons-mouton": {
+    "elevationM": 5182,
+    "slopeDeg": null,
+    "roughnessM": 34,
+    "pixelKm": 1.9,
+    "source": "LRO LOLA (NASA SVS CGI Moon Kit)"
+  },
+  "moon-peak-near-cabeus-b": {
+    "elevationM": -3946,
+    "slopeDeg": null,
+    "roughnessM": 81,
+    "pixelKm": 1.9,
+    "source": "LRO LOLA (NASA SVS CGI Moon Kit)"
+  },
+  "moon-slater-plain": {
+    "elevationM": -1713,
+    "slopeDeg": null,
+    "roughnessM": 49,
+    "pixelKm": 1.9,
+    "source": "LRO LOLA (NASA SVS CGI Moon Kit)"
+  },
+  "moon-marius-hills-pit": {
+    "elevationM": -1555,
+    "slopeDeg": 0.56,
+    "roughnessM": 27,
+    "pixelKm": 1.9,
+    "source": "LRO LOLA (NASA SVS CGI Moon Kit)"
+  },
+  "mars-jezero": {
+    "elevationM": -2568,
+    "slopeDeg": 1.01,
+    "roughnessM": 125,
+    "pixelKm": 3.7,
+    "source": "MGS MOLA MEGDR (NASA PDS)"
+  },
+  "mars-gale": {
+    "elevationM": -4509,
+    "slopeDeg": 0.89,
+    "roughnessM": 356,
+    "pixelKm": 3.7,
+    "source": "MGS MOLA MEGDR (NASA PDS)"
+  },
+  "mars-utopia-viking2": {
+    "elevationM": -4500,
+    "slopeDeg": 0.07,
+    "roughnessM": 10,
+    "pixelKm": 3.7,
+    "source": "MGS MOLA MEGDR (NASA PDS)"
+  },
+  "mars-arcadia": {
+    "elevationM": -4043,
+    "slopeDeg": 0.06,
+    "roughnessM": 4,
+    "pixelKm": 3.7,
+    "source": "MGS MOLA MEGDR (NASA PDS)"
+  },
+  "mars-mawrth-vallis": {
+    "elevationM": -2970,
+    "slopeDeg": 3.88,
+    "roughnessM": 252,
+    "pixelKm": 3.7,
+    "source": "MGS MOLA MEGDR (NASA PDS)"
+  },
+  "mars-hellas": {
+    "elevationM": -6072,
+    "slopeDeg": 1.3,
+    "roughnessM": 99,
+    "pixelKm": 3.7,
+    "source": "MGS MOLA MEGDR (NASA PDS)"
+  },
+  "mars-phoenix": {
+    "elevationM": -4110,
+    "slopeDeg": 0.89,
+    "roughnessM": 21,
+    "pixelKm": 3.7,
+    "source": "MGS MOLA MEGDR (NASA PDS)"
+  }
+}

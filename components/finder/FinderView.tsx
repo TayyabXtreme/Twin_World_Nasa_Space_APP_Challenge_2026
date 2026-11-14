@@ -1,0 +1,523 @@
+"use client";
+
+import { Atom, BookOpenText, ChevronDown, Crosshair, Gauge, Info } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import dynamic from "next/dynamic";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { detailValues, getEngine, loadDetail, type FinderEngine } from "@/lib/finder/engine";
+import { HEAT_CSS } from "@/lib/finder/model";
+import { NAMED_SITES, distinctLabels, labelPlace, loadLabeller } from "@/lib/finder/places";
+import { DEFAULT_WEIGHTS, confidence } from "@/lib/finder/text";
+import type { CellResult, DimId, ScoreResult, Weights } from "@/lib/finder/types";
+import { useRoviHandler } from "@/lib/rovi/handlers";
+import type { Lookup } from "@/lib/lookup";
+import { cn } from "@/lib/utils";
+import { Reveal, SlideWords } from "@/components/landing/Reveal";
+import { CandidateCard } from "./CandidateCard";
+import { FinderSteps } from "./FinderSteps";
+import { AnalogueSpace } from "./AnalogueSpace";
+import { FinderTabs } from "./FinderTabs";
+import { EarthLimits, MethodGlance } from "./FinderNotes";
+import type { LearnedWeights } from "./WeightPanel";
+import type { FlyRequest, MapPin } from "./FinderMap";
+import { MethodPanel, TargetProfile } from "./MethodPanel";
+import { SiteTable, type SiteRow } from "./SiteTable";
+import { TargetPicker } from "./TargetPicker";
+import { WeightPanel } from "./WeightPanel";
+import "./finder.css";
+import { Morph } from "@/components/motion/PageTransition";
+
+// Leaflet touches window on import: client only, after first paint.
+const FinderMap = dynamic(() => import("./FinderMap"), { ssr: false, loading: () => null });
+
+/** What the detail panel shows: the best named site (default), a named site, a new find, or a clicked point. */
+type Selection =
+  | { kind: "auto" }
+  | { kind: "ref"; id: string }
+  | { kind: "pick"; index: number }
+  | { kind: "probe"; lat: number; lon: number };
+
+type ListMode = "named" | "new";
+
+const SITE_BY_ID = new Map(NAMED_SITES.map((s) => [s.id, s]));
+
+function useHeatUrl(result: ScoreResult | null) {
+  const [url, setUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!result) return;
+    let next: string;
+    let revoke = false;
+    if (result.heat instanceof Blob) {
+      next = URL.createObjectURL(result.heat);
+      revoke = true;
+    } else {
+      const canvas = document.createElement("canvas");
+      canvas.width = result.heat.width;
+      canvas.height = result.heat.height;
+      canvas.getContext("2d")?.putImageData(result.heat, 0, 0);
+      next = canvas.toDataURL("image/png");
+    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- the URL is derived from an external Blob
+    setUrl(next);
+    return () => {
+      // Leaflet swaps the image a frame later; free the old blob once it is surely unused.
+      if (revoke) setTimeout(() => URL.revokeObjectURL(next), 1500);
+    };
+  }, [result]);
+  return url;
+}
+
+const EASE = [0.22, 1, 0.36, 1] as const;
+
+/** The target's name in the headline: the old one slides up and out, the new one rises in. */
+function TargetName({ name }: { name: string | null }) {
+  const reduce = useReducedMotion();
+  return (
+    <span className="-mb-[0.12em] inline-grid overflow-hidden pb-[0.12em] align-bottom">
+      <AnimatePresence initial={false} mode="popLayout">
+        <motion.span
+          key={name ?? "none"}
+          className="col-start-1 row-start-1 bg-gradient-to-r from-primary to-[oklch(0.85_0.12_220)] bg-clip-text text-transparent"
+          initial={reduce ? false : { y: "100%", opacity: 0 }}
+          animate={{ y: "0%", opacity: 1 }}
+          exit={reduce ? undefined : { y: "-100%", opacity: 0 }}
+          transition={{ duration: 0.55, ease: EASE }}
+        >
+          {name ?? "the Moon or Mars"}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
+
+export function FinderView() {
+  const params = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [engine, setEngine] = useState<FinderEngine | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [lookup, setLookup] = useState<Lookup | null>(null);
+  const [result, setResult] = useState<ScoreResult | null>(null);
+  const [weightsByTarget, setWeightsByTarget] = useState<Record<string, Weights>>({});
+  const [selection, setSelection] = useState<Selection>({ kind: "auto" });
+  const [listMode, setListMode] = useState<ListMode>("named");
+  const [probe, setProbe] = useState<CellResult | null>(null);
+  const [detailBuf, setDetailBuf] = useState<ArrayBuffer | null>(null);
+  const [fly, setFly] = useState<FlyRequest | null>(null);
+  const [mode, setMode] = useState<"default" | "learned" | "custom">("default");
+  const [learned, setLearned] = useState<LearnedWeights | null>(null);
+  const lastId = useRef(0);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let live = true;
+    getEngine().then(
+      (e) => live && setEngine(e),
+      () => live && setError("Could not load the Earth feature grid."),
+    );
+    loadLabeller().then((l) => live && setLookup(() => l));
+    fetch("/data/ml/learned-weights/weights.json")
+      .then((r) => r.json())
+      .then(
+        (j) => live && setLearned(j),
+        () => {},
+      );
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  const targets = engine?.data.targets.targets;
+  const target = useMemo(() => {
+    if (!targets) return null;
+    return targets.find((t) => t.id === params.get("t")) ?? targets.find((t) => t.id === "mars-jezero") ?? targets[0];
+  }, [targets, params]);
+  const weights = target
+    ? mode === "learned" && learned
+      ? (learned.weights as Weights)
+      : (weightsByTarget[target.id] ?? DEFAULT_WEIGHTS[target.world])
+    : null;
+
+  // Score whenever target or weights change. The engine keeps one job in flight, so results stream in.
+  useEffect(() => {
+    if (!engine || !target || !weights) return;
+    engine.score(target, weights).then((r) => {
+      if (!r || r.id < lastId.current) return;
+      lastId.current = r.id;
+      setResult(r);
+    });
+  }, [engine, target, weights]);
+
+  // Re-probe a clicked point after every new ranking so its card follows the weights.
+  const probeLat = selection.kind === "probe" ? selection.lat : null;
+  const probeLon = selection.kind === "probe" ? selection.lon : null;
+  useEffect(() => {
+    if (!engine || probeLat === null || probeLon === null || !result) return;
+    let live = true;
+    engine.probe(probeLat, probeLon).then((r) => live && setProbe(r));
+    return () => {
+      live = false;
+    };
+  }, [engine, probeLat, probeLon, result]);
+
+  // Display-only values load after the first ranking is on screen.
+  useEffect(() => {
+    if (!result || detailBuf) return;
+    const id = setTimeout(() => loadDetail().then(setDetailBuf, () => {}), 400);
+    return () => clearTimeout(id);
+  }, [result, detailBuf]);
+
+  const heatUrl = useHeatUrl(result);
+
+  const setTarget = useCallback(
+    (id: string) => {
+      router.replace(`${pathname}?t=${id}`, { scroll: false });
+      setSelection({ kind: "auto" });
+    },
+    [router, pathname],
+  );
+
+  // Rovi can set the target and the weights (lib/rovi/actions.ts); the returned function undoes it.
+  useRoviHandler("finder", ({ targetId, weights: w }: { targetId?: string; weights?: Partial<Weights> }) => {
+    const prevSearch = window.location.search;
+    const prevWeights = weightsByTarget;
+    const prevMode = mode;
+    const id = targetId ?? target?.id;
+    if (targetId && targetId !== target?.id) setTarget(targetId);
+    if (id && w) {
+      const world = targets?.find((t) => t.id === id)?.world ?? (id.startsWith("moon") ? "moon" : "mars");
+      setWeightsByTarget((m) => ({ ...m, [id]: { ...(m[id] ?? DEFAULT_WEIGHTS[world]), ...w } as Record<DimId, number> }));
+      // Learned weights would hide Rovi's sliders: switch to custom, like dragging a slider does.
+      setMode("custom");
+    }
+    return () => {
+      setWeightsByTarget(prevWeights);
+      setMode(prevMode);
+      if (targetId && window.location.search !== prevSearch) router.replace(`${pathname}${prevSearch}`, { scroll: false });
+    };
+  });
+
+  const labels = useMemo(() => (result ? distinctLabels(result.top, lookup) : []), [result, lookup]);
+
+  // Per-cell data-quality flags (earth-detail.bin) sharpen the confidence once they have loaded.
+  const flagsOf = useCallback(
+    (c: CellResult) => (detailBuf && engine ? detailValues(engine.data.header, detailBuf, c.cell).flags : undefined),
+    [detailBuf, engine],
+  );
+
+  // The two ranked lists: named analogue sites (each scored by its best cell nearby) and new places found anywhere.
+  const namedRows: SiteRow[] = useMemo(() => {
+    if (!result || !target || !weights) return [];
+    return NAMED_SITES.flatMap((s) => {
+      const c = result.refs[s.id];
+      if (!c) return [];
+      return [{ id: s.id, name: s.name, region: s.region, group: s.group, score: c.score * 100, confidence: confidence(c, target, weights, flagsOf(c)), lat: c.lat, lon: c.lon, sims: c.sims }];
+    }).sort((a, b) => b.score - a.score);
+  }, [result, target, weights, flagsOf]);
+  const newRows: SiteRow[] = useMemo(() => {
+    if (!result || !target || !weights) return [];
+    return result.top.map((c, i) => ({
+      id: `pick-${i}`,
+      name: labels[i]?.title ?? "…",
+      region: labels[i]?.subtitle ?? "",
+      score: c.score * 100,
+      confidence: confidence(c, target, weights, flagsOf(c)),
+      lat: c.lat,
+      lon: c.lon,
+      sims: c.sims,
+    }));
+  }, [result, target, weights, labels, flagsOf]);
+
+  const bestNamed = namedRows[0]?.id;
+  const effective: Selection = useMemo(
+    () => (selection.kind === "auto" ? (bestNamed ? { kind: "ref", id: bestNamed } : { kind: "pick", index: 0 }) : selection),
+    [selection, bestNamed],
+  );
+
+  const current: CellResult | null = !result
+    ? null
+    : effective.kind === "pick"
+      ? (result.top[effective.index] ?? null)
+      : effective.kind === "ref"
+        ? result.refs[effective.id]
+        : effective.kind === "probe"
+          ? probe
+          : null;
+  const currentLabel = useMemo(() => {
+    if (!current) return null;
+    if (effective.kind === "ref") {
+      const s = SITE_BY_ID.get(effective.id);
+      const base = labelPlace(current.lat, current.lon, lookup);
+      return s ? { ...base, title: s.name, subtitle: `${s.region} · ${s.why}` } : base;
+    }
+    if (effective.kind === "pick") return labels[effective.index] ?? labelPlace(current.lat, current.lon, lookup);
+    return labelPlace(current.lat, current.lon, lookup);
+  }, [current, effective, labels, lookup]);
+  const currentRank =
+    effective.kind === "ref" ? namedRows.findIndex((r) => r.id === effective.id) + 1 || null : effective.kind === "pick" ? effective.index + 1 : null;
+
+  const rows = listMode === "named" ? namedRows : newRows;
+  const selectedRowId = effective.kind === "ref" ? effective.id : effective.kind === "pick" ? `pick-${effective.index}` : null;
+
+  const pins: MapPin[] = useMemo(() => {
+    const list = listMode === "named" ? namedRows.slice(0, 10) : newRows;
+    const out: MapPin[] = list.map((r, i) => ({ id: r.id, lat: r.lat, lon: r.lon, rank: i + 1, label: r.name, kind: "pick" }));
+    if (current && selectedRowId && !list.some((r) => r.id === selectedRowId))
+      out.push({ id: selectedRowId, lat: current.lat, lon: current.lon, label: currentLabel?.title ?? "", kind: "probe" });
+    if (current && effective.kind === "probe") out.push({ id: "probe", lat: current.lat, lon: current.lon, label: currentLabel?.title ?? "", kind: "probe" });
+    return out;
+  }, [listMode, namedRows, newRows, current, selectedRowId, effective.kind, currentLabel]);
+  const selectedPin = selectedRowId ?? "probe";
+
+  const flyTo = (lat: number, lon: number) => setFly((f) => ({ lat, lon, n: (f?.n ?? 0) + 1 }));
+  const showCard = () => {
+    const el = cardRef.current;
+    if (!el || window.innerWidth >= 1024) return;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  };
+  const selectRow = (id: string) => {
+    if (id.startsWith("pick-")) {
+      const i = Number(id.slice(5));
+      setSelection({ kind: "pick", index: i });
+      const c = result?.top[i];
+      if (c) flyTo(c.lat, c.lon);
+    } else {
+      setSelection({ kind: "ref", id });
+      const c = result?.refs[id];
+      if (c) flyTo(c.lat, c.lon);
+    }
+  };
+
+  // Deep link from the globe: /finder?t=mars-gale&ref=pk-khewra selects that named site once scores arrive.
+  const refParam = params.get("ref");
+  const shownRef = useRef<string | null>(null);
+  useEffect(() => {
+    const c = refParam ? result?.refs[refParam] : null;
+    if (!refParam || !c || shownRef.current === refParam) return;
+    shownRef.current = refParam;
+    setListMode("named");
+    setSelection({ kind: "ref", id: refParam });
+    setFly((f) => ({ lat: c.lat, lon: c.lon, n: (f?.n ?? 0) + 1 }));
+    requestAnimationFrame(() => document.getElementById("finder-results")?.scrollIntoView({ block: "start" }));
+  }, [result, refParam]);
+
+  const detail = current && detailBuf && engine ? detailValues(engine.data.header, detailBuf, current.cell) : null;
+
+  return (
+    <div className="mx-auto max-w-7xl">
+      <Morph name="feature-finder">
+        <header className="max-w-3xl">
+          <Reveal y={10}>
+            <p className="text-xs font-medium tracking-[0.14em] text-primary uppercase">Analog Finder</p>
+          </Reveal>
+          <h1 className="mt-2 font-heading text-[clamp(2.25rem,4.8vw,3.75rem)] leading-[1.04] font-semibold tracking-tight text-balance">
+            <SlideWords text="Where on Earth is most like" onMount /> <TargetName name={target ? target.name : null} />?
+          </h1>
+          <Reveal delay={0.3} y={14}>
+            <p className="mt-4 max-w-2xl text-[17px] leading-relaxed text-muted-foreground">
+              Pick a Moon base or Mars site. We rank {NAMED_SITES.length} real Earth analogue sites, and every 28 km of Earth&apos;s land, against it with NASA
+              measurements, and show the working behind every score.
+            </p>
+          </Reveal>
+        </header>
+      </Morph>
+
+      <FinderSteps ready={Boolean(result)} />
+
+      <div id="finder-target" className="scroll-mt-36">
+        {targets && target ? <TargetPicker targets={targets} current={target} onPick={setTarget} /> : <div className="mt-7 h-[5.5rem]" aria-hidden />}
+        {target && <EarthLimits target={target} />}
+      </div>
+
+      <Reveal y={36} className="mt-5">
+        <div id="finder-stage" data-engine={engine?.mode} className="grid scroll-mt-36 gap-5 lg:grid-cols-[minmax(0,1fr)_20rem]">
+          <div className="relative isolate h-[clamp(20rem,58vh,30rem)] overflow-hidden rounded-[1.6rem] shadow-[0_40px_100px_-50px_var(--primary)] ring-1 ring-white/10 lg:h-[clamp(28rem,40vw,38rem)]">
+            {engine && (
+              <FinderMap
+                heatUrl={heatUrl}
+                pins={pins}
+                selectedId={selectedPin}
+                fly={fly}
+                onPick={(id) => {
+                  if (id !== "probe") selectRow(id);
+                  showCard();
+                }}
+                onProbe={(lat, lon) => {
+                  setSelection({ kind: "probe", lat, lon });
+                  setProbe(null);
+                }}
+              />
+            )}
+            {!result && (
+              <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/60 text-center">
+                <span className="finder-pulse size-10 rounded-full border border-primary/50" aria-hidden />
+                <p className="text-sm text-muted-foreground">{error ?? "Loading the NASA Earth feature grid (2.3 MB)…"}</p>
+              </div>
+            )}
+            {result && (
+              <>
+                <p className="pointer-events-none absolute start-3 top-3 z-[500] flex items-center gap-2 rounded-full glass px-3 py-1.5 text-[11px] text-muted-foreground">
+                  <span className="size-1.5 rounded-full bg-ok" aria-hidden />
+                  <span className="hud">{engine?.data.header.grid.cells.toLocaleString("en-US")}</span> land cells scored in{" "}
+                  <span className="hud">{Math.max(1, Math.round(result.ms))} ms</span>
+                </p>
+                <div className="pointer-events-none absolute start-3 bottom-3 z-[500] w-[min(17rem,calc(100%-1.5rem))] rounded-2xl glass px-3.5 py-3">
+                  <p className="flex items-center justify-between text-[11px] text-muted-foreground">
+                    <span>Match score</span>
+                    <span className="flex items-center gap-1">
+                      <Crosshair className="size-3" aria-hidden /> tap the map to score any place
+                    </span>
+                  </p>
+                  <div className="mt-2 h-2 rounded-full" style={{ backgroundImage: HEAT_CSS }} />
+                  <p className="mt-1.5 flex justify-between hud text-[11px]">
+                    <span>{Math.round(result.range[0] * 100)}</span>
+                    <span className="text-muted-foreground">0–100 scale</span>
+                    <span>{Math.round(result.range[1] * 100)}</span>
+                  </p>
+                </div>
+              </>
+            )}
+          </div>
+          {target && weights && (
+            <WeightPanel
+              target={target}
+              weights={weights}
+              onChange={(w) => {
+                setWeightsByTarget((m) => ({ ...m, [target.id]: w }));
+                setMode("custom");
+              }}
+              onReset={() => {
+                setWeightsByTarget((m) => ({ ...m, [target.id]: DEFAULT_WEIGHTS[target.world] }));
+                setMode("default");
+              }}
+              mode={mode}
+              onMode={setMode}
+              learned={learned}
+            />
+          )}
+        </div>
+      </Reveal>
+
+      {result && target && engine && (
+        <section id="finder-results" aria-label="Ranked sites and site detail" className="mt-12 grid scroll-mt-36 items-start gap-6 lg:grid-cols-[minmax(0,25rem)_minmax(0,1fr)]">
+          <div className="lg:sticky lg:top-36">
+            <div role="tablist" aria-label="Which places to rank" className="mb-3 flex rounded-xl bg-white/[0.04] p-1 ring-1 ring-white/10">
+              {(
+                [
+                  ["named", `Analogue sites (${namedRows.length})`],
+                  ["new", `New finds (${newRows.length})`],
+                ] as const
+              ).map(([m, label]) => (
+                <button
+                  key={m}
+                  type="button"
+                  role="tab"
+                  aria-selected={listMode === m}
+                  onClick={() => {
+                    setListMode(m);
+                    setSelection(m === "named" ? { kind: "auto" } : { kind: "pick", index: 0 });
+                  }}
+                  className={cn(
+                    "flex-1 rounded-lg px-3 py-1.5 text-sm transition-colors duration-150",
+                    listMode === m ? "bg-white/[0.1] text-foreground ring-1 ring-white/15" : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+            <SiteTable
+              rows={rows}
+              selectedId={selectedRowId}
+              onSelect={(id) => {
+                selectRow(id);
+                showCard();
+              }}
+              targetName={target.name}
+              title={listMode === "named" ? "Ranked analogue sites" : "Best new places on Earth"}
+              note={
+                listMode === "named"
+                  ? "Real field and analogue sites, each scored by its best land cell nearby. Pick a row for the full breakdown."
+                  : "The best-scoring 28 km cells anywhere on Earth, at least 350 km apart: places nobody has called an analogue yet."
+              }
+            />
+          </div>
+          <div ref={cardRef} className="min-w-0 scroll-mt-36">
+            {current && currentLabel ? (
+              <CandidateCard
+                cell={current}
+                label={currentLabel}
+                rank={currentRank}
+                target={target}
+                header={engine.data.header}
+                detail={detail}
+                weights={weights ?? DEFAULT_WEIGHTS[target.world]}
+                confidence={confidence(current, target, weights ?? DEFAULT_WEIGHTS[target.world], detail?.flags)}
+              />
+            ) : (
+              <p
+                className={cn(
+                  "rounded-[1.6rem] bg-white/[0.03] p-6 text-sm text-muted-foreground ring-1 ring-white/10",
+                  effective.kind === "probe" && "finder-pulse",
+                )}
+              >
+                {effective.kind === "probe" ? "Scoring that spot…" : "That place has no land cell in our grid (open water or a tiny island)."}
+              </p>
+            )}
+          </div>
+        </section>
+      )}
+
+      {result && target && engine && (
+        <>
+          <MethodGlance />
+          <details className="group mt-10 rounded-[1.6rem] bg-white/[0.025] ring-1 ring-white/10 open:bg-white/[0.035]">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-5">
+              <span>
+                <span className="block font-heading text-lg font-semibold">Go deeper</span>
+                <span className="block text-[13px] text-muted-foreground">
+                  The Analogue Space map (machine learning), {target.name} in numbers, and the full method.
+                </span>
+              </span>
+              <ChevronDown className="size-5 shrink-0 text-muted-foreground transition-transform duration-200 group-open:rotate-180" aria-hidden />
+            </summary>
+            <div className="px-5 pb-5">
+              <FinderTabs
+                label="More about this ranking"
+                tabs={[
+                  {
+                    id: "space",
+                    label: "Analogue Space",
+                    icon: Atom,
+                    render: () => (
+                      <AnalogueSpace
+                        currentId={target.id}
+                        onTarget={(id) => {
+                          setTarget(id);
+                          document.getElementById("finder-stage")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }}
+                        onEarth={(lat, lon) => {
+                          flyTo(lat, lon);
+                          document.getElementById("finder-stage")?.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }}
+                      />
+                    ),
+                  },
+                  { id: "target", label: `${target.name} in numbers`, icon: Gauge, render: () => <TargetProfile target={target} /> },
+                  { id: "method", label: "Full method", icon: BookOpenText, render: () => <MethodPanel header={engine.data.header} targets={engine.data.targets} /> },
+                ]}
+              />
+            </div>
+          </details>
+          <p className="mt-10 flex max-w-[70ch] items-start gap-2 border-t border-white/[0.07] pt-6 text-xs text-muted-foreground">
+            <Info className="mt-0.5 size-3.5 shrink-0" aria-hidden />
+            New finds carry approximate coordinates (cell centres, 0.25°) until checked against imagery. A high score says the measured conditions are similar for
+            their world, never that Earth matches the Moon or Mars outright.
+          </p>
+        </>
+      )}
+    </div>
+  );
+}

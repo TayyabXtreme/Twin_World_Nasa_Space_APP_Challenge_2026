@@ -1,0 +1,60 @@
+{
+  "mars": {
+    "mars-jezero": {
+      "name": "Jezero Crater",
+      "lat": 18.445,
+      "lon": 77.451,
+      "grs_water_wt_percent": 3.53,
+      "tes_thermal_inertia_night": 305.6,
+      "ns_epithermal_counts_s": 8.13
+    },
+    "mars-gale": {
+      "name": "Gale Crater",
+      "lat": -4.589,
+      "lon": 137.441,
+      "grs_water_wt_percent": 5.42,
+      "tes_thermal_inertia_night": 364.36,
+      "ns_epithermal_counts_s": 5.68
+    },
+    "mars-utopia-viking2": {
+      "name": "Utopia Planitia",
+      "lat": 47.64,
+      "lon": 134.29,
+      "grs_water_wt_percent": 4.58,
+      "tes_thermal_inertia_night": 244.28,
+      "ns_epithermal_counts_s": 5.17
+    },
+    "mars-arcadia": {
+      "name": "Arcadia Planitia",
+      "lat": 49.02,
+      "lon": -171.85,
+      "grs_water_wt_percent": null,
+      "tes_thermal_inertia_night": 214.8,
+      "ns_epithermal_counts_s": 4.85
+    },
+    "mars-mawrth-vallis": {
+      "name": "Mawrth Vallis",
+      "lat": 22.43,
+      "lon": -16.97,
+      "grs_water_wt_percent": 5.46,
+      "tes_thermal_inertia_night": 244.64,
+      "ns_epithermal_counts_s": 5.46
+    },
+    "mars-hellas": {
+      "name": "Hellas Planitia",
+      "lat": -42.43,
+      "lon": 70.5,
+      "grs_water_wt_percent": 4.16,
+      "tes_thermal_inertia_night": 200.88,
+      "ns_epithermal_counts_s": 7.27
+    },
+    "mars-phoenix": {
+      "name": "Phoenix landing site",
+      "lat": 68.22,
+      "lon": -125.75,
+      "grs_water_wt_percent": null,
+      "tes_thermal_inertia_night": 101.2,
+      "ns_epithermal_counts_s": 3.42
+    }
+  }
+}

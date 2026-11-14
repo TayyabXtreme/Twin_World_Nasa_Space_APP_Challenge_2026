@@ -1,0 +1,57 @@
+{
+ "id": "mars-ns-epithermal",
+ "type": "image",
+ "title": "Epithermal neutrons (hydrogen)",
+ "units": "counts/s",
+ "unitsLong": "epithermal neutron counts per second",
+ "range": [
+  1.5,
+  9.4
+ ],
+ "scale": "linear",
+ "ramp": [
+  "#fde725",
+  "#b5de2b",
+  "#6ece58",
+  "#35b779",
+  "#1f9e89",
+  "#26828e",
+  "#31688e",
+  "#3e4989",
+  "#482878",
+  "#440154"
+ ],
+ "lowLabel": "more hydrogen",
+ "highLabel": "less hydrogen",
+ "decimals": 2,
+ "meaning": "Hydrogen slows cosmic-ray neutrons, so FEWER epithermal neutrons means MORE hydrogen (usually water ice) in the top metre. Bright = ice-rich.",
+ "caveat": "First 25.7 days of mapping (Feldman et al. 2002), so it is noisy. The colour scale is reversed: low counts are bright.",
+ "dataset": "Mars Odyssey Neutron Spectrometer · epithermal neutron flux",
+ "datasetId": "ODY GRS special products (NS_EPITHERMAL_020917)",
+ "resolution": "0.5° cells (instrument footprint ~600 km)",
+ "source": "https://pds-geosciences.wustl.edu/ody/urn-nasa-pds-odyssey_grs_special/data/",
+ "image": "/data/layers/mars-ns-epithermal.webp",
+ "bounds": [
+  [
+   -90,
+   -180
+  ],
+  [
+   90,
+   180
+  ]
+ ],
+ "grid": {
+  "url": "/data/layers/mars-ns-epithermal.grid.bin",
+  "width": 720,
+  "height": 360,
+  "offset": 1.319,
+  "scale": 0.00016931669
+ },
+ "stats": {
+  "p2": 1.516,
+  "median": 6.14,
+  "p98": 9.39
+ },
+ "built": "2026-11-13"
+}

@@ -1,0 +1,522 @@
+{
+ "generated": "2026-11-13",
+ "script": "scripts/build-datalab.py",
+ "sizes": {
+  "moon-diviner-prp-expected": 604800210,
+  "moon-diviner-prp": 604816938,
+  "moon-minirf-cpr-expected": 265420800,
+  "moon-minirf-cpr": 265436658,
+  "moon-diviner-rock": 88489353,
+  "moon-diviner-regolith": 88489959,
+  "moon-lola-dem-south": 29067678,
+  "moon-lola-slope-south": 29066671,
+  "moon-lola-global": 33201026,
+  "mars-grs-water": 221593,
+  "mars-grs-elements": 925264,
+  "mars-neutron-epithermal": 6742060,
+  "mars-tes-thermal-inertia-zip": 69628554,
+  "mars-tes-thermal-inertia-unpacked": 162412007,
+  "mars-mola": 33182413,
+  "earth-modis-lst-monthly": 291898872,
+  "earth-modis-ndvi-monthly": 200022369,
+  "earth-modis-albedo": 376328080,
+  "earth-worldview-truecolour": 908645,
+  "earth-worldview-lst": 2087006,
+  "earth-worldview-ndvi": 3253972,
+  "earth-worldview-relief": 1794006,
+  "earth-cmr-listings": 24978,
+  "csa-rcm": 179768404,
+  "csa-tutorial-repos": 73187991,
+  "csa-radarsat1": 8302,
+  "copernicus-s2-quicklooks": 371314,
+  "copernicus-s1-quicklooks": 1680857,
+  "copernicus-manifest": 23395,
+  "esa-osc": 26978,
+  "jaxa": 28101,
+  "copernicus-s2-full-products": 17654888108,
+  "copernicus-s2-scene-count": 17,
+  "copernicus-s1-full-products": 23458652308,
+  "copernicus-s1-scene-count": 18
+ },
+ "stats": {
+  "prp": {
+   "facets": 2880000,
+   "lat_edge": -75.9,
+   "half_width_km": 302.2,
+   "share_flag_minus_1": 0.0348,
+   "flag_minus_1_tmax_median_K": 77.3,
+   "share_ice_within_model_depth": 0.3237,
+   "share_ice_at_surface": 0.0064,
+   "share_tmax_below_110K": 0.0401,
+   "edge_km_median": 0.568
+  },
+  "minirf": {
+   "valid_share": 0.6349,
+   "median": 0.55
+  }
+ },
+ "images": {
+  "moon-lola-dem-south.webp": {
+   "w": 560,
+   "h": 560,
+   "bytes": 27186,
+   "caption": "LOLA elevation 75°S–90°S, hill-shaded (south pole at centre)"
+  },
+  "moon-lola-slope-south.webp": {
+   "w": 560,
+   "h": 560,
+   "bytes": 144770,
+   "caption": "LOLA slope 75°S–90°S, 0° (dark) to 30°+ (bright)"
+  },
+  "moon-diviner-rock.webp": {
+   "w": 720,
+   "h": 240,
+   "bytes": 65290,
+   "caption": "Diviner rock abundance, 60°N–60°S (bright = more rock cover)"
+  },
+  "moon-diviner-regolith.webp": {
+   "w": 720,
+   "h": 240,
+   "bytes": 56970,
+   "caption": "Diviner night-time regolith temperature anomaly, 60°N–60°S"
+  },
+  "moon-lola-global.webp": {
+   "w": 640,
+   "h": 320,
+   "bytes": 30466,
+   "caption": "LOLA global elevation (16 px/°), hill-shaded"
+  },
+  "moon-diviner-prp-ice.webp": {
+   "w": 560,
+   "h": 560,
+   "bytes": 98566,
+   "caption": "Diviner ice stability depth: white = ice stable at the surface, blue = deeper, grey = none within 2.87 m, violet = −1 flag"
+  },
+  "moon-minirf-cpr.webp": {
+   "w": 640,
+   "h": 320,
+   "bytes": 69224,
+   "caption": "Mini-RF CPR, global: bright = high CPR (rough ground or possible ice)"
+  },
+  "mars-grs-water.webp": {
+   "w": 640,
+   "h": 320,
+   "bytes": 3126,
+   "caption": "GRS water-equivalent hydrogen, 0–12 wt % (poles masked)"
+  },
+  "mars-neutron-epithermal.webp": {
+   "w": 640,
+   "h": 320,
+   "bytes": 13224,
+   "caption": "Neutron spectrometer epithermal flux, inverted: bright = fewer neutrons = more hydrogen"
+  },
+  "mars-tes-thermal-inertia.webp": {
+   "w": 640,
+   "h": 320,
+   "bytes": 26730,
+   "caption": "TES night-time thermal inertia, 30 (dust) to 600 (rock / ice-cemented)"
+  },
+  "mars-grs-chlorine.webp": {
+   "w": 640,
+   "h": 320,
+   "bytes": 6088,
+   "caption": "GRS chlorine concentration (one of five element maps)"
+  },
+  "mars-mola.webp": {
+   "w": 640,
+   "h": 320,
+   "bytes": 9532,
+   "caption": "MOLA global elevation (16 px/°), hill-shaded"
+  },
+  "earth-modis-lst-monthly.webp": {
+   "w": 640,
+   "h": 320,
+   "bytes": 19502,
+   "caption": "MOD11C3 daytime land-surface temperature, July 2024, −30 °C to 55 °C"
+  },
+  "earth-modis-ndvi-monthly.webp": {
+   "w": 640,
+   "h": 320,
+   "bytes": 18764,
+   "caption": "MOD13C2 NDVI, July 2024: brown = bare ground, green = dense plants"
+  },
+  "earth-modis-albedo.webp": {
+   "w": 640,
+   "h": 320,
+   "bytes": 10622,
+   "caption": "MCD43C3 white-sky shortwave albedo, 8 Jan 2024: dark rock to bright ice and salt"
+  },
+  "earth-worldview-truecolour.webp": {
+   "w": 640,
+   "h": 425,
+   "bytes": 23144,
+   "caption": "MODIS true colour: Atacama, McMurdo, Devon Island, Askja, Hingol, Dallol"
+  },
+  "earth-worldview-lst.webp": {
+   "w": 640,
+   "h": 211,
+   "bytes": 12812,
+   "caption": "MODIS land-surface temperature: Atacama day, Atacama night, McMurdo day"
+  },
+  "earth-worldview-ndvi.webp": {
+   "w": 640,
+   "h": 211,
+   "bytes": 15550,
+   "caption": "MODIS NDVI: Atacama, Rio Tinto, Kīlauea"
+  },
+  "earth-worldview-relief.webp": {
+   "w": 640,
+   "h": 211,
+   "bytes": 7976,
+   "caption": "ASTER GDEM shaded relief: Haughton crater, Askja, Hingol"
+  },
+  "wv-atacama.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 2814,
+   "caption": "atacama"
+  },
+  "wv-mcmurdo.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 7036,
+   "caption": "mcmurdo"
+  },
+  "wv-devon-island-haughton.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 4738,
+   "caption": "devon-island-haughton"
+  },
+  "wv-askja.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 3116,
+   "caption": "askja"
+  },
+  "wv-hingol-mud-volcanoes.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 1940,
+   "caption": "hingol-mud-volcanoes"
+  },
+  "wv-dallol-danakil.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 2736,
+   "caption": "dallol-danakil"
+  },
+  "wv-death-valley.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 2908,
+   "caption": "death-valley"
+  },
+  "wv-pilot-valley.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 4122,
+   "caption": "pilot-valley"
+  },
+  "wv-kilauea.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 5154,
+   "caption": "kilauea"
+  },
+  "wv-mauna-kea.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 9758,
+   "caption": "mauna-kea"
+  },
+  "wv-medicine-lake.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 4410,
+   "caption": "medicine-lake"
+  },
+  "wv-svalbard-bockfjorden.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 5066,
+   "caption": "svalbard-bockfjorden"
+  },
+  "wv-rio-tinto.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 7488,
+   "caption": "rio-tinto"
+  },
+  "wv-qaidam-basin.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 4242,
+   "caption": "qaidam-basin"
+  },
+  "wv-salar-de-uyuni.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 3358,
+   "caption": "salar-de-uyuni"
+  },
+  "wv-cholistan-desert.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 2230,
+   "caption": "cholistan-desert"
+  },
+  "wv-thar-desert.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 1228,
+   "caption": "thar-desert"
+  },
+  "wv-khewra-salt-range.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 3468,
+   "caption": "khewra-salt-range"
+  },
+  "s2-atacama.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 6236,
+   "caption": "atacama"
+  },
+  "s1-atacama.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 8338,
+   "caption": "atacama"
+  },
+  "s2-mcmurdo.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 3586,
+   "caption": "mcmurdo"
+  },
+  "s1-mcmurdo.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 10914,
+   "caption": "mcmurdo"
+  },
+  "s2-devon-island-haughton.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 6464,
+   "caption": "devon-island-haughton"
+  },
+  "s1-devon-island-haughton.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 9940,
+   "caption": "devon-island-haughton"
+  },
+  "s2-askja.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 626,
+   "caption": "askja"
+  },
+  "s1-askja.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 6276,
+   "caption": "askja"
+  },
+  "s2-hingol-mud-volcanoes.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 7860,
+   "caption": "hingol-mud-volcanoes"
+  },
+  "s1-hingol-mud-volcanoes.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 7206,
+   "caption": "hingol-mud-volcanoes"
+  },
+  "s2-dallol-danakil.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 10390,
+   "caption": "dallol-danakil"
+  },
+  "s1-dallol-danakil.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 6644,
+   "caption": "dallol-danakil"
+  },
+  "s2-death-valley.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 11666,
+   "caption": "death-valley"
+  },
+  "s1-death-valley.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 9550,
+   "caption": "death-valley"
+  },
+  "s2-pilot-valley.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 5446,
+   "caption": "pilot-valley"
+  },
+  "s1-pilot-valley.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 6850,
+   "caption": "pilot-valley"
+  },
+  "s2-kilauea.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 4852,
+   "caption": "kilauea"
+  },
+  "s1-kilauea.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 2664,
+   "caption": "kilauea"
+  },
+  "s2-mauna-kea.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 2658,
+   "caption": "mauna-kea"
+  },
+  "s1-mauna-kea.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 2664,
+   "caption": "mauna-kea"
+  },
+  "s2-medicine-lake.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 12630,
+   "caption": "medicine-lake"
+  },
+  "s1-medicine-lake.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 7934,
+   "caption": "medicine-lake"
+  },
+  "s1-svalbard-bockfjorden.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 4904,
+   "caption": "svalbard-bockfjorden"
+  },
+  "s2-rio-tinto.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 8356,
+   "caption": "rio-tinto"
+  },
+  "s1-rio-tinto.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 7650,
+   "caption": "rio-tinto"
+  },
+  "s2-qaidam-basin.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 5312,
+   "caption": "qaidam-basin"
+  },
+  "s1-qaidam-basin.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 8068,
+   "caption": "qaidam-basin"
+  },
+  "s2-salar-de-uyuni.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 5738,
+   "caption": "salar-de-uyuni"
+  },
+  "s1-salar-de-uyuni.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 6994,
+   "caption": "salar-de-uyuni"
+  },
+  "s2-cholistan-desert.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 6348,
+   "caption": "cholistan-desert"
+  },
+  "s1-cholistan-desert.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 4198,
+   "caption": "cholistan-desert"
+  },
+  "s2-thar-desert.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 8590,
+   "caption": "thar-desert"
+  },
+  "s1-thar-desert.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 4856,
+   "caption": "thar-desert"
+  },
+  "s2-khewra-salt-range.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 9026,
+   "caption": "khewra-salt-range"
+  },
+  "s1-khewra-salt-range.webp": {
+   "w": 220,
+   "h": 220,
+   "bytes": 6750,
+   "caption": "khewra-salt-range"
+  },
+  "copernicus-s2.webp": {
+   "w": 640,
+   "h": 211,
+   "bytes": 20204,
+   "caption": "Sentinel-2 L2A quicklooks: Atacama, Salar de Uyuni, Hingol"
+  },
+  "copernicus-s1.webp": {
+   "w": 640,
+   "h": 211,
+   "bytes": 25518,
+   "caption": "Sentinel-1 radar quicklooks: Atacama, Devon Island, Dallol"
+  },
+  "csa-rcm-1.webp": {
+   "w": 512,
+   "h": 530,
+   "bytes": 58828,
+   "caption": "Canadian Arctic islands, about 75°N 110°W"
+  },
+  "csa-rcm-2.webp": {
+   "w": 512,
+   "h": 527,
+   "bytes": 77520,
+   "caption": "Beaufort Sea and Banks Island, about 77°N 121°W"
+  },
+  "csa-rcm-3.webp": {
+   "w": 512,
+   "h": 575,
+   "bytes": 41486,
+   "caption": "Antarctic Peninsula, about 65°S"
+  }
+ }
+}

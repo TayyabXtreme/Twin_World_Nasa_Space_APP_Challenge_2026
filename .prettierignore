@@ -1,0 +1,6 @@
+assets-raw
+public
+.claude
+.next
+node_modules
+package-lock.json

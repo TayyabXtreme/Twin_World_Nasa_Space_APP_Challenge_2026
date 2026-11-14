@@ -1,0 +1,482 @@
+{
+ "earth-atacama": {
+  "pin": "/photos/globe/atacama-pin.webp",
+  "views": [
+   {
+    "kind": "s2",
+    "src": "/photos/globe/atacama-s2.webp",
+    "w": 343,
+    "h": 343,
+    "date": "2025-01-27",
+    "scene": "S2C_MSIL2A_20250127T143811_N0511_R096_T19KDP_20250127T185013"
+   },
+   {
+    "kind": "wv",
+    "src": "/photos/globe/atacama-wv.webp",
+    "w": 640,
+    "h": 640,
+    "date": "2024-01-11"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/atacama-s1.webp",
+    "w": 291,
+    "h": 200,
+    "date": "2026-11-11",
+    "scene": "S1C_IW_GRDH_1SDV_20261111T231312_20261111T231337_010295_0148FB_2393_COG"
+   }
+  ]
+ },
+ "earth-mcmurdo": {
+  "pin": "/photos/globe/mcmurdo-pin.webp",
+  "views": [
+   {
+    "kind": "wv",
+    "src": "/photos/globe/mcmurdo-wv.webp",
+    "w": 640,
+    "h": 640,
+    "date": "2024-12-20"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/mcmurdo-s1.webp",
+    "w": 215,
+    "h": 189,
+    "date": "2026-11-07",
+    "scene": "S1D_IW_GRDH_1SSH_20261107T124725_20261107T124759_005361_00A388_8FB3"
+   }
+  ]
+ },
+ "earth-askja": {
+  "pin": "/photos/globe/askja-pin.webp",
+  "views": [
+   {
+    "kind": "wv",
+    "src": "/photos/globe/askja-wv.webp",
+    "w": 640,
+    "h": 640,
+    "date": "2024-07-14"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/askja-s1.webp",
+    "w": 295,
+    "h": 200,
+    "date": "2026-11-12",
+    "scene": "S1D_IW_GRDH_1SDV_20261112T183352_20261112T183417_005438_00A61F_38E6"
+   }
+  ]
+ },
+ "earth-death-valley": {
+  "pin": "/photos/globe/death-valley-pin.webp",
+  "views": [
+   {
+    "kind": "s2",
+    "src": "/photos/globe/death-valley-s2.webp",
+    "w": 343,
+    "h": 343,
+    "date": "2025-01-27",
+    "scene": "S2B_MSIL2A_20250127T183539_N0511_R027_T11SNA_20250127T220035"
+   },
+   {
+    "kind": "wv",
+    "src": "/photos/globe/death-valley-wv.webp",
+    "w": 640,
+    "h": 640,
+    "date": "2024-07-14"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/death-valley-s1.webp",
+    "w": 293,
+    "h": 199,
+    "date": "2026-11-13",
+    "scene": "S1C_IW_GRDH_1SDV_20261113T014957_20261113T015022_010312_014983_0EE9_COG"
+   }
+  ]
+ },
+ "earth-pilot-valley": {
+  "pin": "/photos/globe/pilot-valley-pin.webp",
+  "views": [
+   {
+    "kind": "wv",
+    "src": "/photos/globe/pilot-valley-wv.webp",
+    "w": 640,
+    "h": 640,
+    "date": "2024-07-10"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/pilot-valley-s1.webp",
+    "w": 288,
+    "h": 195,
+    "date": "2026-11-10",
+    "scene": "S1C_IW_GRDH_1SDV_20261110T012629_20261110T012654_010268_014818_BC93"
+   }
+  ]
+ },
+ "earth-kilauea": {
+  "pin": "/photos/globe/kilauea-pin.webp",
+  "views": [
+   {
+    "kind": "wv",
+    "src": "/photos/globe/kilauea-wv.webp",
+    "w": 640,
+    "h": 640,
+    "date": "2024-08-05"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/kilauea-s1.webp",
+    "w": 250,
+    "h": 186,
+    "date": "2026-11-11",
+    "scene": "S1D_IW_GRDH_1SDV_20261111T043002_20261111T043032_005415_00A54F_73F5_COG"
+   }
+  ]
+ },
+ "earth-medicine-lake": {
+  "pin": "/photos/globe/medicine-lake-pin.webp",
+  "views": [
+   {
+    "kind": "s2",
+    "src": "/photos/globe/medicine-lake-s2.webp",
+    "w": 343,
+    "h": 343,
+    "date": "2025-01-28",
+    "scene": "S2C_MSIL2A_20250128T185701_N0511_R113_T10TFM_20250128T214509"
+   },
+   {
+    "kind": "wv",
+    "src": "/photos/globe/medicine-lake-wv.webp",
+    "w": 640,
+    "h": 640,
+    "date": "2024-07-10"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/medicine-lake-s1.webp",
+    "w": 224,
+    "h": 188,
+    "date": "2026-11-12",
+    "scene": "S1D_IW_GRDH_1SDV_20261112T015953_20261112T020026_005428_00A5BC_933E_COG"
+   }
+  ]
+ },
+ "earth-hingol": {
+  "pin": "/photos/globe/hingol-mud-volcanoes-pin.webp",
+  "views": [
+   {
+    "kind": "s2",
+    "src": "/photos/globe/hingol-mud-volcanoes-s2.webp",
+    "w": 343,
+    "h": 343,
+    "date": "2025-01-30",
+    "scene": "S2C_MSIL2A_20250130T061131_N0511_R134_T41RQJ_20250130T094713"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/hingol-mud-volcanoes-s1.webp",
+    "w": 292,
+    "h": 198,
+    "date": "2026-11-13",
+    "scene": "S1D_IW_GRDH_1SDV_20261113T013329_20261113T013354_005442_00A642_E36D"
+   }
+  ]
+ },
+ "earth-cholistan": {
+  "pin": "/photos/globe/cholistan-desert-pin.webp",
+  "views": [
+   {
+    "kind": "s2",
+    "src": "/photos/globe/cholistan-desert-s2.webp",
+    "w": 343,
+    "h": 343,
+    "date": "2025-01-29",
+    "scene": "S2B_MSIL2A_20250129T055009_N0511_R048_T42RYS_20250129T074544"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/cholistan-desert-s1.webp",
+    "w": 292,
+    "h": 198,
+    "date": "2026-11-10",
+    "scene": "S1D_IW_GRDH_1SDV_20261110T010811_20261110T010836_005398_00A4C0_CE98_COG"
+   }
+  ]
+ },
+ "earth-thar": {
+  "pin": "/photos/globe/tharparkar-pin.webp",
+  "views": [
+   {
+    "kind": "s2",
+    "src": "/photos/globe/tharparkar-s2.webp",
+    "w": 244,
+    "h": 343,
+    "date": "2025-04-29",
+    "scene": "S2A_MSIL2A_20250429T060301_N0511_R091_T42RWN_20250429T105711"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/tharparkar-s1.webp",
+    "w": 291,
+    "h": 198,
+    "date": "2026-11-03",
+    "scene": "S1D_IW_GRDH_1SDV_20261103T011728_20261103T011753_005296_00A13C_4240"
+   }
+  ]
+ },
+ "earth-khewra": {
+  "pin": "/photos/globe/khewra-salt-range-pin.webp",
+  "views": [
+   {
+    "kind": "s2",
+    "src": "/photos/globe/khewra-salt-range-s2.webp",
+    "w": 343,
+    "h": 343,
+    "date": "2025-01-24",
+    "scene": "S2C_MSIL2A_20250124T055201_N0511_R048_T43SCS_20250124T094912"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/khewra-salt-range-s1.webp",
+    "w": 291,
+    "h": 198,
+    "date": "2026-11-10",
+    "scene": "S1D_IW_GRDH_1SDV_20261110T010656_20261110T010721_005398_00A4C0_457C"
+   }
+  ]
+ },
+ "earth-devon-haughton": {
+  "pin": "/photos/globe/devon-island-haughton-pin.webp",
+  "views": [
+   {
+    "kind": "s2",
+    "src": "/photos/globe/devon-island-haughton-s2.webp",
+    "w": 343,
+    "h": 343,
+    "date": "2024-09-30",
+    "scene": "S2A_MSIL2A_20240930T185211_N0511_R113_T15XWD_20241001T005349"
+   },
+   {
+    "kind": "wv",
+    "src": "/photos/globe/devon-island-haughton-wv.webp",
+    "w": 640,
+    "h": 640,
+    "date": "2024-08-05"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/devon-island-haughton-s1.webp",
+    "w": 217,
+    "h": 200,
+    "date": "2026-11-12",
+    "scene": "S1C_EW_GRDM_1SDH_20261112T125830_20261112T125930_010304_014942_6C31_COG"
+   }
+  ]
+ },
+ "earth-mauna-kea": {
+  "pin": "/photos/globe/mauna-kea-pin.webp",
+  "views": [
+   {
+    "kind": "s2",
+    "src": "/photos/globe/mauna-kea-s2.webp",
+    "w": 156,
+    "h": 342,
+    "date": "2025-01-24",
+    "scene": "S2C_MSIL2A_20250124T210951_N0511_R057_T04QHG_20250124T230408"
+   },
+   {
+    "kind": "wv",
+    "src": "/photos/globe/mauna-kea-wv.webp",
+    "w": 640,
+    "h": 640,
+    "date": "2024-06-29"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/mauna-kea-s1.webp",
+    "w": 250,
+    "h": 186,
+    "date": "2026-11-11",
+    "scene": "S1D_IW_GRDH_1SDV_20261111T043002_20261111T043032_005415_00A54F_73F5_COG"
+   }
+  ]
+ },
+ "earth-craters-of-the-moon": {
+  "pin": "/photos/globe/craters-of-the-moon-pin.webp",
+  "views": []
+ },
+ "earth-meteor-crater": {
+  "pin": "/photos/globe/meteor-crater-pin.webp",
+  "views": []
+ },
+ "earth-black-point": {
+  "pin": "/photos/globe/black-point-pin.webp",
+  "views": []
+ },
+ "earth-mdrs": {
+  "pin": "/photos/globe/mdrs-pin.webp",
+  "views": []
+ },
+ "earth-svalbard-bockfjorden": {
+  "pin": "/photos/globe/svalbard-bockfjorden-pin.webp",
+  "views": [
+   {
+    "kind": "wv",
+    "src": "/photos/globe/svalbard-bockfjorden-wv.webp",
+    "w": 640,
+    "h": 640,
+    "date": "2024-07-18"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/svalbard-bockfjorden-s1.webp",
+    "w": 201,
+    "h": 192,
+    "date": "2026-11-12",
+    "scene": "S1D_EW_GRDM_1SDH_20261112T071119_20261112T071224_005431_00A5D8_32E6_COG"
+   }
+  ]
+ },
+ "earth-dome-c": {
+  "pin": "/photos/globe/dome-c-pin.webp",
+  "views": []
+ },
+ "earth-rio-tinto": {
+  "pin": "/photos/globe/rio-tinto-pin.webp",
+  "views": [
+   {
+    "kind": "s2",
+    "src": "/photos/globe/rio-tinto-s2.webp",
+    "w": 343,
+    "h": 343,
+    "date": "2025-01-30",
+    "scene": "S2C_MSIL2A_20250130T111341_N0511_R137_T29SQB_20250206T165811"
+   },
+   {
+    "kind": "wv",
+    "src": "/photos/globe/rio-tinto-wv.webp",
+    "w": 640,
+    "h": 640,
+    "date": "2024-07-14"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/rio-tinto-s1.webp",
+    "w": 289,
+    "h": 195,
+    "date": "2026-11-12",
+    "scene": "S1D_IW_GRDH_1SDV_20261112T182620_20261112T182645_005438_00A61E_0876"
+   }
+  ]
+ },
+ "earth-lanzarote": {
+  "pin": "/photos/globe/lanzarote-pin.webp",
+  "views": []
+ },
+ "earth-teide": {
+  "pin": "/photos/globe/teide-pin.webp",
+  "views": []
+ },
+ "earth-dallol": {
+  "pin": "/photos/globe/dallol-danakil-pin.webp",
+  "views": [
+   {
+    "kind": "s2",
+    "src": "/photos/globe/dallol-danakil-s2.webp",
+    "w": 343,
+    "h": 343,
+    "date": "2025-01-22",
+    "scene": "S2B_MSIL2A_20250122T074129_N0511_R092_T37PFR_20250122T094033"
+   },
+   {
+    "kind": "wv",
+    "src": "/photos/globe/dallol-danakil-wv.webp",
+    "w": 640,
+    "h": 640,
+    "date": "2024-07-14"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/dallol-danakil-s1.webp",
+    "w": 209,
+    "h": 189,
+    "date": "2026-11-09",
+    "scene": "S1C_IW_GRDH_1SDV_20261109T152639_20261109T152714_010262_0147E5_BFD3"
+   }
+  ]
+ },
+ "earth-namib": {
+  "pin": "/photos/globe/namib-pin.webp",
+  "views": []
+ },
+ "earth-qaidam": {
+  "pin": "/photos/globe/qaidam-basin-pin.webp",
+  "views": [
+   {
+    "kind": "s2",
+    "src": "/photos/globe/qaidam-basin-s2.webp",
+    "w": 343,
+    "h": 295,
+    "date": "2025-01-15",
+    "scene": "S2B_MSIL2A_20250115T043029_N0511_R133_T46SFG_20250115T063812"
+   },
+   {
+    "kind": "wv",
+    "src": "/photos/globe/qaidam-basin-wv.webp",
+    "w": 640,
+    "h": 640,
+    "date": "2024-07-14"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/qaidam-basin-s1.webp",
+    "w": 291,
+    "h": 200,
+    "date": "2026-11-07",
+    "scene": "S1D_IW_GRDH_1SDV_20261107T234312_20261107T234337_005368_00A3C5_5870_COG"
+   }
+  ]
+ },
+ "earth-uyuni": {
+  "pin": "/photos/globe/salar-de-uyuni-pin.webp",
+  "views": [
+   {
+    "kind": "s2",
+    "src": "/photos/globe/salar-de-uyuni-s2.webp",
+    "w": 343,
+    "h": 343,
+    "date": "2025-01-27",
+    "scene": "S2C_MSIL2A_20250127T143811_N0511_R096_T19KFT_20250127T185013"
+   },
+   {
+    "kind": "wv",
+    "src": "/photos/globe/salar-de-uyuni-wv.webp",
+    "w": 640,
+    "h": 640,
+    "date": "2024-01-11"
+   },
+   {
+    "kind": "s1",
+    "src": "/photos/globe/salar-de-uyuni-s1.webp",
+    "w": 289,
+    "h": 200,
+    "date": "2026-11-07",
+    "scene": "S1D_IW_GRDH_1SDV_20261107T225809_20261107T225834_005367_00A3C0_F929_COG"
+   }
+  ]
+ },
+ "earth-ladakh": {
+  "pin": "/photos/globe/ladakh-pin.webp",
+  "views": []
+ },
+ "earth-pilbara": {
+  "pin": "/photos/globe/pilbara-pin.webp",
+  "views": []
+ },
+ "earth-wadi-rum": {
+  "pin": "/photos/globe/wadi-rum-pin.webp",
+  "views": []
+ }
+}

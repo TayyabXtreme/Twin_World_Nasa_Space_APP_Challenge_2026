@@ -1,0 +1,63 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# TwinWorlds: public/ is committed (≈60 MB, no file over 5 MB) so Git-based deploys (Vercel) have every asset.
+# It is generated from assets-raw with `npm run assets` and the scripts/build-*.py builders.
+
+# raw source data that is too big for git (keep locally / share via drive, see README)
+/assets-raw/**/*.tif
+/assets-raw/**/*.img
+/assets-raw/**/*16bit.png
+/assets-raw/textures/8k_*
+/assets-raw/models/*.glb
+
+# tool caches
+.taste-skill/
+.impeccable/
+
+# Challenge datasets (re-download with scripts/fetch-*.{sh,py}); keep only the docs and the sampled values
+/assets-raw/nasa/*
+!/assets-raw/nasa/README.md
+!/assets-raw/nasa/MANUAL-DOWNLOADS.md
+!/assets-raw/nasa/site-samples.json
+ml/__pycache__/

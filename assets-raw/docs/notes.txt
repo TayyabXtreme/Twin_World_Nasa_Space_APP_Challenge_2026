@@ -1,0 +1,167 @@
+NASA MAP & IMAGERY LAYER NOTES
+Build step 4 (X-ray)
+Checked against NASA Trek WMTS catalog and NASA GIBS WMTS capabilities.
+
+============================================================
+1) NASA TREK — MOON
+Website: https://trek.nasa.gov/moon/
+Official catalog / API docs:
+https://trek.nasa.gov/tiles/apidoc/trekAPI.html?body=moon
+
+NASA Trek WMTS endpoint pattern:
+https://trek.nasa.gov/tiles/Moon/EQ/{LAYER_ID}/1.0.0/WMTSCapabilities.xml
+
+1. LRO WAC Global Mosaic
+   Display title: LRO WAC Mosaic v2
+   Layer ID: LRO_WAC_Mosaic_Global_303ppd_v02
+   WMTS GetCapabilities:
+   https://trek.nasa.gov/tiles/Moon/EQ/LRO_WAC_Mosaic_Global_303ppd_v02/1.0.0/WMTSCapabilities.xml
+   Verification: HTTP 200; catalog entry found.
+
+2. LOLA Colorized Elevation / Hillshade (alternative)
+   Display title: LRO LOLA DEM, ColorHillshade
+   Layer ID: LRO_LOLA_ClrShade_Global_128ppd_v04
+   WMTS GetCapabilities:
+   https://trek.nasa.gov/tiles/Moon/EQ/LRO_LOLA_ClrShade_Global_128ppd_v04/1.0.0/WMTSCapabilities.xml
+   Verification: HTTP 200; catalog entry found.
+   Note: This is the catalog's matching color-hillshade LOLA DEM product.
+
+3. LOLA Slope
+   Display title: LOLA Slope 16ppd, Colorized
+   Layer ID: LRO_LOLA_ClrSlope_Global_16ppd
+   WMTS GetCapabilities:
+   https://trek.nasa.gov/tiles/Moon/EQ/LRO_LOLA_ClrSlope_Global_16ppd/1.0.0/WMTSCapabilities.xml
+   Verification: HTTP 200; catalog entry found.
+
+4. Diviner Temperature — maximum
+   Display title: LRO DLRE Color Bolometric Brightness Max Temperatures, 0.5 ppd
+   Layer ID: diviner_Clrtbol_max
+   WMTS GetCapabilities:
+   https://trek.nasa.gov/tiles/Moon/EQ/diviner_Clrtbol_max/1.0.0/WMTSCapabilities.xml
+   Verification: HTTP 200; catalog entry found.
+
+5. Diviner Temperature — minimum
+   Display title: LRO DLRE Color Bolometric Brightness Min Temperatures, 0.5 ppd
+   Layer ID: diviner_Clrtbol_min
+   WMTS GetCapabilities:
+   https://trek.nasa.gov/tiles/Moon/EQ/diviner_Clrtbol_min/1.0.0/WMTSCapabilities.xml
+   Verification: HTTP 200; catalog entry found.
+
+6. Permanently Shadowed Regions (PSR) — North Pole
+   Display title: LOLA Permanently Shadowed Regions Northpole 240m
+   Layer ID: LRO_LOLA_Illumination_NPole65N_240m_EQ
+   WMTS GetCapabilities:
+   https://trek.nasa.gov/tiles/Moon/EQ/LRO_LOLA_Illumination_NPole65N_240m_EQ/1.0.0/WMTSCapabilities.xml
+   Verification: HTTP 200; catalog entry found.
+
+7. Permanently Shadowed Regions (PSR) — South Pole
+   Display title: LOLA Permanently Shadowed Regions Southpole 240m
+   Layer ID: LRO_LOLA_Illumination_SPole65S_240m_EQ
+   WMTS GetCapabilities:
+   https://trek.nasa.gov/tiles/Moon/EQ/LRO_LOLA_Illumination_SPole65S_240m_EQ/1.0.0/WMTSCapabilities.xml
+   Verification: HTTP 200; catalog entry found.
+   Note: PSR is provided as separate north- and south-pole coverage.
+
+============================================================
+2) NASA TREK — MARS
+Website: https://trek.nasa.gov/mars/
+Official catalog / API docs:
+https://trek.nasa.gov/tiles/apidoc/trekAPI.html?body=mars
+
+NASA Trek WMTS endpoint pattern:
+https://trek.nasa.gov/tiles/Mars/EQ/{LAYER_ID}/1.0.0/WMTSCapabilities.xml
+
+1. MOLA Colorized Elevation (closest global colorized product)
+   Display title: MGS MOLA, Global Color Hillshade
+   Layer ID: Mars_MGS_MOLA_ClrShade_merge_global_463m
+   WMTS GetCapabilities:
+   https://trek.nasa.gov/tiles/Mars/EQ/Mars_MGS_MOLA_ClrShade_merge_global_463m/1.0.0/WMTSCapabilities.xml
+   Verification: HTTP 200; catalog entry found.
+   Note: Catalog display name is "Global Color Hillshade", not literally
+   "Colorized Elevation"; this is the closest global MOLA color-relief product.
+
+2. THEMIS Day IR
+   Display title: MO THEMIS-IR Day, Global Mosaic
+   Layer ID: THEMIS_DayIR_ControlledMosaics_100m_v2_oct2018
+   WMTS GetCapabilities:
+   https://trek.nasa.gov/tiles/Mars/EQ/THEMIS_DayIR_ControlledMosaics_100m_v2_oct2018/1.0.0/WMTSCapabilities.xml
+   Verification: HTTP 200; catalog entry found.
+
+3. CTX or Viking Color Mosaic — Viking global mosaic selected
+   Display title: Viking VIS, Global Color Mosaic
+   Layer ID: Mars_Viking_MDIM21_ClrMosaic_global_232m
+   WMTS GetCapabilities:
+   https://trek.nasa.gov/tiles/Mars/EQ/Mars_Viking_MDIM21_ClrMosaic_global_232m/1.0.0/WMTSCapabilities.xml
+   Verification: HTTP 200; catalog entry found.
+   Note: This is the available global color mosaic. CTX entries in the catalog
+   include individual regional mosaics rather than a single global CTX mosaic.
+
+4. TES Dust Cover Index
+   Display title: MGS TES, Global Dust Index
+   Layer ID: tes_ruffdust
+   WMTS GetCapabilities:
+   https://trek.nasa.gov/tiles/Mars/EQ/tes_ruffdust/1.0.0/WMTSCapabilities.xml
+   Verification: HTTP 200; catalog entry found.
+
+============================================================
+3) NASA WORLDVIEW / GIBS — EARTH
+Website: https://worldview.earthdata.nasa.gov/
+Official GIBS WMTS GetCapabilities (EPSG:4326):
+https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/1.0.0/WMTSCapabilities.xml
+
+Common GIBS REST tile URL pattern:
+https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/{LAYER_ID}/default/{TIME}/{TILEMATRIXSET}/{TILEMATRIX}/{TILEROW}/{TILECOL}.{FORMAT}
+
+1. MODIS Terra Land Surface Temperature (Day)
+   Display title: Land Surface Temperature (Day, MODIS, Terra)
+   Layer ID: MODIS_Terra_Land_Surface_Temp_Day
+   WMTS GetCapabilities:
+   https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/1.0.0/WMTSCapabilities.xml
+   Verification: Exact identifier found in official GIBS capabilities.
+
+2. VIIRS Black Marble
+   Display title: Black Marble Nighttime Blue/Yellow Composite
+   Layer ID: VIIRS_SNPP_DayNightBand_AtSensor_M15
+   Platform: Suomi NPP / VIIRS
+   WMTS GetCapabilities:
+   https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/1.0.0/WMTSCapabilities.xml
+   Verification: Exact identifier found in official GIBS capabilities.
+
+3. Blue Marble
+   Display title: Blue Marble (MODIS)
+   Layer ID: BlueMarble_NextGeneration
+   WMTS GetCapabilities:
+   https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/1.0.0/WMTSCapabilities.xml
+   Verification: Exact identifier found in official GIBS capabilities.
+
+4. ASTER GDEM Shaded Relief
+   Display title: Digital Elevation Model (Greyscale Shaded Relief, ASTER, Terra)
+   Layer ID: ASTER_GDEM_Greyscale_Shaded_Relief
+   WMTS GetCapabilities:
+   https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/1.0.0/WMTSCapabilities.xml
+   Verification: Exact identifier found in official GIBS capabilities.
+
+============================================================
+IMPLEMENTATION NOTES
+- NASA Trek uses a separate WMTS GetCapabilities URL for each layer. Use the
+  layer-specific URLs above to inspect the advertised tile matrix, style,
+  image format, and projection before wiring a client.
+- For NASA Trek, the URLs above are the WMTS capabilities endpoints, not a
+  single XYZ tile URL. A WMTS client should read capabilities to obtain the
+  correct style, TileMatrixSet, zoom levels, and image extension.
+- For GIBS, the capabilities URL is shared by the service catalog; the
+  individual visualization is selected by its Layer ID in the tile request.
+- GIBS time-varying layers need a supported TIME value (YYYY-MM-DD). Static
+  Blue Marble layers may not use a changing date. Read each layer's dimensions
+  from the capabilities document rather than hard-coding assumptions.
+- No API key is required for the public NASA Trek and GIBS services listed.
+- All listed NASA Trek capabilities URLs returned HTTP 200 in the check.
+- Earth identifiers were matched against NASA's official GIBS WMTS
+  capabilities document. The catalog is the authority for current formats,
+  dates, and tile matrix sets.
+
+Official references:
+Moon Trek API docs: https://trek.nasa.gov/tiles/apidoc/trekAPI.html?body=moon
+Mars Trek API docs: https://trek.nasa.gov/tiles/apidoc/trekAPI.html?body=mars
+NASA GIBS Access Basics: https://nasa-gibs.github.io/gibs-api-docs/access-basics/
+NASA GIBS Access Advanced Topics: https://nasa-gibs.github.io/gibs-api-docs/access-advanced-topics/

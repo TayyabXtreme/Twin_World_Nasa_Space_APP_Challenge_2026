@@ -1,0 +1,1 @@
+MOLA MEGDR 16ppd (megt90n000eb). Height range (m, relative to areoid): min=-8177 max=21171. PNG value v maps to meters: lo + v/65535*(hi-lo) [16-bit] or lo + v/255*(hi-lo) [8-bit]. Longitude centered on 0 (-180..180).

@@ -1,0 +1,24 @@
+{
+  "_note": "Moon/Mars coordinates for terrain sampling (lat, lon east-positive -180..180). Crater/feature centres from the USGS Gazetteer of Planetary Nomenclature unless noted; Artemis III candidate regions are approximated by their namesake feature; Jezero and Gale use the Perseverance and Curiosity landing areas.",
+  "moon": {
+    "moon-shackleton-rim": [-89.67, 129.78],
+    "moon-malapert-massif": [-85.0, 11.4],
+    "moon-haworth": [-87.45, -5.17],
+    "moon-nobile-rim-1": [-85.28, 53.27],
+    "moon-nobile-rim-2": [-85.28, 53.27],
+    "moon-de-gerlache-rim-2": [-88.49, -88.35],
+    "moon-mons-mouton": [-84.6, 31.5],
+    "moon-peak-near-cabeus-b": [-82.26, -54.59],
+    "moon-slater-plain": [-88.08, 111.29],
+    "moon-marius-hills-pit": [14.09, -56.77]
+  },
+  "mars": {
+    "mars-jezero": [18.445, 77.451],
+    "mars-gale": [-4.589, 137.441],
+    "mars-utopia-viking2": [47.64, 134.29],
+    "mars-arcadia": [49.02, -171.85],
+    "mars-mawrth-vallis": [22.43, -16.97],
+    "mars-hellas": [-42.43, 70.5],
+    "mars-phoenix": [68.22, -125.75]
+  }
+}

@@ -1,0 +1,145 @@
+{
+ "id": "analogue-space",
+ "name": "Analogue Space",
+ "version": "1.0",
+ "trained": "2026-11-14",
+ "task": "Unsupervised: group Earth's land into environment types and place Moon/Mars targets among them.",
+ "data": {
+  "earth": "354,342 land cells of 0.25° (about 28 km) from the Analog Finder grid: NASA MODIS MOD11C3 land surface temperature, MOD13C2 NDVI, MCD43C3 albedo (2024), JAXA AW3D30 elevation.",
+  "targets": "16 Moon and Mars Finder targets from LRO Diviner/LOLA and Mars Odyssey GRS/NS, MGS TES and MOLA, translated into Earth units the same way the Finder does (role dimensions by rank).",
+  "features": [
+   {
+    "id": "tmean",
+    "label": "Mean surface temperature",
+    "units": "K",
+    "missingCells": 0
+   },
+   {
+    "id": "swing",
+    "label": "Day–night swing",
+    "units": "K",
+    "missingCells": 0
+   },
+   {
+    "id": "ndvi",
+    "label": "Vegetation (NDVI)",
+    "units": "",
+    "missingCells": 476
+   },
+   {
+    "id": "log_ati",
+    "label": "Thermal inertia (log ATI)",
+    "units": "log10 1/K",
+    "missingCells": 22331
+   },
+   {
+    "id": "freeze",
+    "label": "Freezing (degree-months)",
+    "units": "K",
+    "missingCells": 0
+   },
+   {
+    "id": "log_relief",
+    "label": "Relief (log m)",
+    "units": "log10 m",
+    "missingCells": 33316
+   },
+   {
+    "id": "maxsun",
+    "label": "Highest noon Sun",
+    "units": "°",
+    "missingCells": 0
+   }
+  ],
+  "note": "Trained in Google Colab (ml/TwinWorlds_ML.ipynb)."
+ },
+ "method": [
+  "Standardise each of the 7 features with area-weighted mean and standard deviation (cells near the poles are smaller).",
+  "PCA on the area-weighted covariance matrix; the 2D chart shows PC1 and PC2.",
+  "Weighted k-means (k-means++ seeding, best of 6 restarts) with k = 8, fitted on 60,000 area-weighted cells and applied to every cell.",
+  "Each type is named from its centroid's physical values (temperature, vegetation, freezing, relief, swing), never from geography.",
+  "Moon and Mars targets are mapped into the same standardised space; features a target lacks sit at Earth's mean."
+ ],
+ "metrics": {
+  "explainedVariance": [
+   0.4927,
+   0.2741,
+   0.1443,
+   0.0493,
+   0.0273,
+   0.0094,
+   0.0028
+  ],
+  "pc12Variance": 0.7669,
+  "stabilityARI": {
+   "mean": 0.857,
+   "std": 0.1217,
+   "runs": 10
+  },
+  "kScan": [
+   {
+    "k": 4,
+    "inertia": 2.3417,
+    "silhouette": 0.3399
+   },
+   {
+    "k": 5,
+    "inertia": 2.0127,
+    "silhouette": 0.3194
+   },
+   {
+    "k": 6,
+    "inertia": 1.8062,
+    "silhouette": 0.2966
+   },
+   {
+    "k": 7,
+    "inertia": 1.6367,
+    "silhouette": 0.2918
+   },
+   {
+    "k": 8,
+    "inertia": 1.5111,
+    "silhouette": 0.2852
+   },
+   {
+    "k": 9,
+    "inertia": 1.3822,
+    "silhouette": 0.2775
+   },
+   {
+    "k": 10,
+    "inertia": 1.296,
+    "silhouette": 0.279
+   },
+   {
+    "k": 11,
+    "inertia": 1.2207,
+    "silhouette": 0.2671
+   },
+   {
+    "k": 12,
+    "inertia": 1.1443,
+    "silhouette": 0.2741
+   }
+  ]
+ },
+ "score": {
+  "label": "Cluster stability",
+  "value": 0.857,
+  "text": "Adjusted Rand index 0.86 ± 0.12 across 10 bootstrap re-fits (1 = identical types every time). PC1 and PC2 hold 77 % of the variance."
+ },
+ "limits": [
+  "Seven climate-and-terrain features only: no chemistry, mineralogy, radar roughness or dust.",
+  "Moon and Mars targets lie far outside Earth's range on temperature, so they sit at the edge of the cloud; the nearest type says which Earth environment is least unlike them, not that it matches.",
+  "k = 8 is a readable choice, not a natural number of environments: the k scan shows no sharp elbow.",
+  "0.25° cells blend small features (a crater, a dry valley) with their surroundings.",
+  "MODIS observes at about 10:30 and 22:30, so the day–night swing understates the true daily range."
+ ],
+ "outputs": [
+  "points.json",
+  "clusters.json",
+  "types-map.png",
+  "model-card.json"
+ ]
+}

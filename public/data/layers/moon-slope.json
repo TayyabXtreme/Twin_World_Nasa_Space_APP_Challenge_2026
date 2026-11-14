@@ -1,0 +1,15 @@
+{
+ "id": "moon-slope",
+ "type": "tile",
+ "title": "LOLA slope",
+ "units": "°",
+ "unitsLong": "degrees from horizontal",
+ "meaning": "Steepness of the ground from laser altimetry. Landers and rovers want slopes under ~8–10°.",
+ "dataset": "LRO LOLA · colourised global slope, 16 px/°",
+ "datasetId": "Moon Trek LRO_LOLA_ClrSlope_Global_16ppd",
+ "resolution": "16 px/° (~1.9 km baseline)",
+ "source": "https://trek.nasa.gov/moon/",
+ "ramp": null,
+ "caveat": "NASA Trek serves these tiles already coloured and publishes no numeric colour key with them, so read them as relative (more vs less), not as exact values.",
+ "built": "2026-11-13"
+}

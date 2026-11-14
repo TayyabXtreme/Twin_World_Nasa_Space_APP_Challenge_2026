@@ -1,0 +1,748 @@
+/*
+ * Motion layer: the launch loading screen, the small orbit loader and React <ViewTransition> route transitions.
+ * Every keyframe below animates transform and/or opacity only. Reduced motion gets calm fades.
+ */
+
+/* ======================================================================
+   Launch loader (components/motion/LaunchLoader.tsx)
+   Timeline from first paint: T-3 0s, T-2 0.6s, T-1 1.2s (ignition), "Ignition" 1.8s.
+   ====================================================================== */
+
+.launch-loader {
+  --rh: min(34vh, 280px); /* rocket height */
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  overflow: hidden;
+  background: radial-gradient(120% 80% at 50% 100%, #0d1730 0%, #04060d 55%, #02030a 100%);
+  color: #fff;
+  transition: opacity 450ms var(--ease-out);
+  cursor: pointer;
+}
+/* Later visits: hidden before paint by the inline script in app/layout.tsx. */
+html[data-boot="seen"] .launch-loader {
+  display: none;
+}
+.launch-loader[data-phase="fade"] {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Cover mode (later visits to the landing page): only the small orbit loader. */
+.ll-cover {
+  position: absolute;
+  inset: 0;
+  display: none;
+  place-items: center;
+}
+html[data-boot="cover"] .ll-cover,
+.launch-loader[data-mode="cover"] .ll-cover {
+  display: grid;
+}
+html[data-boot="cover"] .launch-loader :is(.ll-scene, .ll-ui),
+.launch-loader[data-mode="cover"] :is(.ll-scene, .ll-ui) {
+  display: none;
+}
+
+.ll-scene {
+  position: absolute;
+  inset: 0;
+}
+
+/* Stars twinkle; at lift-off the sky drifts down as the "camera" follows the rocket up. */
+.ll-stars {
+  position: absolute;
+  inset: 0;
+  transition: transform 1.15s cubic-bezier(0.6, 0, 0.9, 0.4);
+}
+.ll-stars span {
+  position: absolute;
+  border-radius: 999px;
+  background: #fff;
+  animation: ll-twinkle 3.2s ease-in-out infinite alternate;
+}
+@keyframes ll-twinkle {
+  to {
+    opacity: 0.15;
+  }
+}
+
+.ll-ground {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 16vh;
+  background: linear-gradient(to top, #070b14 0%, #0a1020 70%, transparent 100%);
+  box-shadow: 0 -1px 0 oklch(0.6 0.05 255 / 0.25);
+  transition: transform 1.15s cubic-bezier(0.6, 0, 0.9, 0.4);
+}
+
+/* Everything on the pad is positioned from the nozzle exit point. */
+.ll-pad {
+  position: absolute;
+  left: 50%;
+  bottom: 16vh;
+  width: 0;
+  height: 0;
+}
+
+.ll-tower {
+  position: absolute;
+  bottom: 0;
+  left: calc(var(--rh) * -0.62);
+  height: calc(var(--rh) * 1.08);
+  overflow: visible;
+  transition: transform 1.15s cubic-bezier(0.6, 0, 0.9, 0.4);
+}
+.ll-arm {
+  transform-box: fill-box;
+  transform-origin: left center;
+  animation: ll-arm 600ms 1.1s var(--ease-out) both;
+}
+@keyframes ll-arm {
+  to {
+    transform: rotate(-62deg);
+  }
+}
+.ll-beacon {
+  animation: ll-blink 1.2s steps(2, jump-none) infinite;
+}
+@keyframes ll-blink {
+  50% {
+    opacity: 0.15;
+  }
+}
+
+/* Engine glow on the pad: lights at ignition, flares at lift-off. */
+.ll-glow {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 360px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, oklch(0.85 0.17 70 / 0.75), oklch(0.7 0.2 45 / 0.25) 55%, transparent);
+  transform: translate(-50%, 50%) scale(0.4);
+  opacity: 0;
+  animation:
+    ll-glow-on 400ms 1.2s ease-out forwards,
+    ll-glow-pulse 160ms 1.6s ease-in-out infinite alternate;
+}
+@keyframes ll-glow-on {
+  to {
+    opacity: 0.8;
+    transform: translate(-50%, 50%) scale(1);
+  }
+}
+@keyframes ll-glow-pulse {
+  from {
+    opacity: 0.8;
+  }
+  to {
+    opacity: 0.55;
+  }
+}
+
+/* Smoke: soft discs that billow sideways along the ground from ignition on. */
+.ll-smoke span,
+.ll-burst span {
+  position: absolute;
+  left: -45px;
+  bottom: -45px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, oklch(0.9 0.01 255 / 0.55) 0%, oklch(0.85 0.01 255 / 0.22) 42%, transparent 70%);
+  opacity: 0;
+}
+.ll-smoke span {
+  animation-name: ll-smoke;
+  animation-timing-function: cubic-bezier(0.2, 0.6, 0.3, 1);
+  animation-iteration-count: infinite;
+}
+@keyframes ll-smoke {
+  0% {
+    transform: translate(0, 0) scale(0.3);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: translate(var(--x), var(--y)) scale(var(--s));
+    opacity: 0;
+  }
+}
+.launch-loader[data-phase="liftoff"] .ll-burst span {
+  animation: ll-burst 1.5s ease-out both;
+}
+@keyframes ll-burst {
+  0% {
+    transform: translate(0, 0) scale(0.4);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate(var(--x), var(--y)) scale(var(--s));
+    opacity: 0;
+  }
+}
+
+/* Rocket: rumbles from ignition, squats, then accelerates away. */
+.ll-rocket {
+  position: absolute;
+  left: 0;
+  bottom: calc(var(--rh) * -0.32); /* the SVG's flame area hangs below the nozzle */
+  height: var(--rh);
+  transform: translateX(-50%);
+  animation: ll-rumble 90ms 1.2s linear infinite alternate;
+}
+.ll-rocket-svg {
+  height: 100%;
+  width: auto;
+  overflow: visible;
+}
+@keyframes ll-rumble {
+  from {
+    transform: translate(calc(-50% - 0.6px), 0);
+  }
+  to {
+    transform: translate(calc(-50% + 0.6px), 0.4px);
+  }
+}
+.launch-loader[data-phase="liftoff"] .ll-rocket {
+  animation: ll-rise 1150ms cubic-bezier(0.6, 0, 0.9, 0.4) forwards;
+}
+@keyframes ll-rise {
+  0% {
+    transform: translate(-50%, 0);
+  }
+  10% {
+    transform: translate(-50%, 4px);
+  }
+  100% {
+    transform: translate(-50%, -135vh);
+  }
+}
+.launch-loader[data-phase="liftoff"] :is(.ll-ground, .ll-tower) {
+  transform: translateY(30vh);
+}
+.launch-loader[data-phase="liftoff"] .ll-stars {
+  transform: translateY(18vh);
+}
+
+.ll-flame {
+  transform-box: view-box;
+  transform-origin: 50px 222px;
+  transform: scale(0);
+  animation: ll-ignite 350ms 1.2s var(--ease-out) forwards;
+}
+.ll-flame path {
+  transform-box: view-box;
+  transform-origin: 50px 222px;
+  animation: ll-flicker 110ms linear infinite alternate;
+}
+@keyframes ll-ignite {
+  to {
+    transform: scale(0.5, 0.45);
+  }
+}
+@keyframes ll-flicker {
+  to {
+    transform: scale(0.93, 1.08);
+  }
+}
+.launch-loader[data-phase="liftoff"] .ll-flame {
+  animation: ll-roar 300ms ease-out forwards;
+}
+@keyframes ll-roar {
+  from {
+    transform: scale(0.5, 0.45);
+  }
+  to {
+    transform: scale(1.1, 1.35);
+  }
+}
+
+/* Countdown: each step pops in and out; "Ignition" stays until lift-off. */
+.ll-count {
+  position: absolute;
+  left: 50%;
+  top: 19vh;
+  width: 0;
+  height: 0;
+}
+.ll-count span {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-size: clamp(3.2rem, 11vw, 7rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  opacity: 0;
+  animation: ll-tick 600ms var(--ease-out) both;
+}
+.ll-count span:nth-child(2) {
+  animation-delay: 600ms;
+}
+.ll-count span:nth-child(3) {
+  animation-delay: 1200ms;
+}
+.ll-count span:nth-child(4) {
+  font-size: clamp(1.6rem, 5vw, 2.6rem);
+  color: oklch(0.86 0.15 70);
+  animation: ll-stay 400ms 1800ms var(--ease-out) both;
+}
+@keyframes ll-tick {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.3);
+  }
+  18% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  78% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.92);
+  }
+}
+@keyframes ll-stay {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+.launch-loader[data-phase="liftoff"] .ll-count {
+  opacity: 0;
+  transition: opacity 200ms;
+}
+
+.ll-hold,
+.ll-liftoff {
+  position: absolute;
+  left: 50%;
+  margin: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  opacity: 0;
+}
+.ll-hold {
+  top: calc(19vh + clamp(2rem, 5vw, 3rem));
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 12px;
+  color: oklch(0.8 0.03 255);
+  transition: opacity 300ms;
+}
+.launch-loader[data-phase="hold"] .ll-hold {
+  opacity: 1;
+}
+.ll-liftoff {
+  top: 19vh;
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-size: clamp(2rem, 7vw, 4rem);
+  font-weight: 600;
+}
+.launch-loader[data-phase="liftoff"] .ll-liftoff {
+  animation: ll-stay-x 500ms var(--ease-out) both;
+}
+@keyframes ll-stay-x {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -40%) scale(1.15);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Brand, progress (scaleX, not width) and skip. */
+.ll-brand {
+  position: absolute;
+  top: max(1.5rem, env(safe-area-inset-top));
+  left: 50%;
+  margin: 0;
+  transform: translateX(-50%);
+  text-align: center;
+  font-family: var(--font-space-grotesk), system-ui, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.ll-brand span {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--font-jetbrains), monospace;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: oklch(0.72 0.03 255);
+}
+.ll-progress {
+  position: absolute;
+  left: 50%;
+  bottom: calc(max(1.25rem, env(safe-area-inset-bottom)) + 1rem);
+  display: flex;
+  width: min(320px, 78vw);
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: oklch(0.78 0.03 255);
+}
+.ll-bar {
+  display: block;
+  width: 100%;
+  height: 3px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: oklch(1 0 0 / 0.1);
+}
+.ll-bar span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  background: var(--primary);
+  transition: transform 300ms var(--ease-out);
+}
+.ll-skip {
+  position: absolute;
+  top: max(1rem, env(safe-area-inset-top));
+  right: 1rem;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: oklch(0.9 0.02 255);
+  background: oklch(1 0 0 / 0.07);
+  box-shadow: inset 0 0 0 1px oklch(1 0 0 / 0.14);
+  transition:
+    background-color 150ms,
+    transform 150ms var(--ease-out);
+}
+.ll-skip:hover {
+  background: oklch(1 0 0 / 0.14);
+}
+.ll-skip:active {
+  transform: scale(0.96);
+}
+.ll-skip:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@media (max-width: 640px) {
+  .launch-loader {
+    --rh: min(30vh, 220px);
+  }
+  .ll-brand {
+    top: max(3.75rem, env(safe-area-inset-top));
+  }
+}
+
+/* Reduced motion: no countdown, flame, smoke or lift-off; brand, a still rocket and the progress bar, then a fade. */
+@media (prefers-reduced-motion: reduce) {
+  .launch-loader *,
+  .launch-loader *::before {
+    animation: none !important;
+    transition: none !important;
+  }
+  .launch-loader :is(.ll-count, .ll-hold, .ll-liftoff, .ll-smoke, .ll-burst, .ll-flame, .ll-glow) {
+    display: none;
+  }
+  .launch-loader {
+    transition: opacity 400ms ease-out;
+  }
+}
+
+/* ======================================================================
+   Orbit loader (components/motion/OrbitLoader.tsx)
+   ====================================================================== */
+
+.orbit-loader-sys {
+  position: relative;
+  width: 76px;
+  height: 76px;
+}
+.orbit-loader-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px dashed oklch(0.8 0.08 230 / 0.35);
+}
+.orbit-loader-planet {
+  position: absolute;
+  inset: 25px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 32%, #b7e4ff 0%, #3d7fd0 45%, #10264d 100%);
+  box-shadow: 0 0 18px oklch(0.7 0.13 240 / 0.45);
+}
+.orbit-loader-arm {
+  position: absolute;
+  inset: 0;
+  animation: orbit-spin 1.8s linear infinite;
+}
+.orbit-loader-rocket {
+  position: absolute;
+  top: -9px;
+  left: 50%;
+  width: 11px;
+  height: 22px;
+  /* Nose along the direction of travel (clockwise: to the right at the top of the orbit). */
+  transform: translateX(-50%) rotate(90deg);
+}
+.orbit-loader-flame {
+  transform-box: fill-box;
+  transform-origin: top center;
+  animation: orbit-flame 120ms linear infinite alternate;
+}
+@keyframes orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes orbit-flame {
+  to {
+    transform: scaleY(0.7);
+    opacity: 0.75;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .orbit-loader-arm {
+    animation: orbit-breathe 2.4s ease-in-out infinite alternate;
+  }
+  .orbit-loader-flame {
+    animation: none;
+  }
+  @keyframes orbit-breathe {
+    to {
+      opacity: 0.45;
+    }
+  }
+}
+
+/* ======================================================================
+   Route transitions (components/motion/PageTransition.tsx)
+   ====================================================================== */
+
+/* Clicks during a transition reach the live page. */
+::view-transition {
+  pointer-events: none;
+}
+/* Everything that matters is in named groups; the leftover root snapshot needs no crossfade. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+/* Anchors: the top bar and the section rail stay put while the page under them moves. */
+::view-transition-group(site-header),
+::view-transition-group(site-rail) {
+  animation: none;
+  z-index: 50;
+}
+::view-transition-old(site-header),
+::view-transition-old(site-rail) {
+  display: none;
+}
+::view-transition-new(site-header),
+::view-transition-new(site-rail) {
+  animation: none;
+}
+
+/* Warp: landing → section. The old page rushes past, the new one arrives, through a star-streak field. */
+::view-transition-old(.warp) {
+  animation: 380ms cubic-bezier(0.55, 0, 1, 0.45) both tw-warp-out;
+}
+::view-transition-new(.warp) {
+  animation: 560ms cubic-bezier(0, 0.55, 0.45, 1) 170ms both tw-warp-in;
+}
+::view-transition-old(.warp-back) {
+  animation: 380ms cubic-bezier(0.55, 0, 1, 0.45) both tw-warp-back-out;
+}
+::view-transition-new(.warp-back) {
+  animation: 560ms cubic-bezier(0, 0.55, 0.45, 1) 170ms both tw-warp-back-in;
+}
+@keyframes tw-warp-out {
+  to {
+    transform: scale(1.14);
+    opacity: 0;
+  }
+}
+@keyframes tw-warp-in {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+}
+@keyframes tw-warp-back-out {
+  to {
+    transform: scale(0.88);
+    opacity: 0;
+  }
+}
+@keyframes tw-warp-back-in {
+  from {
+    transform: scale(1.1);
+    opacity: 0;
+  }
+}
+
+/* The star-streak field: an invisible fixed element (app/layout.tsx) whose transition snapshot carries the streaks.
+   Shown only for warp navigations, so in-page transitions (mission morphs) never flash it. */
+::view-transition-group(warp-field) {
+  animation: none;
+  z-index: 40;
+}
+::view-transition-old(warp-field) {
+  display: none;
+}
+::view-transition-new(warp-field) {
+  opacity: 0;
+  animation: none;
+}
+html:active-view-transition-type(warp)::view-transition-new(warp-field),
+html:active-view-transition-type(warp-back)::view-transition-new(warp-field) {
+  background:
+    repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg 2.3deg, oklch(0.92 0.06 230 / 0.6) 2.45deg, transparent 2.6deg 5.2deg),
+    repeating-conic-gradient(from 1.7deg at 50% 50%, transparent 0deg 3.4deg, oklch(0.95 0.02 260 / 0.45) 3.5deg, transparent 3.6deg 7.3deg);
+  mask-image: radial-gradient(circle at 50% 50%, transparent 8%, #000 26%, #000 55%, transparent 78%);
+}
+html:active-view-transition-type(warp)::view-transition-new(warp-field) {
+  animation: 700ms cubic-bezier(0.45, 0, 0.55, 1) both tw-streak;
+}
+html:active-view-transition-type(warp-back)::view-transition-new(warp-field) {
+  animation: 700ms cubic-bezier(0.45, 0, 0.55, 1) both tw-streak-back;
+}
+@keyframes tw-streak {
+  0% {
+    opacity: 0;
+    transform: scale(0.45);
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+}
+@keyframes tw-streak-back {
+  0% {
+    opacity: 0;
+    transform: scale(2.6);
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.45);
+  }
+}
+
+/* Directional slides: forward pushes content left, back pushes it right. */
+::view-transition-old(.nav-forward) {
+  animation:
+    160ms ease-in both tw-fade-out,
+    420ms cubic-bezier(0.4, 0, 0.2, 1) both tw-to-left;
+}
+::view-transition-new(.nav-forward) {
+  animation:
+    240ms ease-out 140ms both tw-fade-in,
+    420ms cubic-bezier(0.4, 0, 0.2, 1) both tw-from-right;
+}
+::view-transition-old(.nav-back) {
+  animation:
+    160ms ease-in both tw-fade-out,
+    420ms cubic-bezier(0.4, 0, 0.2, 1) both tw-to-right;
+}
+::view-transition-new(.nav-back) {
+  animation:
+    240ms ease-out 140ms both tw-fade-in,
+    420ms cubic-bezier(0.4, 0, 0.2, 1) both tw-from-left;
+}
+::view-transition-old(.route-fade) {
+  animation: 150ms ease-in both tw-fade-out;
+}
+::view-transition-new(.route-fade) {
+  animation: 220ms ease-out 90ms both tw-fade-in;
+}
+@keyframes tw-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes tw-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes tw-to-left {
+  to {
+    transform: translateX(-64px);
+  }
+}
+@keyframes tw-from-right {
+  from {
+    transform: translateX(64px);
+  }
+}
+@keyframes tw-to-right {
+  to {
+    transform: translateX(64px);
+  }
+}
+@keyframes tw-from-left {
+  from {
+    transform: translateX(-64px);
+  }
+}
+
+/* Shared-element morphs: a mission card photo into the game stage, a landing feature card into its page hero.
+   The snapshots are cropped like the real elements instead of stretched. */
+::view-transition-group(.morph) {
+  z-index: 45;
+  overflow: clip;
+  border-radius: 1.4rem;
+  animation-duration: 480ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+::view-transition-old(.morph),
+::view-transition-new(.morph) {
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Keep a gentle crossfade; drop every movement (slides, zooms, streaks, morph flights). */
+  ::view-transition-old(*) {
+    animation: 150ms ease-out both tw-fade-out !important;
+  }
+  ::view-transition-new(*) {
+    animation: 200ms ease-out both tw-fade-in !important;
+  }
+  ::view-transition-group(*) {
+    animation-duration: 0s !important;
+  }
+  html:active-view-transition-type(warp)::view-transition-new(warp-field),
+  html:active-view-transition-type(warp-back)::view-transition-new(warp-field) {
+    display: none;
+  }
+}

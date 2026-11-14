@@ -1,0 +1,265 @@
+{
+  "generated": "2026-11-13T18:39:44.008Z",
+  "note": "Built by scripts/build-landing.mjs from the Analog Finder grid and the Moon base layers.",
+  "earthCells": 354342,
+  "finder": [
+    {
+      "id": "mars-jezero",
+      "name": "Jezero Crater",
+      "world": "mars",
+      "blurb": "Dry, salty, oxidised ground where Perseverance looks for signs of ancient life.",
+      "image": "/landing/finder-mars-jezero.webp",
+      "top": [
+        {
+          "lat": -17.88,
+          "lon": 11.88,
+          "country": "Namibia",
+          "topPct": 0
+        },
+        {
+          "lat": -25.63,
+          "lon": -70.63,
+          "country": "Chile",
+          "topPct": 0
+        },
+        {
+          "lat": -11.88,
+          "lon": -77.13,
+          "country": "Peru",
+          "topPct": 0
+        },
+        {
+          "lat": -24.13,
+          "lon": 16.13,
+          "country": "Namibia",
+          "topPct": 0
+        },
+        {
+          "lat": 30.88,
+          "lon": -6.38,
+          "country": "Morocco",
+          "topPct": 0
+        }
+      ],
+      "known": [
+        {
+          "name": "Atacama Desert",
+          "topPct": 2
+        },
+        {
+          "name": "McMurdo Dry Valleys",
+          "topPct": 46.5
+        },
+        {
+          "name": "Devon Island",
+          "topPct": 64.5
+        },
+        {
+          "name": "Hingol, Pakistan",
+          "topPct": 0.1
+        }
+      ]
+    },
+    {
+      "id": "mars-phoenix",
+      "name": "Phoenix landing site",
+      "world": "mars",
+      "blurb": "Ice-cemented polar soil, the first place a lander touched Martian water ice.",
+      "image": "/landing/finder-mars-phoenix.webp",
+      "top": [
+        {
+          "lat": 66.88,
+          "lon": -44.38,
+          "country": "Greenland",
+          "topPct": 0
+        },
+        {
+          "lat": 69.88,
+          "lon": -35.88,
+          "country": "Greenland",
+          "topPct": 0
+        },
+        {
+          "lat": -70.63,
+          "lon": 158.88,
+          "country": "Antarctica",
+          "topPct": 0.04
+        },
+        {
+          "lat": 73.13,
+          "lon": -38.13,
+          "country": "Greenland",
+          "topPct": 0.04
+        },
+        {
+          "lat": -74.63,
+          "lon": -69.63,
+          "country": "Antarctica",
+          "topPct": 0.05
+        }
+      ],
+      "known": [
+        {
+          "name": "Atacama Desert",
+          "topPct": 30.4
+        },
+        {
+          "name": "McMurdo Dry Valleys",
+          "topPct": 6.6
+        },
+        {
+          "name": "Devon Island",
+          "topPct": 7.6
+        },
+        {
+          "name": "Hingol, Pakistan",
+          "topPct": 28.2
+        }
+      ]
+    },
+    {
+      "id": "moon-shackleton-rim",
+      "name": "Shackleton crater rim",
+      "world": "moon",
+      "blurb": "The lunar south pole: sunlit ridges beside craters that never see the Sun.",
+      "image": "/landing/finder-moon-shackleton-rim.webp",
+      "top": [
+        {
+          "lat": -70.63,
+          "lon": 159.38,
+          "country": "Antarctica",
+          "topPct": 0
+        },
+        {
+          "lat": -84.13,
+          "lon": 167.13,
+          "country": "Antarctica",
+          "topPct": 0
+        },
+        {
+          "lat": -74.13,
+          "lon": 161.63,
+          "country": "Antarctica",
+          "topPct": 0
+        },
+        {
+          "lat": -75.38,
+          "lon": 94.63,
+          "country": "Antarctica",
+          "topPct": 0
+        },
+        {
+          "lat": -74.38,
+          "lon": -5.63,
+          "country": "Antarctica",
+          "topPct": 0
+        }
+      ],
+      "known": [
+        {
+          "name": "Atacama Desert",
+          "topPct": 13
+        },
+        {
+          "name": "McMurdo Dry Valleys",
+          "topPct": 0
+        },
+        {
+          "name": "Devon Island",
+          "topPct": 10
+        },
+        {
+          "name": "Hingol, Pakistan",
+          "topPct": 21.4
+        }
+      ]
+    }
+  ],
+  "moon": {
+    "image": "/landing/moon-pole.webp",
+    "halfWidthKm": 457.44,
+    "datasets": [
+      "LRO LOLA polar gridded data (LRO-L-LOLA-4-GDR-V1.0)",
+      "LRO Diviner Polar Resource Product (LRO-L-DLRE-5-PRP-V2.0)"
+    ],
+    "regions": [
+      {
+        "id": "peak-near-cabeus-b",
+        "name": "Peak near Cabeus B",
+        "lat": -83.5759,
+        "lon": -69.0759,
+        "approximate": true
+      },
+      {
+        "id": "haworth",
+        "name": "Haworth",
+        "lat": -86.7996,
+        "lon": -22.8977,
+        "approximate": true
+      },
+      {
+        "id": "malapert-massif",
+        "name": "Malapert Massif",
+        "lat": -86.0467,
+        "lon": 0.1488,
+        "approximate": true
+      },
+      {
+        "id": "mons-mouton-plateau",
+        "name": "Mons Mouton Plateau",
+        "lat": -84.5338,
+        "lon": 30.6556,
+        "approximate": true
+      },
+      {
+        "id": "mons-mouton",
+        "name": "Mons Mouton",
+        "lat": -85.3988,
+        "lon": 31.1805,
+        "approximate": true
+      },
+      {
+        "id": "nobile-rim-1",
+        "name": "Nobile Rim 1",
+        "lat": -85.1876,
+        "lon": 37.2395,
+        "approximate": true
+      },
+      {
+        "id": "nobile-rim-2",
+        "name": "Nobile Rim 2",
+        "lat": -83.8876,
+        "lon": 58.4032,
+        "approximate": true
+      },
+      {
+        "id": "de-gerlache-rim-2",
+        "name": "de Gerlache Rim 2",
+        "lat": -88.1739,
+        "lon": -68.787,
+        "approximate": true
+      },
+      {
+        "id": "slater-plain",
+        "name": "Slater Plain",
+        "lat": -87.207,
+        "lon": 126.6062,
+        "approximate": true
+      }
+    ],
+    "features": [
+      {
+        "id": "south-pole",
+        "name": "South Pole",
+        "lat": -90,
+        "lon": 0
+      },
+      {
+        "id": "shackleton",
+        "name": "Shackleton crater",
+        "lat": -89.67,
+        "lon": 129.78
+      }
+    ]
+  }
+}

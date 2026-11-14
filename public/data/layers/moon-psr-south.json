@@ -1,0 +1,15 @@
+{
+ "id": "moon-psr-south",
+ "type": "tile",
+ "title": "South-pole illumination",
+ "units": "% time lit",
+ "unitsLong": "average percentage of time in sunlight",
+ "meaning": "How often each spot sees the Sun. Dark areas are permanently shadowed cold traps; bright ridges are candidate base sites with near-constant solar power.",
+ "dataset": "LRO LOLA · south-pole average illumination, 240 m",
+ "datasetId": "Moon Trek LRO_LOLA_Illumination_SPole65S_240m_EQ",
+ "resolution": "240 m, 65°S–90°S",
+ "source": "https://trek.nasa.gov/moon/",
+ "ramp": null,
+ "caveat": "NASA Trek serves these tiles already coloured and publishes no numeric colour key with them, so read them as relative (more vs less), not as exact values.",
+ "built": "2026-11-13"
+}

@@ -1,0 +1,165 @@
+/* Moon base map: Leaflet layer styling, map labels and markers. Motion is opacity/transform only. */
+
+/* .leaflet-container in leaflet.css (loaded later, with the map chunk) would paint #ddd. */
+.mb-map,
+.mb-map.leaflet-container {
+  background: oklch(0.09 0.015 265);
+  font-family: var(--font-sans);
+  cursor: crosshair;
+}
+.mb-map.leaflet-grab,
+.mb-map .leaflet-interactive {
+  cursor: crosshair;
+}
+.mb-map.leaflet-dragging,
+.mb-map.leaflet-dragging .leaflet-interactive {
+  cursor: grabbing;
+}
+
+/* Cross-fade between display layers. */
+.mb-layer {
+  transition: opacity 280ms var(--ease-out);
+}
+/* Under the suitability heat layer the relief turns neutral grey so the heat colours read cleanly. */
+.mb-mono {
+  filter: grayscale(1) brightness(0.72) contrast(1.1);
+}
+
+/* Graticule labels. */
+.mb-grat {
+  color: oklch(1 0 0 / 0.5);
+  font: 500 10px/14px var(--font-mono);
+  text-align: center;
+  text-shadow: 0 1px 2px oklch(0 0 0 / 0.9);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.mb-grat-lon {
+  color: oklch(1 0 0 / 0.62);
+}
+
+/* Region and feature labels (Leaflet tooltips). */
+.leaflet-tooltip.mb-label {
+  padding: 1px 6px;
+  border: 1px solid oklch(0.88 0.14 182 / 0.35);
+  border-radius: 6px;
+  background: oklch(0.12 0.02 262 / 0.82);
+  color: oklch(0.95 0.03 182);
+  font: 500 11px/16px var(--font-sans);
+  box-shadow: none;
+  white-space: nowrap;
+  backdrop-filter: blur(6px);
+}
+.leaflet-tooltip.mb-label::before {
+  display: none;
+}
+.leaflet-tooltip.mb-label b {
+  font: 600 10px/16px var(--font-mono);
+  letter-spacing: 0.04em;
+}
+.mb-label-full {
+  display: none;
+}
+.mb-map[data-zoomed="true"] .mb-label-full {
+  display: inline;
+}
+.leaflet-tooltip.mb-label-feature {
+  border-color: oklch(0.85 0.12 80 / 0.4);
+  color: oklch(0.93 0.08 85);
+}
+
+.mb-feature {
+  display: block;
+  width: 8px;
+  height: 8px;
+  margin: 2px;
+  border-radius: 999px;
+  background: oklch(0.85 0.13 80);
+  box-shadow: 0 0 0 2px oklch(0.12 0.02 262 / 0.9);
+}
+.mb-pole {
+  width: 12px;
+  height: 12px;
+  margin: 0;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+  background:
+    linear-gradient(oklch(0.85 0.13 80), oklch(0.85 0.13 80)) center / 2px 12px no-repeat,
+    linear-gradient(oklch(0.85 0.13 80), oklch(0.85 0.13 80)) center / 12px 2px no-repeat;
+}
+
+/* Best spots for the current weights. */
+.mb-spot {
+  display: flex;
+  width: 22px;
+  height: 22px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: oklch(0.96 0.02 160);
+  color: oklch(0.16 0.02 262);
+  font: 700 11px/1 var(--font-mono);
+  box-shadow:
+    0 0 0 2px oklch(0.12 0.02 262 / 0.85),
+    0 0 14px 2px oklch(0.9 0.14 160 / 0.55);
+  cursor: pointer;
+  transition: transform 140ms var(--ease-out);
+}
+.mb-spot:hover {
+  transform: scale(1.15);
+}
+
+/* The pinned readout point. */
+.mb-pin {
+  position: relative;
+  display: block;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  border: 2px solid var(--primary);
+  box-shadow:
+    0 0 0 2px oklch(0.12 0.02 262 / 0.7),
+    0 0 18px oklch(0.88 0.14 182 / 0.6);
+  animation: mb-pin-in 260ms var(--ease-out) both;
+}
+.mb-pin::after {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  border-radius: 999px;
+  background: var(--primary);
+}
+@keyframes mb-pin-in {
+  from {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+}
+
+/* Legend colour bars and layer swatches. */
+.mb-ramp {
+  background-image: var(--ramp);
+}
+
+/* Region close-ups (RegionCloseup / CloseupMap) */
+.closeup-map {
+  background: #000;
+}
+/* LOLA hillshade adds relief to the LROC image beneath it. */
+.closeup-map .closeup-blend {
+  mix-blend-mode: multiply;
+}
+/* The stretched NAC shadow mosaic is black where there is no permanent shadow: screen lets that through. */
+.closeup-map .closeup-screen {
+  mix-blend-mode: screen;
+}
+.closeup-map .closeup-ours {
+  image-rendering: auto;
+}
+.closeup-map .leaflet-control-scale-line {
+  border-color: oklch(1 0 0 / 0.6);
+  background: oklch(0.15 0.02 265 / 0.75);
+  color: oklch(0.95 0 0);
+  font-size: 10px;
+}

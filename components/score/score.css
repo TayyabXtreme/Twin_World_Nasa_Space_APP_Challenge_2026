@@ -1,0 +1,227 @@
+/* Mission suitability page: a planet horizon behind everything, the scan panel and the score instrument. */
+
+/* ---------- Backdrop ---------- */
+
+/* Stars on an oversized layer moved with transform (compositor only, no repaint per frame). Tile sizes of
+   200px and 300px both divide the 600px loop distance, so the drift wraps seamlessly. */
+.score-stars {
+  position: absolute;
+  inset: -700px;
+  background-image:
+    radial-gradient(1px 1px at 30px 40px, oklch(1 0 0 / 0.6), transparent 60%),
+    radial-gradient(1px 1px at 170px 120px, oklch(1 0 0 / 0.4), transparent 60%),
+    radial-gradient(1.5px 1.5px at 110px 160px, oklch(0.9 0.05 230 / 0.55), transparent 60%),
+    radial-gradient(1px 1px at 60px 250px, oklch(1 0 0 / 0.35), transparent 60%);
+  background-size: 200px 200px, 200px 200px, 300px 300px, 300px 300px;
+  will-change: transform;
+  animation: score-stars 180s linear infinite;
+}
+@keyframes score-stars {
+  to {
+    transform: translate(-600px, 600px);
+  }
+}
+
+/* A planet limb rising from the bottom-right corner. The NASA map turns on a child layer (transform only);
+   the terminator is a static overlay above it, so the lighting never rotates. */
+.score-planet {
+  position: absolute;
+  width: 95vmax;
+  aspect-ratio: 1;
+  right: -38vmax;
+  bottom: -62vmax;
+  border-radius: 9999px;
+  overflow: hidden;
+  opacity: 0.5;
+  animation: score-planet-in 1.6s var(--ease-out) both;
+}
+.score-planet-map {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  will-change: transform;
+  animation: score-planet-turn 900s linear infinite;
+}
+.score-planet::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(120% 120% at 22% 18%, transparent 38%, oklch(0 0 0 / 0.6) 58%, oklch(0 0 0 / 0.95) 75%),
+    radial-gradient(closest-side, transparent 92%, oklch(1 0 0 / 0.06));
+}
+.score-planet-mars {
+  box-shadow: 0 0 6vmax oklch(0.6 0.15 40 / 0.25);
+  overflow: hidden;
+}
+@keyframes score-planet-in {
+  from {
+    opacity: 0;
+    transform: translateY(4vmax) scale(1.03);
+  }
+}
+@keyframes score-planet-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* A meteor streak every so often: long idle, a quick diagonal slash. */
+.score-meteor {
+  position: absolute;
+  top: 12%;
+  left: 62%;
+  width: 9rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, oklch(1 0 0 / 0.85));
+  transform: rotate(-28deg);
+  opacity: 0;
+  animation: score-meteor 11s linear 3s infinite;
+}
+@keyframes score-meteor {
+  0%,
+  91% {
+    opacity: 0;
+    translate: 0 0;
+  }
+  92% {
+    opacity: 1;
+  }
+  97% {
+    opacity: 0;
+    translate: -22rem 12rem;
+  }
+  100% {
+    opacity: 0;
+    translate: -22rem 12rem;
+  }
+}
+
+/* ---------- Scan panel ---------- */
+
+.score-photo {
+  animation: score-drift 36s ease-in-out infinite alternate;
+}
+@keyframes score-drift {
+  to {
+    transform: scale(1.09) translate(-1.5%, -1%);
+  }
+}
+.score-photo-in {
+  animation: score-photo-in 900ms var(--ease-out) both;
+}
+@keyframes score-photo-in {
+  from {
+    opacity: 0.2;
+    filter: blur(16px) saturate(0.5);
+  }
+}
+
+.score-grid {
+  background-image:
+    linear-gradient(oklch(1 0 0 / 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, oklch(1 0 0 / 0.07) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(60% 60% at 50% 50%, #000, transparent);
+}
+
+/* One strong sweep when a site loads, then a faint idle sweep on a loop. */
+.score-scan {
+  background: linear-gradient(to bottom, transparent, oklch(0.88 0.14 182 / 0.16) 70%, oklch(0.88 0.14 182 / 0.55));
+  height: 34%;
+  animation:
+    score-sweep 1.3s var(--ease-in-out) both,
+    score-sweep-idle 7s linear 2.4s infinite;
+}
+@keyframes score-sweep {
+  from {
+    transform: translateY(-110%);
+  }
+  to {
+    transform: translateY(300%);
+  }
+}
+@keyframes score-sweep-idle {
+  0% {
+    transform: translateY(-110%);
+    opacity: 0.35;
+  }
+  45%,
+  100% {
+    transform: translateY(300%);
+    opacity: 0.35;
+  }
+}
+
+/* Reticle brackets close in on the site, then the centre ring keeps pinging. */
+.score-bracket {
+  animation: score-lock 900ms var(--ease-out) 300ms both;
+}
+@keyframes score-lock {
+  from {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+.score-ping {
+  animation: score-ping 2.4s var(--ease-out) 1.2s infinite;
+}
+@keyframes score-ping {
+  from {
+    transform: scale(0.4);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+/* ---------- Instrument ---------- */
+
+.score-ring-spin {
+  transform-origin: center;
+  animation: score-spin 60s linear infinite;
+}
+@keyframes score-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Staggered entrance for things that arrive with a site: --i sets the order. */
+.score-rise {
+  animation: score-rise 560ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 55ms + var(--base, 0ms));
+}
+@keyframes score-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+    filter: blur(5px);
+  }
+}
+
+.score-seg {
+  transition:
+    width 650ms var(--ease-out),
+    opacity 200ms ease;
+}
+
+/* ---------- Loading ---------- */
+
+.score-skeleton {
+  background: linear-gradient(100deg, oklch(1 0 0 / 0.03) 30%, oklch(1 0 0 / 0.08) 50%, oklch(1 0 0 / 0.03) 70%);
+  background-size: 300% 100%;
+  animation: score-shimmer 1.8s linear infinite;
+}
+@keyframes score-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -50% 0;
+  }
+}

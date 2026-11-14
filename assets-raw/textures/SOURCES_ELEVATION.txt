@@ -1,0 +1,17 @@
+Downloaded/derived 2026-11-12
+
+moon-kit/  - NASA SVS CGI Moon Kit (https://svs.gsfc.nasa.gov/4720), NASA/GSFC/ASU LRO data
+  ldem_16_uint.tif          original LOLA elevation, 16 px/deg (keep as source, do not ship)
+  lroc_color_poles_4k.tif   original LROC WAC color with polar fill (do not ship)
+  lroc_color_2k.jpg         LROC color 2k
+  moon_lroc_color_4k.jpg    converted from lroc_color_poles_4k.tif
+  moon_height_4k_16bit.png  LOLA heightmap 4096x2048, 16-bit (for displacement / elevation readout)
+  moon_height_2k.png        LOLA heightmap 2048x1024, 8-bit
+  moon_normal_4k.jpg        normal map derived from LOLA heightmap
+
+mars-mola/ - NASA PDS MGS MOLA MEGDR 16 ppd topography (megt90n000eb), https://pds-geosciences.wustl.edu/missions/mgs/megdr.html
+  megt90n000eb.img/.lbl     original grid (do not ship)
+  mars_height_4k_16bit.png  heightmap, longitude centered on 0 (-180..180) to match 2k_mars.jpg / 8k_mars.jpg
+  mars_height_2k.png        8-bit version
+  mars_normal_4k.jpg        normal map derived from MOLA
+  mars_height_range.txt     how to convert pixel value -> meters (min -8177 m, max 21171 m)

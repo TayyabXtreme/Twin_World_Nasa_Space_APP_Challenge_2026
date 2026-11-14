@@ -1,0 +1,64 @@
+{
+ "id": "mars-tes-ti-night",
+ "type": "image",
+ "title": "Thermal inertia (night)",
+ "units": "tiu",
+ "unitsLong": "J m⁻² K⁻¹ s⁻½ (thermal inertia units)",
+ "range": [
+  30.0,
+  2000.0
+ ],
+ "scale": "log",
+ "ramp": [
+  "#000004",
+  "#1b0c41",
+  "#4a0c6b",
+  "#781c6d",
+  "#a52c60",
+  "#cf4446",
+  "#ed6925",
+  "#fb9b06",
+  "#f7d13d",
+  "#fcffa4"
+ ],
+ "ticks": [
+  30,
+  100,
+  300,
+  1000,
+  2000
+ ],
+ "lowLabel": "fine dust",
+ "highLabel": "rock / ice",
+ "decimals": 0,
+ "meaning": "How well the ground holds heat through the night. Low = loose dust, ~200–400 = sand and crusts, high = bedrock or ice-cemented soil.",
+ "caveat": "Gaps between TES orbits were filled by interpolation in the source map. Log colour scale.",
+ "dataset": "Mars Global Surveyor TES · nightside thermal inertia (Putzig & Mellon 2007)",
+ "datasetId": "MGS-M-TES-5-TIMAP-V1.0 (GLOBAL_TI_NIGHT_2007)",
+ "resolution": "20 px/° (~3 km)",
+ "source": "https://pds-geosciences.wustl.edu/mgs/mgs-m-tes-5-timap-v1/",
+ "image": "/data/layers/mars-tes-ti-night.webp",
+ "bounds": [
+  [
+   -90,
+   -180
+  ],
+  [
+   90,
+   180
+  ]
+ ],
+ "grid": {
+  "url": "/data/layers/mars-tes-ti-night.grid.bin",
+  "width": 720,
+  "height": 360,
+  "offset": 7.5,
+  "scale": 0.070823543
+ },
+ "stats": {
+  "p2": 33.0,
+  "median": 207.0,
+  "p98": 2123.0
+ },
+ "built": "2026-11-13"
+}

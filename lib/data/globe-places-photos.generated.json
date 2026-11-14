@@ -1,0 +1,167 @@
+{
+ "hmp": {
+  "src": "/photos/places/hmp.webp",
+  "w": 800,
+  "h": 535,
+  "pin": "/photos/places/hmp-pin.webp",
+  "nasaId": "ARC-2007-ACD07-0170-003",
+  "title": "ARC-2007-ACD07-0170-003",
+  "credit": "NASA/Matt Deans",
+  "date": "2007-07-18",
+  "page": "https://images.nasa.gov/details/ARC-2007-ACD07-0170-003"
+ },
+ "desert-rats": {
+  "src": "/photos/places/desert-rats.webp",
+  "w": 800,
+  "h": 532,
+  "pin": "/photos/places/desert-rats-pin.webp",
+  "nasaId": "jsc2008e138809",
+  "title": "A front view of the Lunar Electric Rover",
+  "credit": "NASA/Regan Geeseman",
+  "date": "2008-10-23",
+  "page": "https://images.nasa.gov/details/jsc2008e138809"
+ },
+ "artemis2-iceland": {
+  "src": "/photos/places/artemis2-iceland.webp",
+  "w": 800,
+  "h": 533,
+  "pin": "/photos/places/artemis2-iceland-pin.webp",
+  "nasaId": "jsc2024e055108",
+  "title": "Artemis II Crew geology training in Iceland - jsc2024e055108",
+  "credit": "NASA/Robert Markowitz",
+  "date": "2024-08-01",
+  "page": "https://images.nasa.gov/details/jsc2024e055108"
+ },
+ "pisces": {
+  "src": "/photos/places/pisces.webp",
+  "w": 800,
+  "h": 449,
+  "pin": "/photos/places/pisces-pin.webp",
+  "nasaId": "iss072e421839",
+  "title": "Hawaii, the largest island in the chain of the Hawaiian Islands",
+  "credit": "NASA/JSC (ISS Expedition 72)",
+  "date": "2024-12-28",
+  "page": "https://images.nasa.gov/details/iss072e421839"
+ },
+ "neemo": {
+  "src": "/photos/places/neemo.webp",
+  "w": 800,
+  "h": 600,
+  "pin": "/photos/places/neemo-pin.webp",
+  "nasaId": "jsc2014e068003",
+  "title": "NEEMO 18 (NCO-125)",
+  "credit": "NASA/JSC",
+  "date": "2014-07-22",
+  "page": "https://images.nasa.gov/details/jsc2014e068003"
+ },
+ "kennedy": {
+  "src": "/photos/places/kennedy.webp",
+  "w": 800,
+  "h": 533,
+  "pin": "/photos/places/kennedy-pin.webp",
+  "nasaId": "KSC-20220421-PH-JBS01_0061",
+  "title": "Artemis I at Pad 39B",
+  "credit": "NASA/Ben Smegelsky",
+  "date": "2022-04-21",
+  "page": "https://images.nasa.gov/details/KSC-20220421-PH-JBS01_0061"
+ },
+ "baikonur": {
+  "src": "/photos/places/baikonur.webp",
+  "w": 800,
+  "h": 729,
+  "pin": "/photos/places/baikonur-pin.webp",
+  "nasaId": "NHQ202309150023",
+  "title": "Expedition 70 Launch",
+  "credit": "NASA/Bill Ingalls",
+  "date": "2023-09-15",
+  "page": "https://images.nasa.gov/details/NHQ202309150023"
+ },
+ "kourou": {
+  "src": "/photos/places/kourou.webp",
+  "w": 800,
+  "h": 773,
+  "pin": "/photos/places/kourou-pin.webp",
+  "nasaId": "NHQ202112250015",
+  "title": "James Webb Space Telescope Launch",
+  "credit": "NASA/Bill Ingalls",
+  "date": "2021-12-25",
+  "page": "https://images.nasa.gov/details/NHQ202112250015"
+ },
+ "sriharikota": {
+  "src": "/photos/places/sriharikota.webp",
+  "w": 800,
+  "h": 533,
+  "pin": "/photos/places/sriharikota-pin.webp",
+  "nasaId": "PIA26611",
+  "title": "NISAR Encapsulated in Payload Fairing at ISRO Launch Site",
+  "credit": "ISRO, via NASA/JPL-Caltech",
+  "date": "2025-07-22",
+  "page": "https://images.nasa.gov/details/PIA26611"
+ },
+ "jiuquan": {
+  "src": "/photos/places/jiuquan.webp",
+  "w": 800,
+  "h": 530,
+  "pin": "/photos/places/jiuquan-pin.webp",
+  "nasaId": "iss010e14586",
+  "title": "Earth Observations taken by the Expedition 10 crew",
+  "credit": "NASA/JSC (ISS Expedition 10)",
+  "date": "2005-01-23",
+  "page": "https://images.nasa.gov/details/iss010e14586"
+ },
+ "tanegashima": {
+  "src": "/photos/places/tanegashima.webp",
+  "w": 800,
+  "h": 628,
+  "pin": "/photos/places/tanegashima-pin.webp",
+  "nasaId": "201402280007HQ",
+  "title": "Global Precipitation Measurement (GPM) Mission",
+  "credit": "NASA/Bill Ingalls",
+  "date": "2014-02-28",
+  "page": "https://images.nasa.gov/details/201402280007HQ"
+ },
+ "goldstone": {
+  "src": "/photos/places/goldstone.webp",
+  "w": 800,
+  "h": 533,
+  "pin": "/photos/places/goldstone-pin.webp",
+  "nasaId": "PIA23214",
+  "title": "NASA's Deep Space Network Goldstone Complex",
+  "credit": "NASA/JPL-Caltech",
+  "date": "2020-02-11",
+  "page": "https://images.nasa.gov/details/PIA23214"
+ },
+ "madrid": {
+  "src": "/photos/places/madrid.webp",
+  "w": 800,
+  "h": 600,
+  "pin": "/photos/places/madrid-pin.webp",
+  "nasaId": "PIA25136",
+  "title": "A New Antenna for NASA's Deep Space Network",
+  "credit": "NASA/JPL-Caltech",
+  "date": "2022-03-16",
+  "page": "https://images.nasa.gov/details/PIA25136"
+ },
+ "canberra": {
+  "src": "/photos/places/canberra.webp",
+  "w": 800,
+  "h": 533,
+  "pin": "/photos/places/canberra-pin.webp",
+  "nasaId": "PIA23682",
+  "title": "NASA's Deep Space Antenna Upgrade to Affect Voyager",
+  "credit": "NASA/Canberra Deep Space Communication Complex",
+  "date": "2020-03-04",
+  "page": "https://images.nasa.gov/details/PIA23682"
+ },
+ "iss": {
+  "src": "/photos/places/iss.webp",
+  "w": 800,
+  "h": 533,
+  "pin": "/photos/places/iss-pin.webp",
+  "nasaId": "iss056e201248",
+  "title": "iss056e201248",
+  "credit": "NASA/JSC (ISS Expedition 56)",
+  "date": "2018-10-04",
+  "page": "https://images.nasa.gov/details/iss056e201248"
+ }
+}

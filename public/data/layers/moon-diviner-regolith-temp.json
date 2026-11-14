@@ -1,0 +1,56 @@
+{
+ "id": "moon-diviner-regolith-temp",
+ "type": "image",
+ "title": "Night regolith temperature anomaly",
+ "units": "K",
+ "unitsLong": "K, difference from the global average at the same local time",
+ "range": [
+  -9.0,
+  9.0
+ ],
+ "scale": "linear",
+ "ramp": [
+  "#2166ac",
+  "#4393c3",
+  "#92c5de",
+  "#d1e5f0",
+  "#f7f7f7",
+  "#fddbc7",
+  "#f4a582",
+  "#d6604d",
+  "#b2182b"
+ ],
+ "lowLabel": "colder than average",
+ "highLabel": "warmer than average",
+ "decimals": 1,
+ "meaning": "How much warmer or colder the fine soil is at night than the lunar average. Warm = denser, more compacted soil; cold = fluffy, insulating dust.",
+ "caveat": "An anomaly, not an absolute temperature (night-side soil is ~90–120 K), and it still follows latitude: high latitudes get less sunlight. 60°S–60°N only; thin seams between orbit tracks are interpolated in the picture only.",
+ "dataset": "LRO Diviner Lunar Radiometer · gridded data record (Bandfield et al. 2011)",
+ "datasetId": "LRO-L-DLRE-5-GDR-V1.0 (DGDR_ST_AVG_CYL_032)",
+ "resolution": "32 px/° (~950 m)",
+ "source": "https://pds-geosciences.wustl.edu/lro/urn-nasa-pds-lro_diviner_derived1/data_derived_gdr_l3/cylindrical/img/",
+ "image": "/data/layers/moon-diviner-regolith-temp.webp",
+ "bounds": [
+  [
+   -60.0,
+   -180
+  ],
+  [
+   60.0,
+   180
+  ]
+ ],
+ "grid": {
+  "url": "/data/layers/moon-diviner-regolith-temp.grid.bin",
+  "width": 720,
+  "height": 240,
+  "offset": -15.6492,
+  "scale": 0.00072935578
+ },
+ "stats": {
+  "p2": -9.0,
+  "median": 1.26,
+  "p98": 6.26
+ },
+ "built": "2026-11-13"
+}

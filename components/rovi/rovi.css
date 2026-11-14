@@ -1,0 +1,405 @@
+/* Rovi: the docked robot, its speech bubble, chat panel and spotlight ring. Transform and opacity animations only. */
+
+.rovi-root {
+  --rovi-size: 4.25rem;
+  /* Phones: above the bottom tab bar (components/shell/LeftRail). */
+  --rovi-bottom: calc(max(0.75rem, env(safe-area-inset-bottom)) + 4.75rem);
+  --rovi-end: max(0.75rem, env(safe-area-inset-right));
+  --rovi-ink: oklch(0.88 0.14 182);
+}
+.rovi-root[data-route="home"] {
+  --rovi-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+/* Explore on phones: above the HUD strip and the map-layers button. */
+.rovi-root[data-route="explore"] {
+  --rovi-bottom: calc(max(0.75rem, env(safe-area-inset-bottom)) + 10.9rem);
+}
+@media (min-width: 640px) {
+  .rovi-root {
+    --rovi-size: 5.5rem;
+  }
+}
+@media (min-width: 768px) {
+  .rovi-root,
+  .rovi-root[data-route="explore"] {
+    --rovi-bottom: 1rem;
+    --rovi-end: 1rem;
+  }
+}
+
+.rovi-dock {
+  position: fixed;
+  right: var(--rovi-end);
+  bottom: var(--rovi-bottom);
+  z-index: 40;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  transition:
+    opacity 200ms var(--ease-out),
+    transform 260ms var(--ease-out);
+}
+.rovi-dock-away {
+  opacity: 0;
+  transform: translateY(1.5rem);
+  pointer-events: none;
+}
+
+.rovi-bot {
+  position: relative;
+  width: var(--rovi-size);
+  height: var(--rovi-size);
+  border-radius: 9999px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  outline: none;
+}
+.rovi-bot:focus-visible {
+  box-shadow: 0 0 0 2px var(--background), 0 0 0 4px var(--rovi-ink);
+}
+/* Soft halo behind the robot; breathes slowly, quickens while busy. */
+.rovi-bot-glow {
+  position: absolute;
+  inset: 12%;
+  border-radius: 9999px;
+  background: radial-gradient(circle, oklch(0.88 0.14 182 / 0.32), transparent 68%);
+  animation: rovi-breathe 3.6s ease-in-out infinite;
+}
+.rovi-bot[data-mood="thinking"] .rovi-bot-glow {
+  background: radial-gradient(circle, oklch(0.75 0.15 295 / 0.45), transparent 68%);
+  animation-duration: 0.9s;
+}
+.rovi-bot[data-mood="acting"] .rovi-bot-glow {
+  background: radial-gradient(circle, oklch(0.84 0.14 75 / 0.42), transparent 68%);
+  animation-duration: 1.2s;
+}
+.rovi-bot[data-mood="listening"] .rovi-bot-glow {
+  animation-duration: 0.7s;
+}
+@keyframes rovi-breathe {
+  0%,
+  100% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+.rovi-bot-face {
+  position: absolute;
+  inset: 14%;
+}
+
+.rovi-hint {
+  margin-bottom: calc(var(--rovi-size) * 0.38);
+  border-radius: 9999px;
+  padding: 0.35rem 0.75rem;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--foreground);
+  background: var(--glass);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(var(--glass-blur));
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.rovi-bubble {
+  position: absolute;
+  right: calc(var(--rovi-size) * 0.55);
+  bottom: calc(var(--rovi-size) * 0.86);
+  width: min(19rem, calc(100vw - 2rem));
+  border-radius: 1.1rem 1.1rem 0.35rem 1.1rem;
+  padding: 0.75rem 0.9rem;
+  color: var(--foreground);
+  background: oklch(0.2 0.025 250 / 0.92);
+  border: 1px solid oklch(1 0 0 / 0.12);
+  backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: 0 24px 50px -20px oklch(0 0 0 / 0.7), 0 0 0 1px oklch(0.88 0.14 182 / 0.08);
+  transform-origin: bottom right;
+}
+.rovi-tour-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  border-radius: 9999px;
+  padding: 0.35rem 0.55rem;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--foreground);
+  background: oklch(1 0 0 / 0.07);
+  transition:
+    background-color 150ms var(--ease-out),
+    transform 120ms var(--ease-out);
+}
+.rovi-tour-btn:hover {
+  background: oklch(1 0 0 / 0.13);
+}
+.rovi-tour-btn:active {
+  transform: scale(0.95);
+}
+.rovi-tour-next {
+  padding-inline: 0.75rem;
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+.rovi-tour-next:hover {
+  background: oklch(0.88 0.14 182 / 0.88);
+}
+
+/* ---------- chat panel ---------- */
+
+.rovi-panel {
+  color: var(--foreground);
+  background: oklch(0.17 0.022 252 / 0.94);
+  border: 1px solid oklch(1 0 0 / 0.1);
+  backdrop-filter: blur(22px) saturate(150%);
+  box-shadow:
+    0 40px 80px -30px oklch(0 0 0 / 0.8),
+    0 0 0 1px oklch(0.88 0.14 182 / 0.06),
+    0 -1px 0 0 oklch(1 0 0 / 0.06) inset;
+  overflow: hidden;
+}
+.rovi-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: oklch(1 0 0 / 0.15) transparent;
+}
+.rovi-msg {
+  animation: rovi-msg-in 260ms var(--ease-out) both;
+}
+@keyframes rovi-msg-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+.rovi-chip {
+  animation: rovi-msg-in 220ms var(--ease-out) both;
+}
+.rovi-rise {
+  animation: rovi-msg-in 320ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 30ms + 60ms);
+}
+.rovi-caret {
+  display: inline-block;
+  width: 0.45em;
+  height: 1em;
+  margin-inline-start: 1px;
+  vertical-align: -0.12em;
+  border-radius: 1px;
+  background: var(--rovi-ink);
+  animation: rovi-blink 0.8s steps(1) infinite;
+}
+@keyframes rovi-blink {
+  50% {
+    opacity: 0;
+  }
+}
+.rovi-dot {
+  animation: rovi-dot 1s ease-in-out infinite;
+  animation-delay: calc(var(--i) * 140ms);
+}
+@keyframes rovi-dot {
+  0%,
+  80%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  40% {
+    transform: translateY(-4px);
+    opacity: 1;
+  }
+}
+.rovi-mic-on::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 2px solid var(--primary);
+  animation: rovi-ping 1.1s var(--ease-out) infinite;
+}
+@keyframes rovi-ping {
+  from {
+    transform: scale(0.9);
+    opacity: 0.9;
+  }
+  to {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+/* ---------- spotlight ---------- */
+
+.rovi-spot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  border-radius: 1.25rem;
+  border: 2px solid var(--rovi-ink, oklch(0.88 0.14 182));
+  box-shadow:
+    0 0 0 4px oklch(0.88 0.14 182 / 0.16),
+    0 0 40px 4px oklch(0.88 0.14 182 / 0.28);
+  opacity: 0;
+  transition: opacity 260ms var(--ease-out);
+}
+.rovi-spot[data-on] {
+  opacity: 1;
+}
+.rovi-spot-pulse {
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  border: 2px solid oklch(0.88 0.14 182 / 0.7);
+  animation: rovi-spot-pulse 1.6s var(--ease-out) infinite;
+}
+@keyframes rovi-spot-pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  to {
+    transform: scale(1.04);
+    opacity: 0;
+  }
+}
+.rovi-spot-label {
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  max-width: 250px;
+  border-radius: 9999px;
+  padding: 0.35rem 0.8rem 0.35rem 0.6rem;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: oklch(0.15 0.03 200);
+  background: oklch(0.88 0.14 182);
+  box-shadow: 0 10px 30px -10px oklch(0.88 0.14 182 / 0.7);
+  opacity: 0;
+  transition: opacity 260ms var(--ease-out) 120ms;
+}
+.rovi-spot-label[data-on] {
+  opacity: 1;
+}
+.rovi-spot-dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  flex: none;
+  border-radius: 9999px;
+  background: oklch(0.15 0.03 200);
+}
+
+/* ---------- 2D face ---------- */
+
+.rovi-face {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+.rovi-face-head {
+  position: relative;
+  width: 100%;
+  height: 88%;
+  margin-top: 12%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffffff, #dfe6f0 55%, #b7c1d1);
+  box-shadow: inset 0 -4px 8px oklch(0 0 0 / 0.18);
+  display: grid;
+  place-items: center;
+}
+.rovi-face-visor {
+  position: relative;
+  width: 78%;
+  height: 56%;
+  border-radius: 46% / 52%;
+  background: radial-gradient(circle at 40% 30%, #1a2338, #060a14 70%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10%;
+  overflow: hidden;
+}
+.rovi-face-eyes {
+  display: flex;
+  gap: 26%;
+  width: 60%;
+  height: 38%;
+  justify-content: center;
+}
+.rovi-face-eyes span {
+  width: 22%;
+  height: 100%;
+  border-radius: 9999px;
+  background: var(--rovi-ink, oklch(0.88 0.14 182));
+  box-shadow: 0 0 6px oklch(0.88 0.14 182 / 0.8);
+}
+.rovi-face-mouth {
+  width: 26%;
+  height: 7%;
+  min-height: 2px;
+  border-radius: 9999px;
+  background: var(--rovi-ink, oklch(0.88 0.14 182));
+  transform-origin: center;
+}
+.rovi-face-antenna {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 14%;
+  aspect-ratio: 1;
+  border-radius: 9999px;
+  translate: -50% 0;
+  background: var(--rovi-ink, oklch(0.88 0.14 182));
+  box-shadow: 0 0 8px oklch(0.88 0.14 182 / 0.9);
+  animation: rovi-breathe 2.4s ease-in-out infinite;
+}
+.rovi-face[data-mood="thinking"] .rovi-face-antenna {
+  --rovi-ink: oklch(0.78 0.14 295);
+  animation-duration: 0.6s;
+}
+.rovi-face[data-mood="thinking"] .rovi-face-eyes span,
+.rovi-face[data-mood="thinking"] .rovi-face-mouth {
+  --rovi-ink: oklch(0.78 0.14 295);
+}
+.rovi-face[data-mood="acting"] .rovi-face-eyes span,
+.rovi-face[data-mood="acting"] .rovi-face-mouth,
+.rovi-face[data-mood="acting"] .rovi-face-antenna {
+  --rovi-ink: oklch(0.84 0.14 75);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rovi-bot-glow,
+  .rovi-face-antenna,
+  .rovi-spot-pulse,
+  .rovi-dot,
+  .rovi-mic-on::after {
+    animation: none;
+  }
+  .rovi-msg,
+  .rovi-chip,
+  .rovi-rise {
+    animation-duration: 1ms;
+  }
+}
+
+/* Route transitions: Rovi is an anchor like the top bar and rail (app/transitions.css), it stays put on top. */
+::view-transition-group(rovi-dock) {
+  animation: none;
+  z-index: 60;
+}
+::view-transition-old(rovi-dock) {
+  display: none;
+}
+::view-transition-new(rovi-dock) {
+  animation: none;
+}

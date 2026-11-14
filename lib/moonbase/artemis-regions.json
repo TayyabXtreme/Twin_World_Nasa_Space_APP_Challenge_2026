@@ -1,0 +1,58 @@
+{
+  "about": "NASA's nine Artemis III candidate landing regions (NASA release 24-136, 28 Oct 2024). NASA published the regions as a map, not as centre coordinates. The points below are the candidate landing sites inside each region published by Wueller et al. (2026, JGR Planets 131, e2025JE009434, Appendix A), chosen with LOLA 20 m slope (< 8 deg), illumination modelling and Diviner temperatures. TwinWorlds uses their mean position as an APPROXIMATE region centre and their spread as an APPROXIMATE extent.",
+  "sources": [
+    { "label": "NASA: Artemis III landing region update (Oct 2024)", "url": "https://www.nasa.gov/news-release/nasa-provides-update-on-artemis-iii-moon-landing-regions/" },
+    { "label": "Wueller et al. 2026, JGR Planets, doi:10.1029/2025JE009434", "url": "https://doi.org/10.1029/2025JE009434" }
+  ],
+  "regions": [
+    {
+      "id": "peak-near-cabeus-b", "name": "Peak near Cabeus B", "short": "PCB", "siteId": "moon-peak-near-cabeus-b",
+      "note": "A small peak on the near side; the smallest landing area of the nine (about 2 km² meets lander rules).",
+      "sites": [[-83.763, -69.983], [-83.632, -67.634], [-83.563, -68.201], [-83.369, -67.665], [-83.539, -71.942]]
+    },
+    {
+      "id": "haworth", "name": "Haworth", "short": "HW", "siteId": "moon-haworth",
+      "note": "Ridges beside the large, permanently shadowed Haworth crater.",
+      "sites": [[-86.768, -20.514], [-86.808, -21.719], [-86.86, -19.893], [-86.568, -21.473], [-86.662, -30.548], [-87.05, -24.24], [-86.932, -23.02], [-86.924, -25.809], [-86.623, -26.075], [-86.527, -14.876], [-86.99, -24.254]]
+    },
+    {
+      "id": "malapert-massif", "name": "Malapert Massif", "short": "MMA", "siteId": "moon-malapert-massif",
+      "note": "A tall massif facing Earth: good line of sight for direct radio contact.",
+      "sites": [[-85.942, -0.944], [-86.015, 3.382], [-85.958, -3.278], [-86.31, -0.459], [-85.992, 2.056]]
+    },
+    {
+      "id": "mons-mouton-plateau", "name": "Mons Mouton Plateau", "short": "MMP", "siteId": null,
+      "note": "The largest region: the nearly flat top of the ~8 km high Mons Mouton.",
+      "sites": [[-85.111, 26.71], [-84.805, 24.887], [-84.968, 31.153], [-84.686, 20.887], [-84.416, 28.212], [-84.596, 30.452], [-84.683, 37.339], [-84.211, 40.81], [-83.684, 32.885], [-84.138, 25.642], [-84.269, 36.672]]
+    },
+    {
+      "id": "mons-mouton", "name": "Mons Mouton", "short": "MMO", "siteId": "moon-mons-mouton",
+      "note": "The southern margin of Mons Mouton (formerly the Leibnitz Beta Plateau).",
+      "sites": [[-85.416, 31.851], [-85.481, 29.549], [-85.409, 30.406], [-85.409, 28.15], [-85.344, 28.594], [-85.261, 30.186], [-85.195, 32.929], [-85.513, 35.704], [-85.466, 33.04], [-85.461, 31.49]]
+    },
+    {
+      "id": "nobile-rim-1", "name": "Nobile Rim 1", "short": "NR1", "siteId": "moon-nobile-rim-1",
+      "note": "On Mons Mouton near the western rim of Nobile crater; overlaps the two Mons Mouton regions.",
+      "sites": [[-85.295, 36.917], [-85.261, 36.889], [-85.546, 37.557], [-85.017, 37.875], [-85.072, 37.555], [-85.156, 36.986], [-85.198, 37.177], [-85.103, 36.751], [-85.04, 37.434]]
+    },
+    {
+      "id": "nobile-rim-2", "name": "Nobile Rim 2", "short": "NR2", "siteId": "moon-nobile-rim-2",
+      "note": "Northern rim of Nobile crater, where it meets an unnamed ~55 km crater.",
+      "sites": [[-84.054, 56.481], [-84.155, 59.835], [-83.687, 57.008], [-83.785, 57.683], [-83.618, 59.057], [-83.781, 59.282], [-83.918, 59.326], [-83.906, 57.811], [-84.074, 59.197]]
+    },
+    {
+      "id": "de-gerlache-rim-2", "name": "de Gerlache Rim 2", "short": "dGR2", "siteId": "moon-de-gerlache-rim-2",
+      "note": "Rim of de Gerlache crater, close to the pole and to Shackleton.",
+      "sites": [[-88.389, -68.865], [-88.037, -75.044], [-88.141, -71.696], [-88.138, -74.333], [-88.065, -62.074], [-87.947, -62.098], [-88.45, -67.859]]
+    },
+    {
+      "id": "slater-plain", "name": "Slater Plain", "short": "SP", "siteId": "moon-slater-plain",
+      "note": "A plain about 20 km north-east of Slater crater on the far side; the highest share of landable ground.",
+      "sites": [[-87.478, 124.521], [-87.382, 126.513], [-87.283, 123.748], [-87.192, 123.034], [-87.182, 119.703], [-87.073, 126.131], [-87.131, 127.857], [-87.327, 130.054], [-87.184, 133.344], [-87.032, 130.702], [-86.95, 126.675]]
+    }
+  ],
+  "features": [
+    { "id": "south-pole", "name": "South Pole", "lat": -90, "lon": 0, "radiusKm": 0, "note": "Exact pole (90°S)." },
+    { "id": "shackleton", "name": "Shackleton crater", "lat": -89.67, "lon": 129.78, "radiusKm": 10.5, "note": "21 km crater whose rim touches the pole; its floor is in permanent shadow (IAU/USGS gazetteer centre)." }
+  ]
+}

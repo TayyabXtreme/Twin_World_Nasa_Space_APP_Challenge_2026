@@ -1,0 +1,188 @@
+/* Earth · Moon · Mars page: living skies, the portal between worlds, and the twin wipe. */
+
+/* ---------- Portal ---------- */
+
+/* Hyperspace streaks that flash outward from the centre while a new world opens. */
+.sl-warp {
+  background: repeating-conic-gradient(from 0deg at 50% 60%, oklch(1 0 0 / 0.55) 0deg 0.6deg, transparent 0.6deg 7deg);
+  mask-image: radial-gradient(circle at 50% 60%, transparent 8%, #000 30%, transparent 75%);
+  animation: sl-warp 800ms var(--ease-out) both;
+}
+@keyframes sl-warp {
+  from {
+    opacity: 0.9;
+    transform: scale(0.55);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+/* Parallax layers follow --px/--py (set from the pointer, -1..1) at their own depth. */
+.sl-depth {
+  translate: calc(var(--px, 0) * var(--d, 4px)) calc(var(--py, 0) * var(--d, 4px) * 0.6);
+  transition: translate 500ms var(--ease-out);
+}
+
+/* ---------- Skies ---------- */
+
+.sl-star {
+  animation: sl-twinkle var(--dur, 3s) ease-in-out var(--delay, 0s) infinite alternate;
+}
+@keyframes sl-twinkle {
+  from {
+    opacity: 0.25;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.sl-cloud {
+  filter: blur(10px);
+  animation: sl-cloud var(--dur, 60s) linear var(--delay, 0s) infinite;
+}
+@keyframes sl-cloud {
+  from {
+    transform: translateX(-40%);
+  }
+  to {
+    transform: translateX(160%);
+  }
+}
+
+.sl-sun {
+  animation: sl-sun 5s ease-in-out infinite alternate;
+}
+@keyframes sl-sun {
+  to {
+    filter: brightness(1.12);
+    scale: 1.05;
+  }
+}
+
+.sl-globe {
+  background-size: auto 100%;
+  background-repeat: repeat-x;
+  animation: sl-turn 40s linear infinite;
+}
+@keyframes sl-turn {
+  from {
+    background-position-x: -7rem;
+  }
+  to {
+    background-position-x: 0;
+  }
+}
+
+.sl-dust {
+  animation: sl-dust var(--dur, 9s) linear var(--delay, 0s) infinite;
+}
+@keyframes sl-dust {
+  from {
+    transform: translateX(-10vw);
+    opacity: 0;
+  }
+  10% {
+    opacity: var(--o, 0.6);
+  }
+  90% {
+    opacity: var(--o, 0.6);
+  }
+  to {
+    transform: translateX(60vw) translateY(-12px);
+    opacity: 0;
+  }
+}
+
+.sl-haze {
+  animation: sl-haze 14s ease-in-out infinite alternate;
+}
+@keyframes sl-haze {
+  to {
+    opacity: 0.55;
+    transform: translateX(-3%);
+  }
+}
+
+.sl-phobos {
+  animation: sl-phobos 48s linear infinite;
+}
+@keyframes sl-phobos {
+  from {
+    left: -6%;
+  }
+  to {
+    left: 106%;
+  }
+}
+
+/* ---------- Picker globes ---------- */
+
+.sl-pick-globe {
+  background-size: auto 100%;
+  background-repeat: repeat-x;
+  box-shadow: inset -4px -2px 6px rgb(0 0 0 / 0.75);
+}
+[aria-checked="true"] > .sl-pick-globe,
+button:hover > .sl-pick-globe {
+  animation: sl-pick-turn 6s linear infinite;
+}
+@keyframes sl-pick-turn {
+  to {
+    background-position-x: 2.5rem;
+  }
+}
+
+/* ---------- Twin wipe ---------- */
+
+.sl-wipe-in {
+  animation: sl-wipe-in 800ms var(--ease-out) both;
+}
+@keyframes sl-wipe-in {
+  from {
+    opacity: 0.3;
+    filter: blur(14px);
+    transform: scale(1.04);
+  }
+}
+
+.sl-handle-ring {
+  animation: sl-ring 2.2s var(--ease-out) infinite;
+}
+@keyframes sl-ring {
+  from {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  to {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+
+.sl-rise {
+  animation: sl-rise 520ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 50ms);
+}
+@keyframes sl-rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+    filter: blur(5px);
+  }
+}
+
+/* Jump-height marker: drawn upward from the ground; negative side insets (in px: the line is 1px wide) keep the label unclipped. */
+.sl-grow-up {
+  animation: sl-grow-up 700ms var(--ease-out) 150ms both;
+}
+@keyframes sl-grow-up {
+  from {
+    clip-path: inset(100% -90px 0 -90px);
+  }
+  to {
+    clip-path: inset(-40px -90px 0 -90px);
+  }
+}

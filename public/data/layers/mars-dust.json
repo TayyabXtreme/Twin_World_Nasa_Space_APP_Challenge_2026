@@ -1,0 +1,15 @@
+{
+ "id": "mars-dust",
+ "type": "tile",
+ "title": "TES dust cover index",
+ "units": "index",
+ "unitsLong": "TES 1350–1400 cm⁻¹ emissivity (unitless)",
+ "meaning": "Whether the surface is mantled by fine dust (low emissivity) or shows clean rock and sand (high).",
+ "dataset": "MGS TES · dust cover index (Ruff & Christensen 2002)",
+ "datasetId": "Mars Trek tes_ruffdust",
+ "resolution": "16 px/° (~3.7 km)",
+ "source": "https://trek.nasa.gov/mars/",
+ "ramp": null,
+ "caveat": "NASA Trek serves these tiles already coloured and publishes no numeric colour key with them, so read them as relative (more vs less), not as exact values.",
+ "built": "2026-11-13"
+}

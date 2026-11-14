@@ -1,0 +1,12 @@
+Downloaded 2026-11-12 for TwinWorlds (NASA Space Apps 2026)
+
+geo/countries-110m.topo.json, countries-50m.topo.json
+  world-atlas@2.0.2 (jsDelivr) - derived from Natural Earth (public domain). Used for Earth country hover.
+geo/ne_110m_admin_0_countries.geojson, ne_50m_admin_0_countries.geojson
+  Natural Earth vector (github.com/nvkelso/natural-earth-vector) - public domain. Has ISO codes, population, continent etc.
+
+nomenclature/mars_features.json (2055) + mars_features.major.json (>=100 km, 641)
+nomenclature/moon_features.json (9087) + moon_features.major.json (>=100 km, 391)
+  USGS Gazetteer of Planetary Nomenclature (IAU/USGS/NASA), center-point shapefiles converted to JSON.
+  Fields: name, type, lat, lon (-180..180 east), diameter_km, origin, link, bbox [minLon,minLat,maxLon,maxLat].
+  Source: https://planetarynames.wr.usgs.gov/GIS_Downloads

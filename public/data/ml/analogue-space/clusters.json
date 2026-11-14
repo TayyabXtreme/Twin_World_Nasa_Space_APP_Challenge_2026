@@ -1,0 +1,522 @@
+{
+ "types": [
+  {
+   "id": 0,
+   "name": "Polar ice and cold desert",
+   "blurb": "Ice sheets and the coldest bare ground on Earth: frozen all year, no plants.",
+   "areaPct": 7.81,
+   "cells": 94436,
+   "pc": [
+    -4.419,
+    -1.881
+   ],
+   "centroid": {
+    "tmeanC": -42.8,
+    "swingK": 1.9,
+    "ndvi": -0.002,
+    "ati": 0.1015,
+    "freezeK": 42.8,
+    "reliefM": 48,
+    "maxSunDeg": 36.9
+   },
+   "latBand": [
+    -88.4,
+    -70.4
+   ],
+   "color": "#dce9ff"
+  },
+  {
+   "id": 1,
+   "name": "Arctic tundra",
+   "blurb": "Long frozen winters over permafrost, sparse low plants, short summers.",
+   "areaPct": 4.52,
+   "cells": 31609,
+   "pc": [
+    -3.028,
+    -0.132
+   ],
+   "centroid": {
+    "tmeanC": -17.3,
+    "swingK": 2.4,
+    "ndvi": 0.163,
+    "ati": 0.2342,
+    "freezeK": 18.6,
+    "reliefM": 148,
+    "maxSunDeg": 41.8
+   },
+   "latBand": [
+    -77.4,
+    80.4
+   ],
+   "color": "#8db4dc"
+  },
+  {
+   "id": 2,
+   "name": "Boreal forest and cold land",
+   "blurb": "Snowy winters, conifer forest and cold grassland.",
+   "areaPct": 17.74,
+   "cells": 70431,
+   "pc": [
+    -1.319,
+    0.88
+   ],
+   "centroid": {
+    "tmeanC": -3.5,
+    "swingK": 5.6,
+    "ndvi": 0.716,
+    "ati": 0.1518,
+    "freezeK": 8.5,
+    "reliefM": 56,
+    "maxSunDeg": 54.5
+   },
+   "latBand": [
+    51.4,
+    68.4
+   ],
+   "color": "#3f9c98"
+  },
+  {
+   "id": 3,
+   "name": "Dry steppe and scrub",
+   "blurb": "Semi-arid uplands: sparse grass and shrubs, large day–night swing.",
+   "areaPct": 12.65,
+   "cells": 30656,
+   "pc": [
+    1.285,
+    -1.588
+   ],
+   "centroid": {
+    "tmeanC": 15.1,
+    "swingK": 16.4,
+    "ndvi": 0.252,
+    "ati": 0.0476,
+    "freezeK": 1.4,
+    "reliefM": 208,
+    "maxSunDeg": 78.3
+   },
+   "latBand": [
+    -22.4,
+    46.4
+   ],
+   "color": "#d8c27a"
+  },
+  {
+   "id": 4,
+   "name": "Green hills and mountains",
+   "blurb": "Warm, vegetated, rugged terrain.",
+   "areaPct": 15.68,
+   "cells": 34609,
+   "pc": [
+    0.587,
+    1.057
+   ],
+   "centroid": {
+    "tmeanC": 18.7,
+    "swingK": 7.4,
+    "ndvi": 0.737,
+    "ati": 0.1196,
+    "freezeK": 0.4,
+    "reliefM": 223,
+    "maxSunDeg": 84.3
+   },
+   "latBand": [
+    -20.6,
+    44.1
+   ],
+   "color": "#b58ad6"
+  },
+  {
+   "id": 5,
+   "name": "Temperate and savanna lowlands",
+   "blurb": "Mild to warm green plains: farmland, grassland and open woodland.",
+   "areaPct": 15.98,
+   "cells": 37104,
+   "pc": [
+    0.965,
+    0.246
+   ],
+   "centroid": {
+    "tmeanC": 19.9,
+    "swingK": 10.5,
+    "ndvi": 0.611,
+    "ati": 0.077,
+    "freezeK": 0.8,
+    "reliefM": 33,
+    "maxSunDeg": 81.7
+   },
+   "latBand": [
+    -29.4,
+    50.6
+   ],
+   "color": "#9fd36b"
+  },
+  {
+   "id": 6,
+   "name": "Tropical forest",
+   "blurb": "Warm and green all year with a small day–night swing.",
+   "areaPct": 10.78,
+   "cells": 22662,
+   "pc": [
+    0.413,
+    1.851
+   ],
+   "centroid": {
+    "tmeanC": 23.1,
+    "swingK": 4.9,
+    "ndvi": 0.734,
+    "ati": 0.1804,
+    "freezeK": 0.1,
+    "reliefM": 12,
+    "maxSunDeg": 87.1
+   },
+   "latBand": [
+    -13.9,
+    37.4
+   ],
+   "color": "#23874a"
+  },
+  {
+   "id": 7,
+   "name": "Hot desert",
+   "blurb": "Hot, very dry, mostly bare rock and sand with a big day–night swing.",
+   "areaPct": 14.84,
+   "cells": 32835,
+   "pc": [
+    1.75,
+    -1.423
+   ],
+   "centroid": {
+    "tmeanC": 26.4,
+    "swingK": 15.5,
+    "ndvi": 0.178,
+    "ati": 0.0454,
+    "freezeK": 0.3,
+    "reliefM": 24,
+    "maxSunDeg": 85.4
+   },
+   "latBand": [
+    -25.6,
+    41.4
+   ],
+   "color": "#f2a14a"
+  }
+ ],
+ "targets": [
+  {
+   "id": "mars-jezero",
+   "name": "Jezero Crater",
+   "world": "mars",
+   "pc": [
+    1.54,
+    -1.565
+   ],
+   "type": 3,
+   "typeDist": 1.272,
+   "nearestEarth": {
+    "lat": -26.375,
+    "lon": -70.625,
+    "dist": 0.382
+   },
+   "featuresKnown": 7
+  },
+  {
+   "id": "mars-gale",
+   "name": "Gale Crater",
+   "world": "mars",
+   "pc": [
+    0.635,
+    -0.16
+   ],
+   "type": 4,
+   "typeDist": 3.504,
+   "nearestEarth": {
+    "lat": 12.125,
+    "lon": 37.125,
+    "dist": 2.267
+   },
+   "featuresKnown": 7
+  },
+  {
+   "id": "mars-utopia-viking2",
+   "name": "Utopia Planitia",
+   "world": "mars",
+   "pc": [
+    0.174,
+    -2.198
+   ],
+   "type": 7,
+   "typeDist": 1.834,
+   "nearestEarth": {
+    "lat": 48.125,
+    "lon": 93.375,
+    "dist": 0.648
+   },
+   "featuresKnown": 7
+  },
+  {
+   "id": "mars-arcadia",
+   "name": "Arcadia Planitia",
+   "world": "mars",
+   "pc": [
+    0.034,
+    -2.381
+   ],
+   "type": 7,
+   "typeDist": 2.093,
+   "nearestEarth": {
+    "lat": 47.375,
+    "lon": 67.875,
+    "dist": 1.001
+   },
+   "featuresKnown": 7
+  },
+  {
+   "id": "mars-mawrth-vallis",
+   "name": "Mawrth Vallis",
+   "world": "mars",
+   "pc": [
+    1.523,
+    -2.063
+   ],
+   "type": 3,
+   "typeDist": 1.18,
+   "nearestEarth": {
+    "lat": -23.625,
+    "lon": -68.375,
+    "dist": 0.516
+   },
+   "featuresKnown": 7
+  },
+  {
+   "id": "mars-hellas",
+   "name": "Hellas Planitia",
+   "world": "mars",
+   "pc": [
+    0.869,
+    -2.316
+   ],
+   "type": 3,
+   "typeDist": 1.086,
+   "nearestEarth": {
+    "lat": 41.375,
+    "lon": 106.875,
+    "dist": 0.519
+   },
+   "featuresKnown": 7
+  },
+  {
+   "id": "mars-phoenix",
+   "name": "Phoenix landing site",
+   "world": "mars",
+   "pc": [
+    -1.766,
+    -3.431
+   ],
+   "type": 0,
+   "typeDist": 3.362,
+   "nearestEarth": {
+    "lat": 67.125,
+    "lon": -42.375,
+    "dist": 1.812
+   },
+   "featuresKnown": 7
+  },
+  {
+   "id": "moon-shackleton-rim",
+   "name": "Shackleton crater rim",
+   "world": "moon",
+   "pc": [
+    -6.821,
+    -3.919
+   ],
+   "type": 0,
+   "typeDist": 4.202,
+   "nearestEarth": {
+    "lat": -79.375,
+    "lon": 80.125,
+    "dist": 2.939
+   },
+   "featuresKnown": 7
+  },
+  {
+   "id": "moon-malapert-massif",
+   "name": "Malapert Massif",
+   "world": "moon",
+   "pc": [
+    -5.776,
+    -3.625
+   ],
+   "type": 0,
+   "typeDist": 3.971,
+   "nearestEarth": {
+    "lat": -74.375,
+    "lon": -5.625,
+    "dist": 2.581
+   },
+   "featuresKnown": 7
+  },
+  {
+   "id": "moon-haworth",
+   "name": "Haworth",
+   "world": "moon",
+   "pc": [
+    -6.014,
+    -3.678
+   ],
+   "type": 0,
+   "typeDist": 3.934,
+   "nearestEarth": {
+    "lat": -74.375,
+    "lon": -5.625,
+    "dist": 2.682
+   },
+   "featuresKnown": 7
+  },
+  {
+   "id": "moon-nobile-rim-1",
+   "name": "Nobile Rim",
+   "world": "moon",
+   "pc": [
+    -5.79,
+    -3.617
+   ],
+   "type": 0,
+   "typeDist": 3.849,
+   "nearestEarth": {
+    "lat": -74.375,
+    "lon": -5.625,
+    "dist": 2.513
+   },
+   "featuresKnown": 7
+  },
+  {
+   "id": "moon-de-gerlache-rim-2",
+   "name": "de Gerlache Rim 2",
+   "world": "moon",
+   "pc": [
+    -6.091,
+    -3.658
+   ],
+   "type": 0,
+   "typeDist": 3.589,
+   "nearestEarth": {
+    "lat": -79.375,
+    "lon": 80.125,
+    "dist": 2.406
+   },
+   "featuresKnown": 7
+  },
+  {
+   "id": "moon-mons-mouton",
+   "name": "Mons Mouton",
+   "world": "moon",
+   "pc": [
+    -5.715,
+    -3.579
+   ],
+   "type": 0,
+   "typeDist": 3.547,
+   "nearestEarth": {
+    "lat": -74.375,
+    "lon": -5.375,
+    "dist": 2.317
+   },
+   "featuresKnown": 7
+  },
+  {
+   "id": "moon-peak-near-cabeus-b",
+   "name": "Peak near Cabeus B",
+   "world": "moon",
+   "pc": [
+    -5.474,
+    -3.534
+   ],
+   "type": 0,
+   "typeDist": 3.484,
+   "nearestEarth": {
+    "lat": -74.375,
+    "lon": -5.625,
+    "dist": 2.137
+   },
+   "featuresKnown": 7
+  },
+  {
+   "id": "moon-slater-plain",
+   "name": "Slater Plain",
+   "world": "moon",
+   "pc": [
+    -6.058,
+    -3.649
+   ],
+   "type": 0,
+   "typeDist": 3.593,
+   "nearestEarth": {
+    "lat": -79.375,
+    "lon": 80.125,
+    "dist": 2.421
+   },
+   "featuresKnown": 7
+  },
+  {
+   "id": "moon-marius-hills-pit",
+   "name": "Marius Hills pit",
+   "world": "moon",
+   "pc": [
+    1.97,
+    -2.281
+   ],
+   "type": 7,
+   "typeDist": 1.917,
+   "nearestEarth": {
+    "lat": 33.125,
+    "lon": 53.125,
+    "dist": 0.867
+   },
+   "featuresKnown": 6
+  }
+ ],
+ "loadings": [
+  {
+   "feature": "tmean",
+   "label": "Mean surface temperature",
+   "pc1": 0.509,
+   "pc2": 0.175
+  },
+  {
+   "feature": "swing",
+   "label": "Day–night swing",
+   "pc1": 0.415,
+   "pc2": -0.41
+  },
+  {
+   "feature": "ndvi",
+   "label": "Vegetation (NDVI)",
+   "pc1": 0.092,
+   "pc2": 0.635
+  },
+  {
+   "feature": "log_ati",
+   "label": "Thermal inertia (log ATI)",
+   "pc1": -0.295,
+   "pc2": 0.558
+  },
+  {
+   "feature": "freeze",
+   "label": "Freezing (degree-months)",
+   "pc1": -0.481,
+   "pc2": -0.248
+  },
+  {
+   "feature": "log_relief",
+   "label": "Relief (log m)",
+   "pc1": -0.014,
+   "pc2": -0.077
+  },
+  {
+   "feature": "maxsun",
+   "label": "Highest noon Sun",
+   "pc1": 0.491,
+   "pc2": 0.136
+  }
+ ]
+}

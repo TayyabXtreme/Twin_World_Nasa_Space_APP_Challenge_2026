@@ -1,0 +1,63 @@
+{
+ "id": "mars-grs-water",
+ "type": "image",
+ "title": "Water-equivalent hydrogen",
+ "units": "wt%",
+ "unitsLong": "weight % H₂O",
+ "range": [
+  2.0,
+  7.0
+ ],
+ "scale": "linear",
+ "ramp": [
+  "#440154",
+  "#482878",
+  "#3e4989",
+  "#31688e",
+  "#26828e",
+  "#1f9e89",
+  "#35b779",
+  "#6ece58",
+  "#b5de2b",
+  "#fde725"
+ ],
+ "ticks": [
+  3,
+  4,
+  5,
+  6
+ ],
+ "lowLabel": "drier",
+ "highLabel": "more water",
+ "decimals": 1,
+ "meaning": "How much of the top metre of soil is water (as ice or bound in minerals), by mass. Higher means more water to mine.",
+ "caveat": "Polar caps above about 75° are masked in this product. 5° bins smoothed with a 10° boxcar, so features smaller than ~600 km are blurred.",
+ "dataset": "Mars Odyssey Gamma Ray Spectrometer · water concentration",
+ "datasetId": "ODY-M-GRS-5-ELEMENTS-V1.0 (H2O_SR_5X5)",
+ "resolution": "5° bins (~300 km)",
+ "source": "https://pds-geosciences.wustl.edu/ody/ody-m-grs-5-elements-v1/odgm_xxxx/data/smoothed/",
+ "image": "/data/layers/mars-grs-water.webp",
+ "bounds": [
+  [
+   -90,
+   -180
+  ],
+  [
+   90,
+   180
+  ]
+ ],
+ "grid": {
+  "url": "/data/layers/mars-grs-water.grid.bin",
+  "width": 72,
+  "height": 36,
+  "offset": 1.645,
+  "scale": 8.7786489e-05
+ },
+ "stats": {
+  "p2": 2.20248,
+  "median": 3.8415,
+  "p98": 6.33444
+ },
+ "built": "2026-11-13"
+}
