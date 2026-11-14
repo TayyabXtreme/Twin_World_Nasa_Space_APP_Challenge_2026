@@ -5,7 +5,7 @@
 <h3>Search the whole Earth for the places that best stand in for future Moon bases and Mars landing sites,<br/>and show exactly why each one works, and where it breaks.</h3>
 
 <p>
-<a href="https://nasa-space-app-hazel-three.vercel.app"><img alt="Live demo" src="https://img.shields.io/badge/LIVE_DEMO-open_TwinWorlds-4cf5de?style=for-the-badge&labelColor=05070d" /></a>
+<a href="https://twinworld-topaz.vercel.app/"><img alt="Live demo" src="https://img.shields.io/badge/LIVE_DEMO-open_TwinWorlds-4cf5de?style=for-the-badge&labelColor=05070d" /></a>
 <img alt="NASA Space Apps Challenge 2026" src="https://img.shields.io/badge/NASA_Space_Apps-2026-e26239?style=for-the-badge&labelColor=05070d" />
 <img alt="Challenge level" src="https://img.shields.io/badge/Level-Advanced-4ea6fb?style=for-the-badge&labelColor=05070d" />
 </p>
@@ -59,7 +59,7 @@ and present the findings as a map, visualisation or tool.
 | **Difficulty** | Advanced · Intermediate · Beginner/Youth |
 | **Subjects** | Earth Science · Planets & Moons · Software · Space Exploration |
 | **Our entry** | **TwinWorlds**, a live web app |
-| **Live** | [nasa-space-app-hazel-three.vercel.app](https://nasa-space-app-hazel-three.vercel.app) |
+| **Live** | [twinworld-topaz.vercel.app](https://twinworld-topaz.vercel.app/) |
 
 </td>
 </tr>
