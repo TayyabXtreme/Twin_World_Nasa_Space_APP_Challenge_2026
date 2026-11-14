@@ -111,8 +111,8 @@ export const SANITY: SanitySite[] = [
 /** The Finder reference place for a globe site, if it has one (every named site; Pakistan uses its spotlight id). */
 export const finderRefFor = (siteId: string) => PAKISTAN.find((p) => p.siteId === siteId)?.id ?? NAMED_SITES.find((s) => s.id === siteId)?.id;
 
-/** Who uses a named site: a space-agency field programme, a Pakistan spotlight site, or a known analogue in the literature. */
-export type SiteGroup = "agency" | "pakistan" | "known";
+/** Who uses a named site: a space-agency field programme, a Pakistan spotlight site, a known analogue in the literature, or a place the Finder itself found. */
+export type SiteGroup = "agency" | "pakistan" | "known" | "finder";
 
 export interface NamedSite extends KnownPlace {
   group: SiteGroup;
@@ -153,6 +153,7 @@ export const NAMED_SITES: NamedSite[] = [
   { ...site("earth-ladakh"), group: "agency", radiusKm: 50, why: "Cold, high, dry plateau with salt lakes; ISRO analogue mission" },
   { ...site("earth-pilbara"), group: "agency", radiusKm: 80, why: "3.5-billion-year-old stromatolites; ancient life analogue" },
   { ...site("earth-wadi-rum"), group: "known", radiusKm: 40, why: "Red sand valleys; nicknamed the Valley of the Moon" },
+  { ...site("earth-victoria-land"), group: "finder", radiusKm: 60, why: "Top Finder match for the lunar south pole; ice-covered mountains" },
   { ...site("earth-deception"), group: "known", radiusKm: 30, why: "Active volcano in polar ice; proposed Mars analogue" },
   ...PAKISTAN.map((p): NamedSite => ({ id: p.id, name: p.name, lat: p.lat, lon: p.lon, region: p.region, group: "pakistan", radiusKm: 50, why: p.blurb })),
 ];

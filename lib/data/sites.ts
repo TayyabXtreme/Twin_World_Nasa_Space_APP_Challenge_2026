@@ -538,6 +538,29 @@ export const SITES: Site[] = [
     evidence: "evidence_for",
     sourceIds: ["ija-deception"],
   },
+  /* Found by the Analog Finder, not a field site: the record rests only on NASA MODIS (Earthdata) and JAXA
+     AW3D30 values for the Finder's best 0.25° cell (four months of 2024). */
+  {
+    id: "earth-victoria-land",
+    world: "earth",
+    name: "Victoria Land (north)",
+    region: "East Antarctica",
+    kind: "analogue",
+    lat: -70.63,
+    lon: 159.38,
+    coordsVerified: false,
+    summary:
+      "Ice-covered mountains in northern Victoria Land, where the Transantarctic Mountains meet the polar ice sheet. With the default weights the Analog Finder ranks it Earth's closest match to the Shackleton crater rim at the Moon's south pole: NASA MODIS measures the ground at about −33 °C by day and −37 °C by night, almost no day–night swing, no plants and very bright ice.",
+    tags: ["cold", "polar", "ice", "dry"],
+    landforms: ["Ice-sheet margin", "Mountain ranges and glaciers"],
+    geology: ["Glacier ice over mountain bedrock"],
+    resources: [{ label: "Ice at the surface everywhere", evidence: "confirmed" }],
+    hazards: ["extreme-cold", "wind", "long-night"],
+    elevationM: 1988,
+    image: { src: "/photos/sites-earth/victoria-land.webp", alt: "Satellite view of the mountains and glaciers of northern Victoria Land", credit: "NASA Worldview/GIBS · MODIS Terra, 2024-12-20" },
+    evidence: "candidate",
+    sourceIds: ["nasa-earthdata-modis", "nasa-gibs"],
+  },
 
   /* Pakistan spotlight: proposed analogues, not NASA field sites. Coordinates checked against two published
      sources each (mud-volcano survey + gazetteer; UNESCO tentative list; Mindat + gazetteer). */

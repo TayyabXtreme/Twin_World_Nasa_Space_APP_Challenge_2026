@@ -41,7 +41,7 @@ const SOURCES: { resource: string; url: string; items: string[] }[] = [
   },
   {
     resource: "NASA LRO (Diviner, LOLA)",
-    url: "https://lunar.gsfc.nasa.gov/",
+    url: "https://pds-geosciences.wustl.edu/missions/lro/",
     items: ["Diviner polar resource product: temperatures and ice stability", "LOLA: lunar terrain relief", "Diviner: regolith thermal inertia"],
   },
   { resource: "JAXA", url: "https://www.eorc.jaxa.jp/ALOS/en/aw3d30/", items: ["ALOS AW3D30: Earth terrain relief (30 m)"] },

@@ -34,6 +34,7 @@ const PHOTOS = [
   ["ladakh", path.join(RAW, "gibs-ladakh.jpg"), 0.5, 0.5, 0.9],
   ["pilbara", path.join(RAW, "PIA23551.jpg"), 0.5, 0.45],
   ["wadi-rum", path.join(RAW, "GSFC_20171208_Archive_e001903.jpg"), 0.5, 0.5],
+  ["victoria-land", path.join(RAW, "gibs-victoria.jpg"), 0.3, 0.45, 0.85],
 ];
 
 async function crop(src, aspect, fx, fy, zoom = 1) {

@@ -478,5 +478,9 @@
  "earth-wadi-rum": {
   "pin": "/photos/globe/wadi-rum-pin.webp",
   "views": []
+ },
+ "earth-victoria-land": {
+  "pin": "/photos/globe/victoria-land-pin.webp",
+  "views": []
  }
 }
