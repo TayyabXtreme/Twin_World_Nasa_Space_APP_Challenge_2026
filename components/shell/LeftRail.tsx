@@ -25,12 +25,12 @@ export function LeftRail() {
       aria-label="Sections"
       style={{ viewTransitionName: "site-rail" }}
       className={cn(
-        "chrome glass pointer-events-auto z-20 flex rounded-2xl p-1.5",
-        "fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] justify-between overflow-x-auto [scrollbar-width:none] md:overflow-visible",
-        "md:inset-x-auto md:bottom-auto md:start-3 md:top-1/2 md:-translate-y-1/2 md:flex-col md:justify-start md:gap-1",
+        "chrome pointer-events-auto z-20 flex rounded-2xl glass p-1.5",
+        "fixed inset-x-3 bottom-[max(0.75rem,env(safe-area-inset-bottom))] [scrollbar-width:none] justify-between overflow-x-auto md:overflow-visible",
+        "md:inset-x-auto md:start-3 md:top-1/2 md:bottom-auto md:-translate-y-1/2 md:flex-col md:justify-start md:gap-1",
       )}
     >
-      {NAV_ITEMS.map(({ href, label, hint, icon: Icon }, i) => {
+      {NAV_ITEMS.map(({ href, label, title, hint, icon: Icon }, i) => {
         const active = isActive(pathname, href);
         return (
           <Tooltip key={href}>
@@ -40,7 +40,7 @@ export function LeftRail() {
                 transitionTypes={directionType(current, i)}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "group flex shrink-0 flex-col items-center gap-0.5 whitespace-nowrap rounded-xl px-2 py-2 text-[10px] text-muted-foreground md:px-2.5 md:text-[11px]",
+                  "group flex shrink-0 flex-col items-center gap-0.5 rounded-xl px-2 py-2 text-[10px] whitespace-nowrap text-muted-foreground md:px-2.5 md:text-[11px]",
                   "transition-[background-color,color] duration-(--duration-fast) ease-(--ease-out)",
                   "hover:bg-accent hover:text-foreground focus-visible:outline-2 focus-visible:outline-ring",
                   active && "bg-accent text-primary",
@@ -51,7 +51,7 @@ export function LeftRail() {
               </Link>
             </TooltipTrigger>
             <TooltipContent side="right" className="hidden md:block">
-              <p className="font-medium">{label}</p>
+              <p className="font-medium">{title ?? label}</p>
               <p className="text-muted-foreground">{hint}</p>
             </TooltipContent>
           </Tooltip>

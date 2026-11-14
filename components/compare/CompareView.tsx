@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeftRight, ArrowRight, Check, ExternalLink, Hand, ScanSearch, TriangleAlert } from "lucide-react";
+import { ArrowLeftRight, ArrowRight, Check, ExternalLink, Hand, Rocket, ScanSearch, TriangleAlert } from "lucide-react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,7 +8,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { EvidenceTag } from "@/components/site/EvidenceTag";
 import { Conditions } from "./Conditions";
-import { RadarTwins } from "./RadarTwins";
 import { MissionScore } from "@/components/score/MissionScore";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger } from "@/components/ui/select";
 import { playCue } from "@/lib/audio";
@@ -258,6 +257,37 @@ function SiteViewport({
   const groups = (["earth", "moon", "mars"] as const).filter((w) => options.some((o) => o.world === w));
   return (
     <article className="group overflow-hidden rounded-[1.6rem] bg-white/[0.03] ring-1 ring-white/10">
+      <div className="flex items-center justify-between gap-3 border-b border-white/[0.07] px-4 py-3">
+        <span className="flex min-w-0 items-center gap-2 text-[13px] text-muted-foreground">
+          <span className={cn("size-2 shrink-0 rounded-full", DOT[site.world])} aria-hidden />
+          <span className="truncate">
+            <span className="font-medium text-foreground">{WORLD_CONFIG[site.world].name}</span> · {label}
+          </span>
+        </span>
+        <Select value={site.id} onValueChange={onChange}>
+          <SelectTrigger
+            aria-label={`${label}: ${site.name}. Choose another`}
+            className="h-9! gap-2 rounded-xl border-white/12 bg-white/[0.05] ps-3 pe-2.5 text-[13px] font-medium text-foreground transition-[background-color,border-color,scale] duration-150 ease-out hover:border-white/25 hover:bg-white/[0.09] motion-safe:active:scale-[0.96]"
+          >
+            <ArrowLeftRight className="size-3.5" aria-hidden />
+            Change
+          </SelectTrigger>
+          <SelectContent position="popper" align="end">
+            {groups.map((w) => (
+              <SelectGroup key={w}>
+                <SelectLabel>{WORLD_CONFIG[w].name}</SelectLabel>
+                {options
+                  .filter((o) => o.world === w)
+                  .map((o) => (
+                    <SelectItem key={o.id} value={o.id}>
+                      {o.name}
+                    </SelectItem>
+                  ))}
+              </SelectGroup>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
       <div className="relative aspect-[16/10] overflow-hidden bg-white/5">
         {site.image ? (
           <Image
@@ -285,34 +315,6 @@ function SiteViewport({
           className="absolute inset-0 bg-[linear-gradient(to_top,oklch(0.1_0.015_265/0.92),oklch(0.1_0.015_265/0.2)_45%,transparent_70%)]"
         />
 
-        <span className="absolute start-3 top-3 flex items-center gap-1.5 rounded-full glass px-2.5 py-1 text-xs">
-          <span className={cn("size-1.5 rounded-full", DOT[site.world])} aria-hidden />
-          {WORLD_CONFIG[site.world].name}
-        </span>
-        <Select value={site.id} onValueChange={onChange}>
-          <SelectTrigger
-            aria-label={`${label}: ${site.name}. Choose another`}
-            className="absolute end-3 top-3 h-8! rounded-full border-white/10 glass ps-3 text-xs text-foreground"
-          >
-            <ArrowLeftRight className="size-3.5" aria-hidden />
-            Change
-          </SelectTrigger>
-          <SelectContent position="popper" align="end">
-            {groups.map((w) => (
-              <SelectGroup key={w}>
-                <SelectLabel>{WORLD_CONFIG[w].name}</SelectLabel>
-                {options
-                  .filter((o) => o.world === w)
-                  .map((o) => (
-                    <SelectItem key={o.id} value={o.id}>
-                      {o.name}
-                    </SelectItem>
-                  ))}
-              </SelectGroup>
-            ))}
-          </SelectContent>
-        </Select>
-
         <div key={`caption-${site.id}`} className="absolute inset-x-0 bottom-0 p-5">
           <h3 className="compare-rise font-heading text-[clamp(1.5rem,2.4vw,2.1rem)] leading-tight font-semibold tracking-tight">
             {site.name}
@@ -325,6 +327,45 @@ function SiteViewport({
         {site.image && <p className="mt-3 text-[11px] text-muted-foreground">Image: {site.image.credit}</p>}
       </div>
     </article>
+  );
+}
+
+/* ---------- Mission call to action ---------- */
+
+function MissionCta({ site, onStart }: { site: Site; onStart: () => void }) {
+  return (
+    <section
+      aria-labelledby="mission-cta-title"
+      className="relative mt-20 overflow-hidden rounded-[1.75rem] bg-white/[0.03] ring-1 ring-white/10"
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_85%_50%,oklch(0.88_0.14_182/0.14),transparent_60%)]"
+      />
+      <div className="relative flex flex-col gap-6 p-6 sm:p-10 md:flex-row md:items-center md:justify-between">
+        <div className="max-w-xl">
+          <p className="hud text-xs tracking-[0.16em] text-primary uppercase">Mission score</p>
+          <h2
+            id="mission-cta-title"
+            className="mt-2 font-heading text-[clamp(1.5rem,2.6vw,2.1rem)] leading-tight font-semibold tracking-tight"
+          >
+            Could {site.name} take a landing, a rover or a base?
+          </h2>
+          <p className="mt-2 text-[15px] leading-relaxed text-muted-foreground">
+            Pick a mission, weigh what matters, and see how {site.name} ranks against every other site, built from
+            measured NASA data.
+          </p>
+        </div>
+        <button
+          type="button"
+          onClick={onStart}
+          className="inline-flex shrink-0 items-center gap-2.5 self-start rounded-full bg-primary py-3 ps-5 pe-6 text-[15px] font-semibold text-primary-foreground shadow-[0_12px_40px_-12px_var(--primary)] transition-[scale,box-shadow] duration-150 ease-out hover:shadow-[0_16px_48px_-12px_var(--primary)] motion-safe:active:scale-[0.96] md:self-center"
+        >
+          <Rocket className="size-4.5" aria-hidden />
+          Start your mission
+        </button>
+      </div>
+    </section>
   );
 }
 
@@ -715,6 +756,28 @@ export function CompareView() {
       stageRef.current?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
     }
   };
+  // The mission scorer stays folded behind "Start your mission" until asked for; a #mission-score link opens it.
+  const [missionOpen, setMissionOpen] = useState(false);
+  const openMission = () => {
+    setMissionOpen(true);
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    requestAnimationFrame(() =>
+      document
+        .getElementById("mission-score")
+        ?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }),
+    );
+  };
+  useEffect(() => {
+    const check = () => {
+      if (window.location.hash !== "#mission-score") return;
+      setMissionOpen(true);
+      requestAnimationFrame(() => document.getElementById("mission-score")?.scrollIntoView({ block: "start" }));
+    };
+    check();
+    window.addEventListener("hashchange", check);
+    return () => window.removeEventListener("hashchange", check);
+  }, []);
+
   const twin = TWINS.find((t) => t.earthId === a.id && t.otherId === b.id);
   const overlap = tagOverlap(a.tags, b.tags);
   const data = dataUsed(a, b);
@@ -722,15 +785,15 @@ export function CompareView() {
   return (
     <div className="mx-auto max-w-7xl">
       <Morph name="feature-compare">
-      <header className="max-w-2xl">
-        <h1 className="font-heading text-[clamp(2.25rem,4.5vw,3.5rem)] leading-[1.05] font-semibold tracking-tight">
-          Compare
-        </h1>
-        <p className="mt-3 text-[17px] leading-relaxed text-muted-foreground">
-          Fly from a place on Earth to its twin on the Moon or Mars. Each pair names the one feature that matches and
-          the differences that matter, because an analogue is never an exact copy.
-        </p>
-      </header>
+        <header className="max-w-2xl">
+          <h1 className="font-heading text-[clamp(2.25rem,4.5vw,3.5rem)] leading-[1.05] font-semibold tracking-tight">
+            Compare
+          </h1>
+          <p className="mt-3 text-[17px] leading-relaxed text-muted-foreground">
+            Fly from a place on Earth to its twin on the Moon or Mars. Each pair names the one feature that matches and
+            the differences that matter, because an analogue is never an exact copy.
+          </p>
+        </header>
       </Morph>
 
       <PairStrip a={a} b={b} onPick={(e, o) => setPair(e, o)} />
@@ -740,15 +803,18 @@ export function CompareView() {
       </div>
 
       <div className="mt-8 grid gap-5 md:grid-cols-2">
-        <SiteViewport site={a} options={EARTH_SITES} onChange={(id) => setPair(id, b.id)} label="Earth place" />
-        <SiteViewport site={b} options={OTHER_SITES} onChange={(id) => setPair(a.id, id)} label="Moon or Mars site" />
+        <SiteViewport site={a} options={EARTH_SITES} onChange={(id) => setPair(id, b.id)} label="Analogue site" />
+        <SiteViewport site={b} options={OTHER_SITES} onChange={(id) => setPair(a.id, id)} label="Target site" />
       </div>
 
       <Match a={a} b={b} twin={twin} overlap={overlap} />
       <Field key={`${a.id}:${b.id}`} a={a} b={b} twin={twin} />
       <Conditions a={a} b={b} />
-      <MissionScore site={b} onSite={(id) => setPair(a.id, id)} />
-      <RadarTwins />
+      {missionOpen ? (
+        <MissionScore site={b} onSite={(id) => setPair(a.id, id)} />
+      ) : (
+        <MissionCta site={b} onStart={openMission} />
+      )}
       <AnalogFinderCard b={b} />
 
       <section className="mt-20 border-t border-white/[0.07] pt-8" aria-labelledby="compare-sources">
@@ -778,12 +844,13 @@ export function CompareView() {
           >
             See {b.name} on the {WORLD_CONFIG[b.world].name} globe
           </Link>
-          <Link
-            href="#mission-score"
+          <button
+            type="button"
+            onClick={openMission}
             className="rounded-full px-4 py-2 text-muted-foreground ring-1 ring-white/10 transition-colors duration-150 hover:text-foreground hover:ring-white/20"
           >
             Score it for a mission
-          </Link>
+          </button>
         </div>
       </section>
     </div>

@@ -1,13 +1,12 @@
 "use client";
 
-import { Check, ExternalLink, Search } from "lucide-react";
+import { Check, Search } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { useMemo, useState } from "react";
 import { EvidenceTag } from "@/components/site/EvidenceTag";
 import { PhotoWipe } from "@/components/slider/PhotoWipe";
 import { WorldScene } from "@/components/slider/WorldScene";
 import { CAUTIONS, GLOSSARY, WORLD_CHAPTERS } from "@/lib/data/learn";
-import { SOURCES } from "@/lib/data/sources";
 import { ChapterNav } from "./ChapterNav";
 import { JourneyHero } from "./JourneyHero";
 import { GravityLab, SignalLab } from "./Labs";
@@ -45,7 +44,7 @@ function SectionTitle({
 
 /**
  * Learn: a scroll trip from Earth to Mars, then a chapter per world, things to try, a quiz, the glossary, our
- * honesty rules and every source.
+ * honesty rules. Sources live on the Data page.
  */
 export function LearnView() {
   const reduce = useReducedMotion();
@@ -165,35 +164,6 @@ export function LearnView() {
                 <EvidenceTag key={e} evidence={e} />
               ))}
             </Reveal>
-          </section>
-
-          <section id="sources" aria-labelledby="sources-title" className="scroll-mt-32">
-            <SectionTitle id="sources-title" kicker="Chapter 08" title="Where it all comes from">
-              {SOURCES.length} NASA and partner sources behind every fact, map and image on TwinWorlds.
-            </SectionTitle>
-            <ul className="mt-10 grid gap-2 md:grid-cols-2">
-              {SOURCES.map((s, i) => (
-                <Reveal key={s.id} as="li" delay={Math.min((i % 2) * 0.05, 0.1)} y={12}>
-                  <a
-                    href={s.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group flex h-full items-start gap-3 rounded-xl border border-white/6 px-4 py-3 transition-[background-color,border-color] duration-150 hover:border-primary/30 hover:bg-white/[0.04]"
-                  >
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-sm font-medium group-hover:text-primary">{s.title}</span>
-                      <span className="mt-0.5 block text-xs text-muted-foreground">
-                        {s.org} · {s.covers}
-                      </span>
-                    </span>
-                    <ExternalLink
-                      className="mt-1 size-3.5 shrink-0 text-muted-foreground transition-transform duration-150 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                      aria-hidden
-                    />
-                  </a>
-                </Reveal>
-              ))}
-            </ul>
           </section>
         </div>
       </div>

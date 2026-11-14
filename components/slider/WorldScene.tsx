@@ -90,10 +90,11 @@ function Sky({ world }: { world: World }) {
             className="sl-star absolute rounded-full bg-white"
             style={
               {
-                left: `${rand(i, 1) * 100}%`,
-                top: `${rand(i, 2) * 62}%`,
-                width: rand(i, 3) > 0.85 ? 2 : 1,
-                height: rand(i, 3) > 0.85 ? 2 : 1,
+                // Fixed precision and px strings, so server and browser render identical styles (no hydration mismatch).
+                left: `${(rand(i, 1) * 100).toFixed(3)}%`,
+                top: `${(rand(i, 2) * 62).toFixed(3)}%`,
+                width: rand(i, 3) > 0.85 ? "2px" : "1px",
+                height: rand(i, 3) > 0.85 ? "2px" : "1px",
                 "--dur": `${(2 + rand(i, 4) * 3).toFixed(2)}s`,
                 "--delay": `${(-rand(i, 5) * 4).toFixed(2)}s`,
               } as Vars
@@ -160,7 +161,7 @@ function WorldLayer({ info, origin }: { info: WorldInfo; origin: string }) {
           <span
             key={i}
             className="sl-dust absolute left-0 size-[3px] rounded-full bg-[#f1d2ad]"
-            style={{ top: `${58 + rand(i, 6) * 30}%`, "--dur": `${(6 + rand(i, 7) * 6).toFixed(2)}s`, "--delay": `${(-rand(i, 8) * 10).toFixed(2)}s`, "--o": (0.35 + rand(i, 9) * 0.45).toFixed(2) } as Vars}
+            style={{ top: `${(58 + rand(i, 6) * 30).toFixed(3)}%`, "--dur": `${(6 + rand(i, 7) * 6).toFixed(2)}s`, "--delay": `${(-rand(i, 8) * 10).toFixed(2)}s`, "--o": (0.35 + rand(i, 9) * 0.45).toFixed(2) } as Vars}
           />
         ))}
     </motion.div>

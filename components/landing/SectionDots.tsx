@@ -8,9 +8,6 @@ const SECTIONS = [
   { id: "hero", label: "Start" },
   { id: "journey", label: "Where to go" },
   { id: "finder", label: "Analog Finder" },
-  { id: "twins", label: "Twin pairs" },
-  { id: "moon", label: "Moon base" },
-  { id: "hardware", label: "Spacecraft" },
   { id: "data", label: "Open data" },
   { id: "cta", label: "Start exploring" },
 ];

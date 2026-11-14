@@ -78,9 +78,10 @@ export function MoonbaseView() {
     [scores, size],
   );
 
-  const layers = useMemo(() => manifest?.layers.filter((l) => !l.hidden) ?? [], [manifest]);
+  // Only layers with data at the pole: ones with no polar coverage or still downloading add nothing here.
+  const layers = useMemo(() => manifest?.layers.filter((l) => !l.hidden && l.status === "ready") ?? [], [manifest]);
   const readoutLayers = useMemo(
-    () => manifest?.layers.filter((l) => l.status === "ready" || !l.hidden) ?? [],
+    () => manifest?.layers.filter((l) => l.status === "ready" && !l.hidden) ?? [],
     [manifest],
   );
   const loadedLayers = useMemo(() => new Set(Object.keys(floats)), [floats]);
@@ -115,37 +116,21 @@ export function MoonbaseView() {
     };
   });
 
-  const ready = manifest?.layers.filter((l) => l.status === "ready" && !l.hidden).length ?? 0;
-  const datasets = new Set(manifest?.layers.filter((l) => l.status === "ready").map((l) => l.dataset.name)).size;
-
   return (
     <div className="mx-auto max-w-[1440px]">
       <Morph name="feature-bases">
-      <header className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
-        <div className="max-w-2xl">
-          <p className="hud text-xs tracking-[0.14em] text-moon uppercase">Moon · South Pole · 75°S to 90°S</p>
-          <h1 className="mt-2 font-heading text-[clamp(2.25rem,4.5vw,3.5rem)] leading-[1.05] font-semibold tracking-tight">
-            Moon Base Map
-          </h1>
-          <p className="mt-3 text-[17px] leading-relaxed text-muted-foreground">
-            Where would you build the first Moon base? Explore NASA orbital data for the lunar south pole, read every
-            layer at any point, and weigh slope, ice and sunlight to see where a base could work.
-          </p>
-        </div>
-        <dl className="grid grid-cols-3 gap-2 text-center sm:gap-3">
-          {[
-            [String(ready || "–"), "layers live"],
-            ["9", "Artemis III regions"],
-            [String(datasets || "–"), "NASA datasets"],
-          ].map(([n, l]) => (
-            <div key={l} className="min-w-24 rounded-xl glass px-3 py-2.5">
-              <dt className="sr-only">{l}</dt>
-              <dd className="hud text-xl font-semibold">{n}</dd>
-              <dd className="text-[11px] text-muted-foreground">{l}</dd>
-            </div>
-          ))}
-        </dl>
-      </header>
+        <header className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
+          <div className="max-w-2xl">
+            <p className="hud text-xs tracking-[0.14em] text-moon uppercase">Moon · South Pole · 75°S to 90°S</p>
+            <h1 className="mt-2 font-heading text-[clamp(2.25rem,4.5vw,3.5rem)] leading-[1.05] font-semibold tracking-tight">
+              Moon Base Map
+            </h1>
+            <p className="mt-3 text-[17px] leading-relaxed text-muted-foreground">
+              Where would you build the first Moon base? Weigh slope, ice and sunlight on NASA data for the lunar south
+              pole and see where a base could work.
+            </p>
+          </div>
+        </header>
       </Morph>
 
       <div className="mt-8 grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">

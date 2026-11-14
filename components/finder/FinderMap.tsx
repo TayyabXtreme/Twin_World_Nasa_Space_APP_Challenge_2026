@@ -67,7 +67,7 @@ function FitWorld() {
 function Controls() {
   const map = useMap();
   const btn =
-    "flex size-9 items-center justify-center rounded-lg text-foreground/85 transition-colors duration-150 hover:bg-white/10 hover:text-foreground active:scale-[0.96]";
+    "flex size-9 items-center justify-center rounded-lg text-foreground/85 transition-[background-color,color,scale] duration-150 ease-out hover:bg-white/10 hover:text-foreground motion-safe:active:scale-[0.96]";
   return (
     <div className="absolute end-3 top-3 z-[500] flex flex-col rounded-xl glass p-1">
       <button type="button" className={btn} aria-label="Zoom in" onClick={() => map.zoomIn()}>

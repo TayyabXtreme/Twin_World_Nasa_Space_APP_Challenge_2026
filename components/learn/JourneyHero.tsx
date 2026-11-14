@@ -38,9 +38,9 @@ function formatDelay(km: number) {
 const CAPTIONS = [
   {
     window: [0, 0, 0.08, 0.14],
-    kicker: "Learn · a trip in one scroll",
-    title: "What is it really like out there?",
-    body: "Three worlds, the facts we are sure of, and the ones we are not. Scroll to leave Earth.",
+    kicker: "Learn · for students and beginners",
+    title: "Space, explained from the start",
+    body: "The Moon and Mars made simple: the facts we are sure of, and the ones we are not. Scroll to leave Earth.",
   },
   {
     window: [0.24, 0.3, 0.44, 0.5],
@@ -58,7 +58,7 @@ const CAPTIONS = [
     window: [0.9, 0.95, 1, 1],
     kicker: "Ready?",
     title: "Here is what we know",
-    body: "How sure we are, what you can try for yourself, and where every fact comes from.",
+    body: "How sure we are, what you can try for yourself, a quiz and the words explained.",
   },
 ] as const;
 
@@ -254,12 +254,12 @@ function Orb({ style, ...props }: Omit<React.ComponentProps<typeof PlanetOrb>, "
 function StaticHero() {
   return (
     <header className="hidden py-10 motion-reduce:block">
-      <p className="hud text-xs tracking-[0.18em] text-primary uppercase">Learn</p>
+      <p className="hud text-xs tracking-[0.18em] text-primary uppercase">Learn · for students and beginners</p>
       <h1 className="mt-3 font-heading text-[clamp(2.2rem,6vw,4rem)] leading-tight font-semibold tracking-tight">
-        What is it really like out there?
+        Space, explained from the start
       </h1>
       <p className="mt-3 max-w-xl text-muted-foreground">
-        Three worlds, the facts we are sure of, and the ones we are not.
+        The Moon and Mars made simple: the facts we are sure of, and the ones we are not.
       </p>
       <div className="mt-8 flex items-center gap-6">
         <PlanetOrb texture="/textures/earth/day-1k.webp" glow="oklch(0.72 0.13 235)" className="size-28" priority />

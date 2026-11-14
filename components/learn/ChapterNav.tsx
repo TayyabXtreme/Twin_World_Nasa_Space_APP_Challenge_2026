@@ -12,7 +12,6 @@ export const CHAPTERS = [
   { id: "quiz", label: "Quiz" },
   { id: "glossary", label: "Glossary" },
   { id: "honesty", label: "Honesty" },
-  { id: "sources", label: "Sources" },
 ];
 
 /** The chapter currently crossing the upper-middle of the screen. */
