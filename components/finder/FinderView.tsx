@@ -558,7 +558,6 @@ export function FinderView() {
             target={target}
             header={engine.data.header}
             detail={detail}
-            weights={weights ?? DEFAULT_WEIGHTS[target.world]}
             confidence={confidence(current, target, weights ?? DEFAULT_WEIGHTS[target.world], detail?.flags)}
           />
         </section>

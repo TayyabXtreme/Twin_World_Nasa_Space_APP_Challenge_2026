@@ -4,7 +4,7 @@ and, where LRO or Mars Reconnaissance Orbiter imaged the hardware, a second view
 
 Sources: the NASA Image and Video Library API (images-api.nasa.gov) for the Apollo, Viking, Pathfinder, MER,
 Phoenix, MSL, InSight and Mars 2020 photos and the HiRISE views; LROC featured-image pages (lroc.im-ldi.com,
-NASA/GSFC/Arizona State University) for the LRO views of the Apollo, Luna, Chang'e, Chandrayaan-3 and SLIM landing
+NASA/GSFC/Arizona State University) for the LRO views of the Apollo, Luna, Chandrayaan-3 and SLIM landing
 sites (most are not in the NASA library); NSSDCA for the Luna 9 surface image.
 
   assets-raw/photos/landings/<file>                original download, never shipped
@@ -66,12 +66,8 @@ PHOTOS = {
     "apollo-17": {"photo": nasa("AS17-134-20384", "NASA/Eugene Cernan"), "orbit": lroc(379, "/news/uploads/ap17_lm_25cm.png", "Apollo 17 descent stage at 25 cm per pixel (LROC NAC)")},
     "luna-21": {"photo": nasa("PIA12976")},
     "luna-24": {"photo": lroc(461, "/news/uploads/LROCiotw/luna24_rev_fig.png", "Luna 24 lander from low altitude (LROC NAC)")},
-    "change-3": {"photo": lroc(637, "/news/uploads/chang_e3_FI_opening.png", "Chang'e 3 lander and Yutu rover from above (LROC NAC)")},
-    "change-4": {"photo": lroc(1090, "/ckeditor_assets/pictures/725/content_lander_enlarge_web.png", "First look: Chang'e 4 in Von Kármán crater (LROC NAC)")},
-    "change-5": {"photo": lroc(1172, "/ckeditor_assets/pictures/974/content_CE5_1100p_Image_version2.png", "First look: Chang'e 5 (LROC NAC)")},
     "chandrayaan-3": {"photo": lroc(1314, "/ckeditor_assets/pictures/1348/content_M1447750764_LRmos.warp.1100px1100p.clean.png", "Chandrayaan-3 landing site (LROC NAC)")},
     "slim": {"photo": lroc(1358, "/ckeditor_assets/pictures/1421/content_Fig03_SLIM_Crop_Ratio_1100x1100.png", "JAXA SLIM on the slope of Shioli crater (LROC NAC)")},
-    "change-6": {"photo": lroc(1374, "/ckeditor_assets/pictures/1457/content_CE6_FI_Header_425mmpp.png", "First look: Chang'e 6 (LROC NAC)")},
     # ---- Mars ----
     "viking-1": {"photo": nasa("PIA00563")},
     "viking-2": {"photo": nasa("PIA00568")},
@@ -82,7 +78,6 @@ PHOTOS = {
     "curiosity": {"photo": nasa("PIA19808"), "orbit": nasa("PIA21710")},
     "insight": {"photo": nasa("PIA23203"), "orbit": nasa("PIA23376")},
     "perseverance": {"photo": nasa("PIA24542"), "orbit": nasa("PIA24333")},
-    "zhurong": {"photo": nasa("PIA24914")},
 }
 
 

@@ -35,7 +35,6 @@ PHOTOS = {
     "baikonur": ("NHQ202309150023", None),
     "kourou": ("NHQ202112250015", None),
     "sriharikota": ("PIA26611", "ISRO, via NASA/JPL-Caltech"),
-    "jiuquan": ("iss010e14586", "NASA/JSC (ISS Expedition 10)"),
     "tanegashima": ("201402280007HQ", None),
     "goldstone": ("PIA23214", None),
     "madrid": ("PIA25136", None),

@@ -74,7 +74,7 @@ export function ExplorationTimeline({ world }: { world: LandingWorld }) {
       aria-label="Exploration history"
       className={cn(
         "chrome glass pointer-events-auto absolute z-20 flex items-center gap-2 rounded-2xl p-1.5",
-        "inset-x-3 top-[calc(max(0.75rem,env(safe-area-inset-top))+3.25rem)]",
+        "inset-x-3 top-[calc(max(0.75rem,env(safe-area-inset-top))+3.5rem)]",
         "md:inset-x-auto md:start-[4.75rem] md:top-auto md:bottom-3 md:w-80 md:flex-col md:items-stretch md:gap-0 md:p-3",
       )}
     >

@@ -411,34 +411,6 @@
   "pin": "/photos/globe/namib-pin.webp",
   "views": []
  },
- "earth-qaidam": {
-  "pin": "/photos/globe/qaidam-basin-pin.webp",
-  "views": [
-   {
-    "kind": "s2",
-    "src": "/photos/globe/qaidam-basin-s2.webp",
-    "w": 343,
-    "h": 295,
-    "date": "2025-01-15",
-    "scene": "S2B_MSIL2A_20250115T043029_N0511_R133_T46SFG_20250115T063812"
-   },
-   {
-    "kind": "wv",
-    "src": "/photos/globe/qaidam-basin-wv.webp",
-    "w": 640,
-    "h": 640,
-    "date": "2024-07-14"
-   },
-   {
-    "kind": "s1",
-    "src": "/photos/globe/qaidam-basin-s1.webp",
-    "w": 291,
-    "h": 200,
-    "date": "2026-11-07",
-    "scene": "S1D_IW_GRDH_1SDV_20261107T234312_20261107T234337_005368_00A3C5_5870_COG"
-   }
-  ]
- },
  "earth-uyuni": {
   "pin": "/photos/globe/salar-de-uyuni-pin.webp",
   "views": [

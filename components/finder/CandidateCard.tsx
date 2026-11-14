@@ -6,11 +6,11 @@ import { GetTheData } from "@/components/data/GetTheData";
 import { AnimatedNumber } from "@/components/motion/AnimatedNumber";
 import { SatelliteView } from "@/components/satellite/SatelliteView";
 import type { PlaceLabel } from "@/lib/finder/places";
-import { WORLD_LIMITS, fieldTests, parameterRows, strengths, weaknesses } from "@/lib/finder/text";
-import type { CellResult, GridHeader, Target, Weights } from "@/lib/finder/types";
+import { WORLD_LIMITS, fieldTests, strengths, weaknesses } from "@/lib/finder/text";
+import type { CellResult, GridHeader, Target } from "@/lib/finder/types";
 import { ScoreSteps } from "./FinderNotes";
 import { FinderTabs } from "./FinderTabs";
-import { ParameterTable } from "./ParameterTable";
+import { SiteConditions } from "./SiteConditions";
 
 const k2c = (k: number) => (k - 273.15).toFixed(0);
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -107,7 +107,6 @@ export function CandidateCard({
   target,
   header,
   detail,
-  weights,
   confidence,
 }: {
   cell: CellResult;
@@ -116,7 +115,6 @@ export function CandidateCard({
   target: Target;
   header: GridHeader;
   detail: Record<string, number> | null;
-  weights: Weights;
   /** Data confidence 0–100 (lib/finder/text.ts confidence()). */
   confidence: number;
 }) {
@@ -176,10 +174,12 @@ export function CandidateCard({
               icon: BarChart3,
               render: () => (
                 <>
-                  <ParameterTable
-                    rows={parameterRows(cell, target, header, weights, detail)}
-                    worldName={target.world === "moon" ? "Moon" : "Mars"}
-                    score={score}
+                  <SiteConditions
+                    cell={cell}
+                    target={target}
+                    known={label.known}
+                    detail={detail}
+                    siteName={label.title}
                   />
                   <div className="mt-6 grid gap-4 md:grid-cols-2">
                     <div className="rounded-[1.2rem] bg-ok/[0.05] p-4 ring-1 ring-ok/20">

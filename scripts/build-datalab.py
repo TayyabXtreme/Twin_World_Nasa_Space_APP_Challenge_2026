@@ -334,7 +334,7 @@ def earth_global():
 SITE_ORDER = [
     "atacama", "mcmurdo", "devon-island-haughton", "askja", "hingol-mud-volcanoes", "dallol-danakil",
     "death-valley", "pilot-valley", "kilauea", "mauna-kea", "medicine-lake", "svalbard-bockfjorden",
-    "rio-tinto", "qaidam-basin", "salar-de-uyuni", "cholistan-desert", "thar-desert", "khewra-salt-range",
+    "rio-tinto", "salar-de-uyuni", "cholistan-desert", "thar-desert", "khewra-salt-range",
 ]
 
 

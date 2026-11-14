@@ -189,39 +189,6 @@
    "page": "https://lroc.im-ldi.com/images/461"
   }
  },
- "change-3": {
-  "photo": {
-   "src": "/photos/landings/change-3.webp",
-   "w": 576,
-   "h": 576,
-   "pin": "/photos/landings/change-3-pin.webp",
-   "title": "Chang'e 3 lander and Yutu rover from above (LROC NAC)",
-   "credit": "NASA/GSFC/Arizona State University (LRO LROC)",
-   "page": "https://lroc.im-ldi.com/images/637"
-  }
- },
- "change-4": {
-  "photo": {
-   "src": "/photos/landings/change-4.webp",
-   "w": 800,
-   "h": 800,
-   "pin": "/photos/landings/change-4-pin.webp",
-   "title": "First look: Chang'e 4 in Von Kármán crater (LROC NAC)",
-   "credit": "NASA/GSFC/Arizona State University (LRO LROC)",
-   "page": "https://lroc.im-ldi.com/images/1090"
-  }
- },
- "change-5": {
-  "photo": {
-   "src": "/photos/landings/change-5.webp",
-   "w": 800,
-   "h": 800,
-   "pin": "/photos/landings/change-5-pin.webp",
-   "title": "First look: Chang'e 5 (LROC NAC)",
-   "credit": "NASA/GSFC/Arizona State University (LRO LROC)",
-   "page": "https://lroc.im-ldi.com/images/1172"
-  }
- },
  "chandrayaan-3": {
   "photo": {
    "src": "/photos/landings/chandrayaan-3.webp",
@@ -242,17 +209,6 @@
    "title": "JAXA SLIM on the slope of Shioli crater (LROC NAC)",
    "credit": "NASA/GSFC/Arizona State University (LRO LROC)",
    "page": "https://lroc.im-ldi.com/images/1358"
-  }
- },
- "change-6": {
-  "photo": {
-   "src": "/photos/landings/change-6.webp",
-   "w": 800,
-   "h": 800,
-   "pin": "/photos/landings/change-6-pin.webp",
-   "title": "First look: Chang'e 6 (LROC NAC)",
-   "credit": "NASA/GSFC/Arizona State University (LRO LROC)",
-   "page": "https://lroc.im-ldi.com/images/1374"
   }
  },
  "viking-1": {
@@ -406,18 +362,6 @@
    "credit": "NASA/JPL-Caltech/University of Arizona",
    "page": "https://images.nasa.gov/details/PIA24333",
    "nasaId": "PIA24333"
-  }
- },
- "zhurong": {
-  "photo": {
-   "src": "/photos/landings/zhurong.webp",
-   "w": 800,
-   "h": 500,
-   "pin": "/photos/landings/zhurong-pin.webp",
-   "title": "The Zhurong Rover Explores Utopia Planitia",
-   "credit": "NASA/JPL-Caltech/University of Arizona",
-   "page": "https://images.nasa.gov/details/PIA24914",
-   "nasaId": "PIA24914"
   }
  }
 }

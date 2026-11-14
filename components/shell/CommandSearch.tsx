@@ -53,7 +53,7 @@ export function CommandSearch() {
         variant="ghost"
         size="sm"
         onClick={() => setOpen(true)}
-        className="gap-2 text-muted-foreground"
+        className="gap-2 text-muted-foreground max-lg:px-2"
         aria-label="Search"
       >
         <Search className="size-4" aria-hidden />

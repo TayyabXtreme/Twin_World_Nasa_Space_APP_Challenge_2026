@@ -49,7 +49,8 @@ export function LayerToggles() {
       aria-label="Map layers"
       className={cn(
         "chrome pointer-events-auto absolute z-20 flex gap-1.5 overflow-x-auto [scrollbar-width:none]",
-        "inset-x-3 top-[calc(max(0.75rem,env(safe-area-inset-top))+3.25rem)]",
+        "inset-x-0 top-[calc(max(0.75rem,env(safe-area-inset-top))+3.25rem)] px-3 pb-1",
+        "[mask-image:linear-gradient(to_right,transparent,black_0.75rem,black_calc(100%-2rem),transparent)] md:[mask-image:none] md:px-1.5 md:pb-1.5",
         "md:glass md:inset-x-auto md:start-[4.75rem] md:top-auto md:bottom-3 md:w-64 md:flex-col md:gap-0.5 md:overflow-visible md:rounded-2xl md:p-1.5",
       )}
     >
@@ -62,7 +63,7 @@ export function LayerToggles() {
         onClick={startTour}
         className={cn(
           "flex shrink-0 items-center gap-2 rounded-xl text-xs font-medium transition-[background-color,scale] duration-150 ease-(--ease-out) active:scale-[0.97]",
-          "bg-primary px-3 py-1.5 text-primary-foreground shadow-[0_0_24px_-6px_var(--primary)] hover:bg-primary/90",
+          "h-9 bg-primary px-3 text-primary-foreground shadow-[0_0_24px_-6px_var(--primary)] hover:bg-primary/90 md:h-auto",
           "md:order-last md:mt-1 md:justify-center md:py-2.5 md:text-sm",
         )}
       >
@@ -80,7 +81,7 @@ export function LayerToggles() {
             title={l.hint}
             className={cn(
               "group flex shrink-0 items-center gap-2.5 rounded-xl text-start whitespace-nowrap transition-[background-color,opacity,scale] duration-150 ease-(--ease-out) active:scale-[0.97]",
-              "glass px-3 py-1.5 text-xs md:border-transparent md:bg-transparent md:px-2 md:py-1.5 md:text-sm md:[backdrop-filter:none] md:hover:bg-white/5",
+              "glass h-9 px-3 text-xs md:h-auto md:border-transparent md:bg-transparent md:px-2 md:py-1.5 md:text-sm md:[backdrop-filter:none] md:hover:bg-white/5",
               !on && "opacity-55",
             )}
           >
@@ -92,7 +93,7 @@ export function LayerToggles() {
               <Check className={cn("size-3 text-background transition-[opacity,scale] duration-150", on ? "scale-100 opacity-100" : "scale-50 opacity-0")} strokeWidth={3} />
             </span>
             <span className="min-w-0 flex-1 leading-tight font-medium">{l.label}</span>
-            <span className="hud text-xs text-muted-foreground">{l.id === "iss" ? "live" : COUNTS[l.id]}</span>
+            <span className="hud text-[11px] text-muted-foreground md:text-xs">{l.id === "iss" ? "live" : COUNTS[l.id]}</span>
           </button>
         );
       })}

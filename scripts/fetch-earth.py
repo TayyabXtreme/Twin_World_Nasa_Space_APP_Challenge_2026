@@ -27,7 +27,6 @@ EXTRA = [
     ("mauna-kea", "Mauna Kea, Hawai'i", 19.82, -155.47, "Basaltic volcanic terrain used for lunar resource (ISRU) field tests"),
     ("rio-tinto", "Rio Tinto, Spain", 37.72, -6.55, "Acidic, iron-rich river; Mars astrobiology drilling analogue"),
     ("dallol-danakil", "Dallol, Danakil Depression", 14.24, 40.30, "Hot, hyper-saline, acidic springs; extreme-environment analogue"),
-    ("qaidam-basin", "Qaidam Basin, China", 37.50, 95.00, "High, cold, salty desert basin; Mars analogue studies"),
     ("salar-de-uyuni", "Salar de Uyuni, Bolivia", -20.13, -67.49, "Vast salt flat; salts and evaporites"),
     ("cholistan-desert", "Cholistan Desert, Pakistan", 28.50, 71.50, "Hot sandy desert with dunes (Pakistan spotlight)"),
     ("thar-desert", "Thar Desert, Pakistan/India", 27.00, 71.00, "Dune fields and wind-driven sand (Pakistan spotlight)"),

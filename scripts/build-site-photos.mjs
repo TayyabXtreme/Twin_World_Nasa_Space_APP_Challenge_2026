@@ -29,7 +29,6 @@ const PHOTOS = [
   ["teide", path.join(RAW, "iss013e23272.jpg"), 0.5, 0.5],
   ["dallol", path.join(RAW, "gibs-dallol.jpg"), 0.5, 0.5, 0.9],
   ["namib", path.join(RAW, "PIA17632.jpg"), 0.5, 0.5],
-  ["qaidam", path.join(RAW, "gibs-qaidam.jpg"), 0.5, 0.5, 0.9],
   ["uyuni", path.join(RAW, "iss074e0319935.jpg"), 0.5, 0.5],
   ["ladakh", path.join(RAW, "gibs-ladakh.jpg"), 0.5, 0.5, 0.9],
   ["pilbara", path.join(RAW, "PIA23551.jpg"), 0.5, 0.45],

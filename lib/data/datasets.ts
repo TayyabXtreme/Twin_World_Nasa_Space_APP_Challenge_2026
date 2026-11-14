@@ -69,7 +69,7 @@ const NASA_LICENCE = "NASA open data: no copyright restrictions; credit the miss
 const PDS = "NASA PDS Geosciences Node";
 const LP = "NASA LP DAAC (Earthdata)";
 
-/** The 18 Earth analogue sites with Worldview snapshots (order of assets-raw/nasa/earth/worldview/manifest.json). */
+/** The 17 Earth analogue sites with Worldview snapshots (order of assets-raw/nasa/earth/worldview/manifest.json). */
 export const EARTH_SITES: { id: string; name: string }[] = [
   { id: "atacama", name: "Atacama Desert, Chile" },
   { id: "mcmurdo", name: "McMurdo Dry Valleys, Antarctica" },
@@ -84,7 +84,6 @@ export const EARTH_SITES: { id: string; name: string }[] = [
   { id: "medicine-lake", name: "Medicine Lake lava caves, USA" },
   { id: "svalbard-bockfjorden", name: "Bockfjorden, Svalbard" },
   { id: "rio-tinto", name: "Rio Tinto, Spain" },
-  { id: "qaidam-basin", name: "Qaidam Basin, China" },
   { id: "salar-de-uyuni", name: "Salar de Uyuni, Bolivia" },
   { id: "cholistan-desert", name: "Cholistan Desert, Pakistan" },
   { id: "thar-desert", name: "Thar Desert, Pakistan/India" },
@@ -596,7 +595,7 @@ export const DATASETS: Dataset[] = [
   {
     id: "earth-worldview-truecolour",
     badge: "Worldview · true colour",
-    name: "Worldview true-colour snapshots (18 sites)",
+    name: "Worldview true-colour snapshots (17 sites)",
     world: "earth",
     agency: "NASA",
     archive: "NASA Worldview Snapshots / GIBS",
@@ -605,7 +604,7 @@ export const DATASETS: Dataset[] = [
     productId: "MODIS_Terra_CorrectedReflectance_TrueColor",
     measures: "What each Earth analogue looks like from orbit: the clearest of several 2024 days for every site.",
     resolution: "250 m source; snapshots are 768 px across 1.2° (≈ 170 m per pixel)",
-    coverage: "18 Earth analogue sites",
+    coverage: "17 Earth analogue sites",
     period: "Jan – Dec 2024 (one chosen day per site)",
     sizeBytes: 908_645,
     format: "JPEG, 768 × 768, with a JSON note per site",
@@ -631,7 +630,7 @@ export const DATASETS: Dataset[] = [
     productId: "MODIS_Aqua_L3_Land_Surface_Temp_8Day_Day / _Night",
     measures: "Day and night ground temperature around each analogue, as a colour map: shows the day–night swing.",
     resolution: "1 km source; snapshots are 512 px across 3° (≈ 650 m per pixel)",
-    coverage: "18 Earth analogue sites, day and night",
+    coverage: "17 Earth analogue sites, day and night",
     period: "8-day composites starting 15 Jan, 14 Jul or 20 Dec 2024 (summer at each site)",
     sizeBytes: 2_087_006,
     format: "PNG (colour-mapped), 512 × 512, 36 files",
@@ -656,7 +655,7 @@ export const DATASETS: Dataset[] = [
     productId: "MODIS_Terra_L3_NDVI_16Day",
     measures: "How green each analogue is at a glance: bare, plant-free ground is what we look for.",
     resolution: "250 m source; snapshots are 512 px across 3° (≈ 650 m per pixel)",
-    coverage: "18 Earth analogue sites",
+    coverage: "17 Earth analogue sites",
     period: "16-day composites starting 15 Jan, 14 Jul or 20 Dec 2024",
     sizeBytes: 3_253_972,
     format: "PNG (colour-mapped), 512 × 512",
@@ -681,7 +680,7 @@ export const DATASETS: Dataset[] = [
     productId: "ASTER_GDEM_Color_Shaded_Relief",
     measures: "The shape of the land around each analogue: craters, volcanoes, dunes and salt domes.",
     resolution: "1 arc-second (≈ 30 m) source; snapshots are 512 px across 3°",
-    coverage: "18 Earth analogue sites",
+    coverage: "17 Earth analogue sites",
     period: "ASTER GDEM v3 (static elevation model)",
     sizeBytes: 1_794_006,
     format: "JPEG (colour shaded relief), 512 × 512",
@@ -730,7 +729,7 @@ export const DATASETS: Dataset[] = [
     productId: "MOD11A2 v061 · MYD11A2 v061 · MOD13A2 v061",
     measures: "Sharper (1 km) temperature and greenness at each analogue site, for training the similarity model.",
     resolution: "1 km (8-day LST, 16-day NDVI)",
-    coverage: "Global land; we listed the exact tiles for our 18 sites",
+    coverage: "Global land; we listed the exact tiles for our 17 sites",
     period: "2024 (21 LST and 18 NDVI granules listed)",
     sizeBytes: null,
     sizeNote: "Not downloaded; the listing is 25 KB",
@@ -894,7 +893,7 @@ export const DATASETS: Dataset[] = [
   {
     id: "copernicus-s2",
     badge: "Sentinel-2 · L2A",
-    name: "Sentinel-2 L2A optical scenes (17 sites)",
+    name: "Sentinel-2 L2A optical scenes (16 sites)",
     world: "earth",
     agency: "ESA",
     archive: "Copernicus Data Space Ecosystem (EU / ESA)",
@@ -903,7 +902,7 @@ export const DATASETS: Dataset[] = [
     productId: "S2*_MSIL2A (best low-cloud scene per site)",
     measures: "Natural-colour and infrared surface reflectance of each analogue, much sharper than MODIS.",
     resolution: "10 m (visible and near-infrared), 20 m and 60 m for other bands; quicklooks are much coarser",
-    coverage: "17 of 18 analogue sites (Svalbard request timed out)",
+    coverage: "16 of 17 analogue sites (Svalbard request timed out)",
     period: "30 Sep 2024 – 30 Jan 2025 (one scene per site)",
     sizeBytes: 371_314,
     sizeNote: "Quicklooks only; the 17 full products would be 17.7 GB",
@@ -926,7 +925,7 @@ export const DATASETS: Dataset[] = [
   {
     id: "copernicus-s1",
     badge: "Sentinel-1 · GRD",
-    name: "Sentinel-1 radar scenes (18 sites)",
+    name: "Sentinel-1 radar scenes (17 sites)",
     world: "earth",
     agency: "ESA",
     archive: "Copernicus Data Space Ecosystem (EU / ESA)",
@@ -935,7 +934,7 @@ export const DATASETS: Dataset[] = [
     productId: "S1*_IW_GRDH (Svalbard: EW_GRDM), latest scene per site",
     measures: "Radar backscatter over every analogue: surface roughness and moisture, independent of cloud and daylight.",
     resolution: "10 m pixels in IW mode (≈ 20 m resolution); 40 m for the Svalbard EW scene",
-    coverage: "All 18 analogue sites",
+    coverage: "All 17 analogue sites",
     period: "7 – 13 Nov 2026 (latest scene per site)",
     sizeBytes: 1_680_857,
     sizeNote: "Quicklooks only; the 18 full products would be 23.5 GB",
