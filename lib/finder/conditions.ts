@@ -90,14 +90,29 @@ const climateCache = new Map<string, Promise<EarthClimate | null>>();
 const sandCache = new Map<string, Promise<number | null>>();
 const key = (lat: number, lon: number) => `${lat.toFixed(2)},${lon.toFixed(2)}`;
 
+/** fetch() that tries again after 1.5 s and 4 s when NASA POWER is busy (429, 5xx) or the network drops. */
+async function fetchRetry(url: string, tries = 3): Promise<Response | null> {
+  for (let i = 0; i < tries; i++) {
+    try {
+      const r = await fetch(url);
+      if (r.ok) return r;
+      if (r.status < 429 || r.status === 501) return null;
+    } catch {
+      // network error: retry below
+    }
+    if (i < tries - 1) await new Promise((res) => setTimeout(res, i === 0 ? 1500 : 4000));
+  }
+  return null;
+}
+
 /** NASA POWER monthly climatology for one point; ANN of T2M_MAX / T2M_MIN is the warmest / coldest month. */
 export function fetchClimate(lat: number, lon: number): Promise<EarthClimate | null> {
   const k = key(lat, lon);
   let p = climateCache.get(k);
   if (!p) {
     const url = `https://power.larc.nasa.gov/api/temporal/climatology/point?parameters=${POWER_PARAMS}&community=RE&latitude=${lat.toFixed(3)}&longitude=${lon.toFixed(3)}&format=JSON`;
-    p = fetch(url)
-      .then((r) => (r.ok ? r.json() : null))
+    p = fetchRetry(url)
+      .then((r) => (r ? r.json() : null))
       .then((d) => {
         const v = d?.properties?.parameter as Record<string, Record<string, number>> | undefined;
         if (!v) return null;
@@ -265,7 +280,9 @@ export function conditionRows({ cell, target, known, detail, site, climate, sand
   const tt = (terrain as Record<string, { elev: number; slope: number | null; source: string }>)[target.id];
   const loading = climate === undefined;
   const c = climate ?? null;
-  const live = (v: number | undefined, digits = 1) => (loading ? "…" : c && v !== undefined ? fmt(v, digits) : "–");
+  // A failed NASA POWER lookup shows "unavailable" (kept on screen, with a retry), not "–" (hidden: no data).
+  const live = (v: number | undefined, digits = 1) =>
+    loading ? "…" : !c ? "unavailable" : v !== undefined ? fmt(v, digits) : "–";
   const POWER = "NASA POWER climatology (MERRA-2, 2001–2025)";
 
   const elev = detail?.elev;
@@ -304,7 +321,7 @@ export function conditionRows({ cell, target, known, detail, site, climate, sand
       units: "°C",
       sv: c ? c.tmax - c.tmin : undefined,
       tv: marius ? 295 : roverTemps ? 100 : undefined,
-      site: loading ? "…" : c ? fmt(c.tmax - c.tmin, 1) : "–",
+      site: loading ? "…" : c ? fmt(c.tmax - c.tmin, 1) : "unavailable",
       target: moon
         ? marius
           ? "295"
@@ -404,7 +421,7 @@ export function conditionRows({ cell, target, known, detail, site, climate, sand
       units: "mm/yr",
       sv: c ? c.precip * 365.25 : undefined,
       tv: 0,
-      site: loading ? "…" : c ? fmt(c.precip * 365.25, 0) : "–",
+      site: loading ? "…" : c ? fmt(c.precip * 365.25, 0) : "unavailable",
       target: moon ? "0 (no air)" : "0 (no rain)",
       siteSource: `${POWER}, corrected precipitation`,
       targetSource: moon ? "No atmosphere" : "Mars air is too thin and cold for liquid rain",

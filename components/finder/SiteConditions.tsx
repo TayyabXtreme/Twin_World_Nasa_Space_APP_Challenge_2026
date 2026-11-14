@@ -50,6 +50,7 @@ export function SiteConditions({
   const [site, setSite] = useState<SiteGrid | null>(null);
   const [climate, setClimate] = useState<Tagged<EarthClimate | null> | null>(null);
   const [sand, setSand] = useState<Tagged<number | null> | null>(null);
+  const [attempt, setAttempt] = useState(0);
   const cellKey = `${cell.lat},${cell.lon}`;
 
   useEffect(() => {
@@ -70,7 +71,7 @@ export function SiteConditions({
     return () => {
       live = false;
     };
-  }, [cell.lat, cell.lon, cellKey]);
+  }, [cell.lat, cell.lon, cellKey, attempt]);
 
   const rows = useMemo(
     () =>
@@ -178,6 +179,7 @@ export function SiteConditions({
                         "hud text-foreground",
                         r.site.length > 14 ? "inline-block max-w-[20ch] text-[12px] leading-snug" : "whitespace-nowrap",
                         r.site === "…" && "animate-pulse text-muted-foreground",
+                        r.site === "unavailable" && "text-[12px] text-muted-foreground",
                       )}
                     >
                       {r.site}
@@ -214,9 +216,24 @@ export function SiteConditions({
         </div>
       )}
       <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
-        {offline
-          ? "NASA POWER did not answer, so live climate values are missing. "
-          : "Climate values load live from NASA POWER for this 28 km cell. "}
+        {offline ? (
+          <>
+            NASA POWER is busy, so the live climate values did not load.{" "}
+            <button
+              type="button"
+              onClick={() => {
+                setClimate(null);
+                setAttempt((a) => a + 1);
+              }}
+              className="text-primary underline-offset-2 hover:underline"
+            >
+              Try again
+            </button>
+            .{" "}
+          </>
+        ) : (
+          "Climate values load live from NASA POWER for this 28 km cell. "
+        )}
         These are conditions only; the score above comes from the matched factors.
         {graph || sources ? "" : " Show sources for the dataset behind every number."}
       </p>
