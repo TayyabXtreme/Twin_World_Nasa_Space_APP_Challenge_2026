@@ -4,7 +4,6 @@ import { Check, Search } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 import { useMemo, useState } from "react";
 import { EvidenceTag } from "@/components/site/EvidenceTag";
-import { PhotoWipe } from "@/components/slider/PhotoWipe";
 import { WorldScene } from "@/components/slider/WorldScene";
 import { CAUTIONS, GLOSSARY, WORLD_CHAPTERS } from "@/lib/data/learn";
 import { ChapterNav } from "./ChapterNav";
@@ -80,14 +79,9 @@ export function LearnView() {
                 <SignalLab />
               </Reveal>
             </div>
-            <div className="mt-20 flex flex-col gap-16">
-              <Reveal>
-                <WorldScene />
-              </Reveal>
-              <Reveal>
-                <PhotoWipe />
-              </Reveal>
-            </div>
+            <Reveal className="mt-20">
+              <WorldScene />
+            </Reveal>
           </section>
 
           <section id="quiz" aria-labelledby="quiz-title" className="scroll-mt-32">

@@ -1,4 +1,4 @@
-/* Earth · Moon · Mars page: living skies, the portal between worlds, and the twin wipe. */
+/* Earth · Moon · Mars page: living skies and the portal between worlds. */
 
 /* ---------- Portal ---------- */
 
@@ -135,32 +135,7 @@ button:hover > .sl-pick-globe {
   }
 }
 
-/* ---------- Twin wipe ---------- */
-
-.sl-wipe-in {
-  animation: sl-wipe-in 800ms var(--ease-out) both;
-}
-@keyframes sl-wipe-in {
-  from {
-    opacity: 0.3;
-    filter: blur(14px);
-    transform: scale(1.04);
-  }
-}
-
-.sl-handle-ring {
-  animation: sl-ring 2.2s var(--ease-out) infinite;
-}
-@keyframes sl-ring {
-  from {
-    transform: scale(1);
-    opacity: 0.7;
-  }
-  to {
-    transform: scale(1.9);
-    opacity: 0;
-  }
-}
+/* ---------- Readouts ---------- */
 
 .sl-rise {
   animation: sl-rise 520ms var(--ease-out) both;

@@ -1,6 +1,7 @@
 "use client";
 
-import { ArrowLeftRight, ArrowRight, Check, ExternalLink, Hand, Rocket, ScanSearch, TriangleAlert } from "lucide-react";
+import { ArrowLeftRight, ArrowRight, Check, ChevronsLeftRight, ExternalLink, Hand, Rocket, ScanSearch, TriangleAlert } from "lucide-react";
+import { animate, motionValue, useInView as useMotionInView, useReducedMotion } from "motion/react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -241,90 +242,205 @@ function Stage({ a, b, twin, overlapPct }: { a: Site; b: Site; twin?: TwinLink; 
   );
 }
 
-/* ---------- Site viewports ---------- */
+/* ---------- Site wipe ---------- */
 
-function SiteViewport({
+function SitePicker({
   site,
   options,
   onChange,
   label,
+  align,
 }: {
   site: Site;
   options: Site[];
   onChange: (id: string) => void;
   label: string;
+  align: "start" | "end";
 }) {
   const groups = (["earth", "moon", "mars"] as const).filter((w) => options.some((o) => o.world === w));
   return (
-    <article className="group overflow-hidden rounded-[1.6rem] bg-white/[0.03] ring-1 ring-white/10">
-      <div className="flex items-center justify-between gap-3 border-b border-white/[0.07] px-4 py-3">
-        <span className="flex min-w-0 items-center gap-2 text-[13px] text-muted-foreground">
-          <span className={cn("size-2 shrink-0 rounded-full", DOT[site.world])} aria-hidden />
-          <span className="truncate">
-            <span className="font-medium text-foreground">{WORLD_CONFIG[site.world].name}</span> · {label}
-          </span>
+    <div className={cn("flex min-w-0 items-center gap-3", align === "end" && "flex-row-reverse")}>
+      <span className="flex min-w-0 items-center gap-2 text-[13px] text-muted-foreground">
+        <span className={cn("size-2 shrink-0 rounded-full", DOT[site.world])} aria-hidden />
+        <span className="truncate">
+          <span className="font-medium text-foreground">{WORLD_CONFIG[site.world].name}</span> · {label}
         </span>
-        <Select value={site.id} onValueChange={onChange}>
-          <SelectTrigger
-            aria-label={`${label}: ${site.name}. Choose another`}
-            className="h-9! gap-2 rounded-xl border-white/12 bg-white/[0.05] ps-3 pe-2.5 text-[13px] font-medium text-foreground transition-[background-color,border-color,scale] duration-150 ease-out hover:border-white/25 hover:bg-white/[0.09] motion-safe:active:scale-[0.96]"
-          >
-            <ArrowLeftRight className="size-3.5" aria-hidden />
-            Change
-          </SelectTrigger>
-          <SelectContent position="popper" align="end">
-            {groups.map((w) => (
-              <SelectGroup key={w}>
-                <SelectLabel>{WORLD_CONFIG[w].name}</SelectLabel>
-                {options
-                  .filter((o) => o.world === w)
-                  .map((o) => (
-                    <SelectItem key={o.id} value={o.id}>
-                      {o.name}
-                    </SelectItem>
-                  ))}
-              </SelectGroup>
-            ))}
-          </SelectContent>
-        </Select>
+      </span>
+      <Select value={site.id} onValueChange={onChange}>
+        <SelectTrigger
+          aria-label={`${label}: ${site.name}. Choose another`}
+          className="h-9! shrink-0 gap-2 rounded-xl border-white/12 bg-white/[0.05] ps-3 pe-2.5 text-[13px] font-medium text-foreground transition-[background-color,border-color,scale] duration-150 ease-out hover:border-white/25 hover:bg-white/[0.09] motion-safe:active:scale-[0.96]"
+        >
+          <ArrowLeftRight className="size-3.5" aria-hidden />
+          Change
+        </SelectTrigger>
+        <SelectContent position="popper" align={align}>
+          {groups.map((w) => (
+            <SelectGroup key={w}>
+              <SelectLabel>{WORLD_CONFIG[w].name}</SelectLabel>
+              {options
+                .filter((o) => o.world === w)
+                .map((o) => (
+                  <SelectItem key={o.id} value={o.id}>
+                    {o.name}
+                  </SelectItem>
+                ))}
+            </SelectGroup>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
+  );
+}
+
+/** A site's photo filling its layer, or its world's surface map when we have no photo yet. */
+function SitePhoto({ site }: { site: Site }) {
+  return site.image ? (
+    <Image
+      key={`photo-${site.id}`}
+      src={site.image.src}
+      alt={site.image.alt}
+      fill
+      sizes="(min-width: 1280px) 1200px, 100vw"
+      draggable={false}
+      className="compare-reveal object-cover"
+    />
+  ) : (
+    <div
+      key={`map-${site.id}`}
+      aria-hidden
+      className="compare-reveal absolute inset-0 bg-cover bg-center opacity-50"
+      style={{ backgroundImage: `url(${texture(site.world)})` }}
+    />
+  );
+}
+
+/** Drag the divider to reveal the Earth site over its Moon or Mars twin. Works with pointer and arrow keys. */
+function SiteWipe({ a, b, onA, onB }: { a: Site; b: Site; onA: (id: string) => void; onB: (id: string) => void }) {
+  const [pos, setPos] = useState(50);
+  const [dragged, setDragged] = useState(false);
+  const frame = useRef<HTMLDivElement>(null);
+  const inView = useMotionInView(frame, { once: true, amount: 0.6 });
+  const reduce = useReducedMotion();
+
+  // A new pair starts centred again.
+  const pairKey = `${a.id}:${b.id}`;
+  const [shownPair, setShownPair] = useState(pairKey);
+  if (shownPair !== pairKey) {
+    setShownPair(pairKey);
+    setPos(50);
+  }
+
+  // First time the frame is properly on screen, the divider sweeps once to show it can be dragged.
+  useEffect(() => {
+    if (!inView || reduce || dragged) return;
+    const mv = motionValue(50);
+    const off = mv.on("change", (v) => setPos(v));
+    const c = animate(mv, [50, 28, 72, 50], { duration: 2.2, ease: "easeInOut" });
+    return () => {
+      c.stop();
+      off();
+    };
+  }, [inView, reduce, dragged]);
+
+  const moveTo = (clientX: number) => {
+    // Grabbing the frame ends the hint sweep (the effect's cleanup runs once `dragged` is set below).
+    const r = frame.current!.getBoundingClientRect();
+    setPos(Math.min(100, Math.max(0, ((clientX - r.left) / r.width) * 100)));
+    setDragged(true);
+  };
+
+  const caption = "compare-rise font-heading text-[clamp(1.15rem,2.4vw,2.1rem)] leading-tight font-semibold tracking-tight";
+  const noPhoto = "pointer-events-none absolute top-3 rounded-full glass px-3 py-1 text-xs text-muted-foreground transition-opacity duration-200";
+
+  return (
+    <article className="mt-8 overflow-hidden rounded-[1.6rem] bg-white/[0.03] ring-1 ring-white/10">
+      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-b border-white/[0.07] px-4 py-3">
+        <SitePicker site={a} options={EARTH_SITES} onChange={onA} label="Analogue site" align="start" />
+        <SitePicker site={b} options={OTHER_SITES} onChange={onB} label="Target site" align="end" />
       </div>
-      <div className="relative aspect-[16/10] overflow-hidden bg-white/5">
-        {site.image ? (
-          <Image
-            key={`photo-${site.id}`}
-            src={site.image.src}
-            alt={site.image.alt}
-            fill
-            sizes="(min-width: 768px) 45vw, 92vw"
-            className="compare-reveal object-cover"
-          />
-        ) : (
-          <div className="relative size-full">
-            <div
-              aria-hidden
-              className="absolute inset-0 bg-cover bg-center opacity-50"
-              style={{ backgroundImage: `url(${texture(site.world)})` }}
-            />
-            <p className="absolute end-3 bottom-24 rounded-full glass px-3 py-1 text-xs text-muted-foreground">
-              No site photo yet · {WORLD_CONFIG[site.world].name} surface map
-            </p>
-          </div>
-        )}
+
+      <div
+        ref={frame}
+        className="relative aspect-[4/3] touch-pan-y overflow-hidden bg-white/5 select-none sm:aspect-[16/9]"
+        onPointerDown={(e) => {
+          e.currentTarget.setPointerCapture(e.pointerId);
+          moveTo(e.clientX);
+        }}
+        onPointerMove={(e) => e.buttons === 1 && moveTo(e.clientX)}
+      >
+        <div className="absolute inset-0">
+          <SitePhoto site={b} />
+        </div>
+        <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
+          <SitePhoto site={a} />
+        </div>
         <div
           aria-hidden
-          className="absolute inset-0 bg-[linear-gradient(to_top,oklch(0.1_0.015_265/0.92),oklch(0.1_0.015_265/0.2)_45%,transparent_70%)]"
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,oklch(0.1_0.015_265/0.9),oklch(0.1_0.015_265/0.15)_38%,transparent_60%)]"
         />
 
-        <div key={`caption-${site.id}`} className="absolute inset-x-0 bottom-0 p-5">
-          <h3 className="compare-rise font-heading text-[clamp(1.5rem,2.4vw,2.1rem)] leading-tight font-semibold tracking-tight">
-            {site.name}
-          </h3>
-          <p className="compare-rise mt-0.5 text-sm text-foreground/75 [--d:60ms]">{site.region}</p>
+        <div
+          key={`cap-a-${a.id}`}
+          className="pointer-events-none absolute bottom-0 left-0 max-w-[48%] p-4 transition-opacity duration-200 sm:p-5"
+          style={{ opacity: pos < 18 ? 0 : 1 }}
+        >
+          <h3 className={caption}>{a.name}</h3>
+          <p className="compare-rise mt-0.5 text-xs text-foreground/75 [--d:60ms] sm:text-sm">{a.region}</p>
+        </div>
+        <div
+          key={`cap-b-${b.id}`}
+          className="pointer-events-none absolute right-0 bottom-0 max-w-[48%] p-4 text-end transition-opacity duration-200 sm:p-5"
+          style={{ opacity: pos > 82 ? 0 : 1 }}
+        >
+          <h3 className={caption}>{b.name}</h3>
+          <p className="compare-rise mt-0.5 text-xs text-foreground/75 [--d:60ms] sm:text-sm">{b.region}</p>
+        </div>
+
+        {!a.image && (
+          <p className={cn(noPhoto, "left-3")} style={{ opacity: pos < 30 ? 0 : 1 }}>
+            No site photo yet · {WORLD_CONFIG[a.world].name} surface map
+          </p>
+        )}
+        {!b.image && (
+          <p className={cn(noPhoto, "right-3")} style={{ opacity: pos > 70 ? 0 : 1 }}>
+            No site photo yet · {WORLD_CONFIG[b.world].name} surface map
+          </p>
+        )}
+
+        {/* Divider: a lit seam with a handle that pings until someone drags it */}
+        <div className="absolute inset-y-0 w-px bg-white shadow-[0_0_14px_2px_rgba(127,227,224,0.55)]" style={{ left: `${pos}%` }}>
+          <button
+            type="button"
+            role="slider"
+            aria-label={`Reveal ${a.name} or ${b.name}`}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(pos)}
+            onKeyDown={(e) => {
+              if (e.key === "ArrowLeft") setPos((p) => Math.max(0, p - 5));
+              if (e.key === "ArrowRight") setPos((p) => Math.min(100, p + 5));
+              setDragged(true);
+            }}
+            className="absolute top-1/2 left-1/2 flex size-11 -translate-x-1/2 -translate-y-1/2 cursor-ew-resize items-center justify-center rounded-full bg-white text-[#05070d] shadow-[0_6px_20px_rgba(0,0,0,0.5)] transition-transform duration-150 active:scale-95"
+          >
+            {!dragged && <span aria-hidden className="compare-handle-ring absolute inset-0 rounded-full ring-2 ring-white" />}
+            <ChevronsLeftRight className="size-5" aria-hidden />
+          </button>
         </div>
       </div>
-      <div className="px-5 pt-4 pb-5">
-        <p className="max-w-[62ch] text-[15px] leading-relaxed text-foreground/85">{site.summary}</p>
-        {site.image && <p className="mt-3 text-[11px] text-muted-foreground">Image: {site.image.credit}</p>}
+
+      <div className="grid gap-5 px-5 pt-4 pb-5 md:grid-cols-2 md:gap-10">
+        {[a, b].map((s) => (
+          <div key={s.id}>
+            <p className="flex items-center gap-2 text-[13px] font-medium">
+              <span className={cn("size-2 shrink-0 rounded-full", DOT[s.world])} aria-hidden />
+              {s.name}
+            </p>
+            <p className="mt-1.5 max-w-[62ch] text-[15px] leading-relaxed text-foreground/85">{s.summary}</p>
+            {s.image && <p className="mt-2 text-[11px] text-muted-foreground">Image: {s.image.credit}</p>}
+          </div>
+        ))}
       </div>
     </article>
   );
@@ -802,10 +918,7 @@ export function CompareView() {
         <Stage a={a} b={b} twin={twin} overlapPct={Math.round(overlap.score * 100)} />
       </div>
 
-      <div className="mt-8 grid gap-5 md:grid-cols-2">
-        <SiteViewport site={a} options={EARTH_SITES} onChange={(id) => setPair(id, b.id)} label="Analogue site" />
-        <SiteViewport site={b} options={OTHER_SITES} onChange={(id) => setPair(a.id, id)} label="Target site" />
-      </div>
+      <SiteWipe a={a} b={b} onA={(id) => setPair(id, b.id)} onB={(id) => setPair(a.id, id)} />
 
       <Match a={a} b={b} twin={twin} overlap={overlap} />
       <Field key={`${a.id}:${b.id}`} a={a} b={b} twin={twin} />
