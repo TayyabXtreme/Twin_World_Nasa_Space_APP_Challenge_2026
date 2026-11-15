@@ -1,0 +1,1115 @@
+{
+ "version": 1,
+ "curves": {
+  "tmean": {
+   "sigma": 15
+  },
+  "trange": {
+   "sigma": 20
+  },
+  "radiation": {
+   "sigma": 0.3,
+   "log": 0.1
+  },
+  "slope": {
+   "sigma": 1.5
+  },
+  "sand": {
+   "sigma": 20
+  },
+  "pressure": {
+   "sigma": 0.3,
+   "log": 0.001
+  },
+  "daylight": {
+   "sigma": 3
+  },
+  "precip": {
+   "sigma": 60
+  },
+  "rh": {
+   "sigma": 20
+  },
+  "aod": {
+   "sigma": 0.25
+  },
+  "isolation": {
+   "sigma": 0.5,
+   "log": 1
+  },
+  "elev": {
+   "sigma": 0.12
+  },
+  "water": {
+   "sigma": 0
+  }
+ },
+ "earthRange": {
+  "tmean": [
+   -54.544,
+   33.495
+  ],
+  "trange": [
+   4.705,
+   100.769
+  ],
+  "precip": [
+   0.0,
+   5974.9429
+  ],
+  "rh": [
+   16.65,
+   98.402
+  ],
+  "ps": [
+   51.928,
+   102.1513
+  ],
+  "aod": [
+   0.0,
+   1.0425
+  ],
+  "sand": [
+   0.9125,
+   94.7125
+  ],
+  "slope": [
+   0.0,
+   15.0
+  ],
+  "isolation": [
+   0.0,
+   3464.4831
+  ],
+  "dose": [
+   1.86,
+   15.0
+  ],
+  "daylight": [
+   12.0072,
+   24.0
+  ]
+ },
+ "targets": {
+  "mars-jezero": {
+   "tmean": {
+    "v": -63.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "trange": {
+    "v": 100.0,
+    "mode": "near"
+   },
+   "radiation": {
+    "v": 640.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "slope": {
+    "v": 0.59,
+    "mode": "near"
+   },
+   "sand": {
+    "v": 85.0,
+    "mode": "near"
+   },
+   "pressure": {
+    "v": 0.7864,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "daylight": {
+    "v": 13.5665,
+    "mode": "near"
+   },
+   "precip": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "rh": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "aod": {
+    "v": 0.5,
+    "mode": "near"
+   },
+   "isolation": {
+    "v": 225000000.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "elev": {
+    "v": -2356,
+    "mode": "rank",
+    "pct": 0.3268
+   },
+   "water": {
+    "v": 1,
+    "mode": "match"
+   }
+  },
+  "mars-gale": {
+   "tmean": {
+    "v": -63.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "trange": {
+    "v": 100.0,
+    "mode": "near"
+   },
+   "radiation": {
+    "v": 640.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "slope": {
+    "v": 0.61,
+    "mode": "near"
+   },
+   "sand": {
+    "v": 85.0,
+    "mode": "near"
+   },
+   "pressure": {
+    "v": 0.9216,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "daylight": {
+    "v": 12.6264,
+    "mode": "near"
+   },
+   "precip": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "rh": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "aod": {
+    "v": 0.5,
+    "mode": "near"
+   },
+   "isolation": {
+    "v": 225000000.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "elev": {
+    "v": -4117,
+    "mode": "rank",
+    "pct": 0.1226
+   },
+   "water": {
+    "v": 1,
+    "mode": "match"
+   }
+  },
+  "mars-utopia-viking2": {
+   "tmean": {
+    "v": -63.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "radiation": {
+    "v": 640.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "slope": {
+    "v": 0.08,
+    "mode": "near"
+   },
+   "sand": {
+    "v": 85.0,
+    "mode": "near"
+   },
+   "pressure": {
+    "v": 0.9546,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "daylight": {
+    "v": 16.5842,
+    "mode": "near"
+   },
+   "precip": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "rh": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "aod": {
+    "v": 0.5,
+    "mode": "near"
+   },
+   "isolation": {
+    "v": 225000000.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "elev": {
+    "v": -4508,
+    "mode": "rank",
+    "pct": 0.0696
+   },
+   "water": {
+    "v": 1,
+    "mode": "match"
+   }
+  },
+  "mars-arcadia": {
+   "tmean": {
+    "v": -63.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "radiation": {
+    "v": 640.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "slope": {
+    "v": 0.03,
+    "mode": "near"
+   },
+   "sand": {
+    "v": 85.0,
+    "mode": "near"
+   },
+   "pressure": {
+    "v": 0.9151,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "daylight": {
+    "v": 16.8213,
+    "mode": "near"
+   },
+   "precip": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "rh": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "aod": {
+    "v": 0.5,
+    "mode": "near"
+   },
+   "isolation": {
+    "v": 225000000.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "elev": {
+    "v": -4038,
+    "mode": "rank",
+    "pct": 0.1348
+   },
+   "water": {
+    "v": 1,
+    "mode": "match"
+   }
+  },
+  "mars-mawrth-vallis": {
+   "tmean": {
+    "v": -63.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "radiation": {
+    "v": 640.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "slope": {
+    "v": 0.32,
+    "mode": "near"
+   },
+   "sand": {
+    "v": 85.0,
+    "mode": "near"
+   },
+   "pressure": {
+    "v": 0.8023,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "daylight": {
+    "v": 13.8637,
+    "mode": "near"
+   },
+   "precip": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "rh": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "aod": {
+    "v": 0.5,
+    "mode": "near"
+   },
+   "isolation": {
+    "v": 225000000.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "elev": {
+    "v": -2578,
+    "mode": "rank",
+    "pct": 0.3096
+   },
+   "water": {
+    "v": 1,
+    "mode": "match"
+   }
+  },
+  "mars-hellas": {
+   "tmean": {
+    "v": -63.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "radiation": {
+    "v": 640.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "slope": {
+    "v": 0.64,
+    "mode": "near"
+   },
+   "sand": {
+    "v": 85.0,
+    "mode": "near"
+   },
+   "pressure": {
+    "v": 1.1057,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "daylight": {
+    "v": 15.8185,
+    "mode": "near"
+   },
+   "precip": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "rh": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "aod": {
+    "v": 0.5,
+    "mode": "near"
+   },
+   "isolation": {
+    "v": 225000000.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "elev": {
+    "v": -6139,
+    "mode": "rank",
+    "pct": 0.0099
+   },
+   "water": {
+    "v": 1,
+    "mode": "match"
+   }
+  },
+  "mars-phoenix": {
+   "tmean": {
+    "v": -63.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "radiation": {
+    "v": 640.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "slope": {
+    "v": 0.17,
+    "mode": "near"
+   },
+   "sand": {
+    "v": 20.0,
+    "mode": "near"
+   },
+   "pressure": {
+    "v": 0.9204,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "daylight": {
+    "v": 24.66,
+    "mode": "near"
+   },
+   "precip": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "rh": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "aod": {
+    "v": 0.5,
+    "mode": "near"
+   },
+   "isolation": {
+    "v": 225000000.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "elev": {
+    "v": -4103,
+    "mode": "rank",
+    "pct": 0.1246
+   },
+   "water": {
+    "v": 1,
+    "mode": "match"
+   }
+  },
+  "moon-shackleton-rim": {
+   "tmean": {
+    "v": -221.75,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "trange": {
+    "v": 53.2,
+    "min": true,
+    "mode": "near"
+   },
+   "radiation": {
+    "v": null,
+    "mode": "toward",
+    "dir": 1,
+    "unreachable": true
+   },
+   "slope": {
+    "v": 0.68,
+    "mode": "near"
+   },
+   "sand": {
+    "v": 55.0,
+    "mode": "near"
+   },
+   "pressure": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "daylight": {
+    "v": 708.7,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "precip": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "rh": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "aod": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "isolation": {
+    "v": 384400.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "elev": {
+    "v": 102,
+    "mode": "rank",
+    "pct": 0.753
+   },
+   "water": {
+    "v": 1,
+    "mode": "match"
+   }
+  },
+  "moon-malapert-massif": {
+   "tmean": {
+    "v": -187.05,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "trange": {
+    "v": 155.2,
+    "min": true,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "radiation": {
+    "v": null,
+    "mode": "toward",
+    "dir": 1,
+    "unreachable": true
+   },
+   "slope": {
+    "v": 4.91,
+    "mode": "near"
+   },
+   "sand": {
+    "v": 55.0,
+    "mode": "near"
+   },
+   "pressure": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "daylight": {
+    "v": 424.8109,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "precip": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "rh": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "aod": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "isolation": {
+    "v": 384400.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "elev": {
+    "v": -1443,
+    "mode": "rank",
+    "pct": 0.5265
+   },
+   "water": {
+    "v": 1,
+    "mode": "match"
+   }
+  },
+  "moon-haworth": {
+   "tmean": {
+    "v": -234.75,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "trange": {
+    "v": 39.1,
+    "min": true,
+    "mode": "near"
+   },
+   "radiation": {
+    "v": null,
+    "mode": "toward",
+    "dir": 1,
+    "unreachable": true
+   },
+   "slope": {
+    "v": 3.37,
+    "mode": "near"
+   },
+   "sand": {
+    "v": 55.0,
+    "mode": "near"
+   },
+   "pressure": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "daylight": {
+    "v": 500.5511,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "precip": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "rh": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "aod": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "isolation": {
+    "v": 384400.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "elev": {
+    "v": -3009,
+    "mode": "rank",
+    "pct": 0.2343
+   },
+   "water": {
+    "v": 1,
+    "mode": "match"
+   }
+  },
+  "moon-nobile-rim-1": {
+   "tmean": {
+    "v": -160.75,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "trange": {
+    "v": 158.1,
+    "min": true,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "radiation": {
+    "v": null,
+    "mode": "toward",
+    "dir": 1,
+    "unreachable": true
+   },
+   "slope": {
+    "v": 5.16,
+    "mode": "near"
+   },
+   "sand": {
+    "v": 55.0,
+    "mode": "near"
+   },
+   "pressure": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "daylight": {
+    "v": 429.1675,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "precip": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "rh": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "aod": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "isolation": {
+    "v": 384400.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "elev": {
+    "v": 305,
+    "mode": "rank",
+    "pct": 0.7729
+   },
+   "water": {
+    "v": 1,
+    "mode": "match"
+   }
+  },
+  "moon-de-gerlache-rim-2": {
+   "tmean": {
+    "v": -226.95,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "trange": {
+    "v": 162.1,
+    "min": true,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "radiation": {
+    "v": null,
+    "mode": "toward",
+    "dir": 1,
+    "unreachable": true
+   },
+   "slope": {
+    "v": 1.17,
+    "mode": "near"
+   },
+   "sand": {
+    "v": 55.0,
+    "mode": "near"
+   },
+   "pressure": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "daylight": {
+    "v": 708.7,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "precip": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "rh": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "aod": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "isolation": {
+    "v": 384400.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "elev": {
+    "v": -646,
+    "mode": "rank",
+    "pct": 0.6647
+   },
+   "water": {
+    "v": 1,
+    "mode": "match"
+   }
+  },
+  "moon-mons-mouton": {
+   "tmean": {
+    "v": -155.75,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "trange": {
+    "v": 140.7,
+    "min": true,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "radiation": {
+    "v": null,
+    "mode": "toward",
+    "dir": 1,
+    "unreachable": true
+   },
+   "slope": {
+    "v": 2.24,
+    "mode": "near"
+   },
+   "sand": {
+    "v": 55.0,
+    "mode": "near"
+   },
+   "pressure": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "daylight": {
+    "v": 419.4067,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "precip": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "rh": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "aod": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "isolation": {
+    "v": 384400.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "elev": {
+    "v": 5330,
+    "mode": "rank",
+    "pct": 0.9978
+   },
+   "water": {
+    "v": 1,
+    "mode": "match"
+   }
+  },
+  "moon-peak-near-cabeus-b": {
+   "tmean": {
+    "v": -187.75,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "trange": {
+    "v": 194.3,
+    "min": true,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "radiation": {
+    "v": null,
+    "mode": "toward",
+    "dir": 1,
+    "unreachable": true
+   },
+   "slope": {
+    "v": 0.94,
+    "mode": "near"
+   },
+   "sand": {
+    "v": 55.0,
+    "mode": "near"
+   },
+   "pressure": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "daylight": {
+    "v": 399.2677,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "precip": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "rh": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "aod": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "isolation": {
+    "v": 384400.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "elev": {
+    "v": -3787,
+    "mode": "rank",
+    "pct": 0.1325
+   },
+   "water": {
+    "v": 1,
+    "mode": "match"
+   }
+  },
+  "moon-slater-plain": {
+   "tmean": {
+    "v": -228.75,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "trange": {
+    "v": 33.8,
+    "min": true,
+    "mode": "near"
+   },
+   "radiation": {
+    "v": null,
+    "mode": "toward",
+    "dir": 1,
+    "unreachable": true
+   },
+   "slope": {
+    "v": 1.02,
+    "mode": "near"
+   },
+   "sand": {
+    "v": 55.0,
+    "mode": "near"
+   },
+   "pressure": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "daylight": {
+    "v": 564.2797,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "precip": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "rh": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "aod": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "isolation": {
+    "v": 384400.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "elev": {
+    "v": -966,
+    "mode": "rank",
+    "pct": 0.614
+   },
+   "water": {
+    "v": 1,
+    "mode": "match"
+   }
+  },
+  "moon-marius-hills-pit": {
+   "trange": {
+    "v": 295.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "radiation": {
+    "v": null,
+    "mode": "toward",
+    "dir": 1,
+    "unreachable": true
+   },
+   "sand": {
+    "v": 55.0,
+    "mode": "near"
+   },
+   "pressure": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": -1
+   },
+   "daylight": {
+    "v": 355.8723,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "precip": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "rh": {
+    "v": 0.0,
+    "unreachable": true,
+    "mode": "near"
+   },
+   "aod": {
+    "v": 0.0,
+    "mode": "near"
+   },
+   "isolation": {
+    "v": 384400.0,
+    "unreachable": true,
+    "mode": "toward",
+    "dir": 1
+   },
+   "water": {
+    "v": 0,
+    "mode": "match"
+   }
+  }
+ }
+}

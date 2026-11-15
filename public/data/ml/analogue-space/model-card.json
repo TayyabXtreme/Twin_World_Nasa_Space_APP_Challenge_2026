@@ -2,7 +2,7 @@
  "id": "analogue-space",
  "name": "Analogue Space",
  "version": "1.0",
- "trained": "2026-11-14",
+ "trained": "2026-11-15",
  "task": "Unsupervised: group Earth's land into environment types and place Moon/Mars targets among them.",
  "data": {
   "earth": "354,342 land cells of 0.25° (about 28 km) from the Analog Finder grid: NASA MODIS MOD11C3 land surface temperature, MOD13C2 NDVI, MCD43C3 albedo (2024), JAXA AW3D30 elevation.",

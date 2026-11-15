@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-13T18:39:44.008Z",
+  "generated": "2026-11-15T10:29:29.091Z",
   "note": "Built by scripts/build-landing.mjs from the Analog Finder grid and the Moon base layers.",
   "earthCells": 354342,
   "finder": [
@@ -11,52 +11,52 @@
       "image": "/landing/finder-mars-jezero.webp",
       "top": [
         {
-          "lat": -17.88,
-          "lon": 11.88,
-          "country": "Namibia",
+          "lat": 21.38,
+          "lon": 28.88,
+          "country": "Sudan",
           "topPct": 0
         },
         {
-          "lat": -25.63,
-          "lon": -70.63,
-          "country": "Chile",
+          "lat": 18.88,
+          "lon": 20.88,
+          "country": "Chad",
           "topPct": 0
         },
         {
-          "lat": -11.88,
-          "lon": -77.13,
-          "country": "Peru",
-          "topPct": 0
+          "lat": 23.13,
+          "lon": 0.38,
+          "country": "Algeria",
+          "topPct": 0.02
         },
         {
-          "lat": -24.13,
-          "lon": 16.13,
-          "country": "Namibia",
-          "topPct": 0
+          "lat": 18.88,
+          "lon": 11.63,
+          "country": "Niger",
+          "topPct": 0.05
         },
         {
-          "lat": 30.88,
-          "lon": -6.38,
-          "country": "Morocco",
-          "topPct": 0
+          "lat": 18.13,
+          "lon": 29.63,
+          "country": "Sudan",
+          "topPct": 0.06
         }
       ],
       "known": [
         {
           "name": "Atacama Desert",
-          "topPct": 2
+          "topPct": 3.3
         },
         {
           "name": "McMurdo Dry Valleys",
-          "topPct": 46.5
+          "topPct": 18.6
         },
         {
           "name": "Devon Island",
-          "topPct": 64.5
+          "topPct": 69.5
         },
         {
           "name": "Hingol, Pakistan",
-          "topPct": 0.1
+          "topPct": 10.7
         }
       ]
     },
@@ -68,52 +68,52 @@
       "image": "/landing/finder-mars-phoenix.webp",
       "top": [
         {
-          "lat": 66.88,
-          "lon": -44.38,
-          "country": "Greenland",
+          "lat": -78.63,
+          "lon": 42.88,
+          "country": "Antarctica",
           "topPct": 0
         },
         {
-          "lat": 69.88,
-          "lon": -35.88,
-          "country": "Greenland",
+          "lat": -81.63,
+          "lon": 72.38,
+          "country": "Antarctica",
           "topPct": 0
         },
         {
-          "lat": -70.63,
-          "lon": 158.88,
+          "lat": -80.13,
+          "lon": 91.38,
           "country": "Antarctica",
-          "topPct": 0.04
+          "topPct": 0
         },
         {
-          "lat": 73.13,
-          "lon": -38.13,
-          "country": "Greenland",
-          "topPct": 0.04
+          "lat": -81.63,
+          "lon": 50.63,
+          "country": "Antarctica",
+          "topPct": 0.17
         },
         {
-          "lat": -74.63,
-          "lon": -69.63,
+          "lat": -76.88,
+          "lon": 116.38,
           "country": "Antarctica",
-          "topPct": 0.05
+          "topPct": 0.23
         }
       ],
       "known": [
         {
           "name": "Atacama Desert",
-          "topPct": 30.4
+          "topPct": 7.4
         },
         {
           "name": "McMurdo Dry Valleys",
-          "topPct": 6.6
+          "topPct": 9.8
         },
         {
           "name": "Devon Island",
-          "topPct": 7.6
+          "topPct": 24
         },
         {
           "name": "Hingol, Pakistan",
-          "topPct": 28.2
+          "topPct": 23.8
         }
       ]
     },
@@ -125,52 +125,52 @@
       "image": "/landing/finder-moon-shackleton-rim.webp",
       "top": [
         {
-          "lat": -70.63,
-          "lon": 159.38,
+          "lat": -82.63,
+          "lon": 78.63,
           "country": "Antarctica",
           "topPct": 0
         },
         {
-          "lat": -84.13,
-          "lon": 167.13,
+          "lat": -81.63,
+          "lon": 53.88,
           "country": "Antarctica",
           "topPct": 0
         },
         {
-          "lat": -74.13,
-          "lon": 161.63,
+          "lat": -78.63,
+          "lon": 42.38,
           "country": "Antarctica",
-          "topPct": 0
+          "topPct": 0.05
         },
         {
-          "lat": -75.38,
-          "lon": 94.63,
+          "lat": -80.13,
+          "lon": 91.63,
           "country": "Antarctica",
-          "topPct": 0
+          "topPct": 0.09
         },
         {
-          "lat": -74.38,
-          "lon": -5.63,
+          "lat": -82.88,
+          "lon": 118.63,
           "country": "Antarctica",
-          "topPct": 0
+          "topPct": 0.17
         }
       ],
       "known": [
         {
           "name": "Atacama Desert",
-          "topPct": 13
+          "topPct": 8
         },
         {
           "name": "McMurdo Dry Valleys",
-          "topPct": 0
+          "topPct": 3.7
         },
         {
           "name": "Devon Island",
-          "topPct": 10
+          "topPct": 26.2
         },
         {
           "name": "Hingol, Pakistan",
-          "topPct": 21.4
+          "topPct": 58.2
         }
       ]
     }

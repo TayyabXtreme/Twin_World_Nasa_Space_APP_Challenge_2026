@@ -1,30 +1,36 @@
 {
  "weights": {
-  "cold": 0.068,
-  "swing": 0.186,
-  "bare": 1.0,
-  "inertia": 0.0,
-  "ice": 0.523,
-  "sun": 0.038,
-  "relief": 0.439
+  "tmean": 0.081,
+  "trange": 0.0,
+  "radiation": 0.74,
+  "slope": 0.0,
+  "sand": 0.057,
+  "pressure": 1.0,
+  "daylight": 0.308,
+  "precip": 0.0,
+  "rh": 0.085,
+  "aod": 0.0,
+  "isolation": 0.0,
+  "elev": 0.0,
+  "water": null
  },
- "lambda": 0.01,
+ "lambda": 0.3,
  "recall5": {
   "learnedLOPO": 0.1739,
-  "learnedLOSO": 0.2174,
-  "hand": 0.2174,
-  "equal": 0.1304
+  "learnedLOSO": 0.1304,
+  "hand": 0.087,
+  "equal": 0.087
  },
  "byWorld": {
   "moon": {
    "pairs": 8,
    "learned": 0.0,
-   "hand": 0.125
+   "hand": 0.0
   },
   "mars": {
    "pairs": 15,
    "learned": 0.2667,
-   "hand": 0.2667
+   "hand": 0.1333
   }
  },
  "pairs": [
@@ -33,184 +39,184 @@
    "target": "mars-jezero",
    "targetName": "Jezero Crater",
    "world": "mars",
-   "learnedTopPct": 0.107,
-   "handTopPct": 2.002
+   "learnedTopPct": 2.068,
+   "handTopPct": 3.303
   },
   {
    "earth": "Atacama Desert",
    "target": "mars-gale",
    "targetName": "Gale Crater",
    "world": "mars",
-   "learnedTopPct": 5.465,
-   "handTopPct": 29.673
+   "learnedTopPct": 1.926,
+   "handTopPct": 2.768
   },
   {
    "earth": "McMurdo Dry Valleys",
    "target": "mars-phoenix",
    "targetName": "Phoenix landing site",
    "world": "mars",
-   "learnedTopPct": 7.179,
-   "handTopPct": 6.603
+   "learnedTopPct": 6.214,
+   "handTopPct": 9.825
   },
   {
    "earth": "McMurdo Dry Valleys",
    "target": "mars-arcadia",
    "targetName": "Arcadia Planitia",
    "world": "mars",
-   "learnedTopPct": 10.726,
-   "handTopPct": 16.82
+   "learnedTopPct": 20.457,
+   "handTopPct": 13.624
   },
   {
    "earth": "Devon Island (Haughton crater)",
    "target": "mars-phoenix",
    "targetName": "Phoenix landing site",
    "world": "mars",
-   "learnedTopPct": 9.239,
-   "handTopPct": 7.598
+   "learnedTopPct": 56.959,
+   "handTopPct": 24.039
   },
   {
    "earth": "Devon Island (Haughton crater)",
    "target": "mars-arcadia",
    "targetName": "Arcadia Planitia",
    "world": "mars",
-   "learnedTopPct": 14.804,
-   "handTopPct": 19.554
+   "learnedTopPct": 73.763,
+   "handTopPct": 68.7
   },
   {
    "earth": "Death Valley",
    "target": "mars-utopia-viking2",
    "targetName": "Utopia Planitia",
    "world": "mars",
-   "learnedTopPct": 39.162,
-   "handTopPct": 25.784
+   "learnedTopPct": 15.483,
+   "handTopPct": 13.072
   },
   {
    "earth": "Pilot Valley",
    "target": "mars-phoenix",
    "targetName": "Phoenix landing site",
    "world": "mars",
-   "learnedTopPct": 11.246,
-   "handTopPct": 28.051
+   "learnedTopPct": 14.244,
+   "handTopPct": 20.756
   },
   {
    "earth": "Askja and Vikursandur",
    "target": "mars-gale",
    "targetName": "Gale Crater",
    "world": "mars",
-   "learnedTopPct": 0.722,
-   "handTopPct": 0.69
+   "learnedTopPct": 41.333,
+   "handTopPct": 70.116
   },
   {
    "earth": "Lake Salda",
    "target": "mars-jezero",
    "targetName": "Jezero Crater",
    "world": "mars",
-   "learnedTopPct": 26.026,
-   "handTopPct": 13.701
+   "learnedTopPct": 14.744,
+   "handTopPct": 46.155
   },
   {
    "earth": "Verde Valley",
    "target": "mars-gale",
    "targetName": "Gale Crater",
    "world": "mars",
-   "learnedTopPct": 44.993,
-   "handTopPct": 31.364
+   "learnedTopPct": 6.743,
+   "handTopPct": 41.903
   },
   {
    "earth": "Bockfjorden, Svalbard",
    "target": "mars-gale",
    "targetName": "Gale Crater",
    "world": "mars",
-   "learnedTopPct": 0.664,
-   "handTopPct": 1.32
+   "learnedTopPct": 54.263,
+   "handTopPct": 81.185
   },
   {
    "earth": "Rio Tinto",
    "target": "mars-mawrth-vallis",
    "targetName": "Mawrth Vallis",
    "world": "mars",
-   "learnedTopPct": 67.771,
-   "handTopPct": 53.076
+   "learnedTopPct": 45.69,
+   "handTopPct": 60.651
   },
   {
    "earth": "Mars Desert Research Station",
    "target": "mars-mawrth-vallis",
    "targetName": "Mawrth Vallis",
    "world": "mars",
-   "learnedTopPct": 9.416,
-   "handTopPct": 0.448
+   "learnedTopPct": 4.006,
+   "handTopPct": 23.738
   },
   {
    "earth": "Mars Desert Research Station",
    "target": "mars-jezero",
    "targetName": "Jezero Crater",
    "world": "mars",
-   "learnedTopPct": 1.133,
-   "handTopPct": 10.001
+   "learnedTopPct": 4.276,
+   "handTopPct": 21.024
   },
   {
    "earth": "Kīlauea",
    "target": "moon-marius-hills-pit",
    "targetName": "Marius Hills pit",
    "world": "moon",
-   "learnedTopPct": 10.331,
-   "handTopPct": 26.917
+   "learnedTopPct": 25.496,
+   "handTopPct": 59.888
   },
   {
    "earth": "Medicine Lake volcano",
    "target": "moon-marius-hills-pit",
    "targetName": "Marius Hills pit",
    "world": "moon",
-   "learnedTopPct": 62.879,
-   "handTopPct": 52.951
+   "learnedTopPct": 12.707,
+   "handTopPct": 16.168
   },
   {
    "earth": "Askja",
    "target": "moon-shackleton-rim",
    "targetName": "Shackleton crater rim",
    "world": "moon",
-   "learnedTopPct": 7.068,
-   "handTopPct": 9.998
+   "learnedTopPct": 15.799,
+   "handTopPct": 12.606
   },
   {
    "earth": "Mauna Kea",
    "target": "moon-shackleton-rim",
    "targetName": "Shackleton crater rim",
    "world": "moon",
-   "learnedTopPct": 26.08,
-   "handTopPct": 29.001
+   "learnedTopPct": 25.96,
+   "handTopPct": 62.018
   },
   {
    "earth": "Mauna Kea",
    "target": "moon-marius-hills-pit",
    "targetName": "Marius Hills pit",
    "world": "moon",
-   "learnedTopPct": 10.264,
-   "handTopPct": 7.958
+   "learnedTopPct": 25.53,
+   "handTopPct": 59.888
   },
   {
    "earth": "Black Point Lava Flow",
    "target": "moon-malapert-massif",
    "targetName": "Malapert Massif",
    "world": "moon",
-   "learnedTopPct": 26.23,
-   "handTopPct": 22.707
+   "learnedTopPct": 10.695,
+   "handTopPct": 24.732
   },
   {
    "earth": "Black Point Lava Flow",
    "target": "moon-marius-hills-pit",
    "targetName": "Marius Hills pit",
    "world": "moon",
-   "learnedTopPct": 5.915,
-   "handTopPct": 2.328
+   "learnedTopPct": 10.321,
+   "handTopPct": 16.639
   },
   {
    "earth": "Devon Island (Haughton crater)",
    "target": "moon-shackleton-rim",
    "targetName": "Shackleton crater rim",
    "world": "moon",
-   "learnedTopPct": 11.082,
-   "handTopPct": 10.032
+   "learnedTopPct": 58.337,
+   "handTopPct": 26.134
   }
  ]
 }

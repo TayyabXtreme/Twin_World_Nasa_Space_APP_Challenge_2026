@@ -1,9 +1,10 @@
 "use client";
 
 import { type InitRequest } from "./model";
+import { withParams } from "./params";
 import { REF_POINTS } from "./places";
 import { createScorer } from "./scorer";
-import type { CellResult, GridHeader, ScoreResult, Target, TargetsDoc, Weights } from "./types";
+import type { CellResult, GridHeader, ParamsHeader, ScoreResult, Target, TargetsDoc, Weights } from "./types";
 
 /**
  * Browser side of the Analog Finder. Fetches the grid and targets once per session (module-level cache),
@@ -15,22 +16,25 @@ const BASE = "/data/finder";
 
 export interface FinderData {
   header: GridHeader;
+  /** The Earth side of the thirteen parameters (earth-params.json). */
+  params: ParamsHeader;
   targets: TargetsDoc;
 }
 
-let dataPromise: Promise<{ data: FinderData; core: ArrayBuffer }> | null = null;
+let dataPromise: Promise<{ data: FinderData; buf: ArrayBuffer }> | null = null;
 function loadData() {
   dataPromise ??= Promise.all([
     fetch(`${BASE}/earth-grid.json`).then((r) => r.json() as Promise<GridHeader>),
+    fetch(`${BASE}/earth-params.json`).then((r) => r.json() as Promise<ParamsHeader>),
     fetch(`${BASE}/targets.json`).then((r) => r.json() as Promise<TargetsDoc>),
-    fetch(`${BASE}/earth-core.bin`).then((r) => r.arrayBuffer()),
-  ]).then(([header, targets, core]) => ({ data: { header, targets }, core }));
+    fetch(`${BASE}/earth-params.bin`).then((r) => r.arrayBuffer()),
+  ]).then(([header, params, targets, buf]) => ({ data: { header, params, targets: withParams(targets) }, buf }));
   dataPromise.catch(() => (dataPromise = null));
   return dataPromise;
 }
 
 let detailPromise: Promise<ArrayBuffer> | null = null;
-/** Display-only channels (day/night/coldest temperatures, albedo, elevation, flags), fetched on demand. */
+/** Display-only MODIS channels (day/night/coldest surface temperatures, albedo, flags), fetched on demand. */
 export function loadDetail() {
   detailPromise ??= fetch(`${BASE}/earth-detail.bin`).then((r) => r.arrayBuffer());
   detailPromise.catch(() => (detailPromise = null));
@@ -55,12 +59,12 @@ interface Backend {
   mode: "worker" | "main";
 }
 
-function mainBackend(header: GridHeader, core: ArrayBuffer): Backend {
-  const s = createScorer(header, core, REF_POINTS);
+function mainBackend(data: FinderData, buf: ArrayBuffer): Backend {
+  const s = createScorer(data.header, data.params, buf, REF_POINTS);
   return { mode: "main", score: (id, t, w) => s.score(id, t, w), probe: async (lat, lon) => s.probe(lat, lon) };
 }
 
-function workerBackend(header: GridHeader, core: ArrayBuffer): Promise<Backend> {
+function workerBackend(data: FinderData, buf: ArrayBuffer): Promise<Backend> {
   return new Promise((resolve, reject) => {
     let worker: Worker;
     try {
@@ -109,8 +113,8 @@ function workerBackend(header: GridHeader, core: ArrayBuffer): Promise<Backend> 
       }
     };
     // The worker gets its own copy of the grid; the main thread keeps one for the fallback path.
-    const init: InitRequest = { type: "init", header, core: core.slice(0), refs: REF_POINTS };
-    worker.postMessage(init, [init.core]);
+    const init: InitRequest = { type: "init", header: data.header, params: data.params, buf: buf.slice(0), refs: REF_POINTS };
+    worker.postMessage(init, [init.buf]);
   });
 }
 
@@ -124,13 +128,13 @@ export interface FinderEngine {
 let enginePromise: Promise<FinderEngine> | null = null;
 
 export function getEngine(): Promise<FinderEngine> {
-  enginePromise ??= loadData().then(async ({ data, core }) => {
+  enginePromise ??= loadData().then(async ({ data, buf }) => {
     let backend: Backend;
     try {
-      backend = await workerBackend(data.header, core);
+      backend = await workerBackend(data, buf);
     } catch (e) {
       console.warn("Analog Finder: falling back to main-thread scoring.", e);
-      backend = mainBackend(data.header, core);
+      backend = mainBackend(data, buf);
     }
     // One score job in flight; while it runs only the newest request waits (older waiting ones resolve
     // null). Dragging a slider therefore streams fresh results with no backlog.

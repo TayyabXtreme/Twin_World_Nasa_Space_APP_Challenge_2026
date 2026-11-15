@@ -6,7 +6,7 @@
 //   public/landing/moon-pole.webp            LOLA shaded relief with Diviner cold traps on top
 //   lib/data/landing.generated.json          top places, known-analogue ranks and image paths
 
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -23,31 +23,30 @@ mkdirSync(OUT_IMG, { recursive: true });
 
 // 1. Compile the Finder's scorer (TypeScript, browser code) to CommonJS so this script runs the exact same maths.
 const build = mkdtempSync(path.join(tmpdir(), "twinworlds-landing-"));
-for (const name of ["types", "model", "scorer"]) {
+for (const name of ["types", "params", "model", "scorer"]) {
   const src = readFileSync(at("lib", "finder", `${name}.ts`), "utf8");
-  const js = ts.transpileModule(src, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+  const js = ts.transpileModule(src, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText;
   writeFileSync(path.join(build, `${name}.js`), js);
 }
+copyFileSync(at("lib", "finder", "params.generated.json"), path.join(build, "params.generated.json"));
 // The scorer paints into ImageData; Node has none, and no OffscreenCanvas, so it hands back the raw pixels.
 globalThis.ImageData = class {
   constructor(data, width, height) {
     Object.assign(this, { data, width, height });
   }
 };
-const { createScorer } = createRequire(import.meta.url)(path.join(build, "scorer.js"));
+const load = createRequire(import.meta.url);
+const { createScorer } = load(path.join(build, "scorer.js"));
+const { DEFAULT_WEIGHTS, withParams } = load(path.join(build, "params.js"));
 
-// 2. Data, default weights (read from the Finder's own text.ts so they never drift) and country outlines.
+// 2. Data (the thirteen-parameter grid), the Finder's own default weights and country outlines.
 const readJson = (...p) => JSON.parse(readFileSync(at(...p), "utf8"));
 const header = readJson("public", "data", "finder", "earth-grid.json");
-const targetsDoc = readJson("public", "data", "finder", "targets.json");
-const coreBuf = readFileSync(at("public", "data", "finder", "earth-core.bin"));
-const core = coreBuf.buffer.slice(coreBuf.byteOffset, coreBuf.byteOffset + coreBuf.length);
-
-const text = readFileSync(at("lib", "finder", "text.ts"), "utf8");
-const weightsFor = (world) => {
-  const m = text.match(new RegExp(`${world}: (\\{[^}]+\\})`));
-  return JSON.parse(m[1].replace(/(\w+):/g, '"$1":'));
-};
+const params = readJson("public", "data", "finder", "earth-params.json");
+const targetsDoc = withParams(readJson("public", "data", "finder", "targets.json"));
+const binBuf = readFileSync(at("public", "data", "finder", "earth-params.bin"));
+const bin = binBuf.buffer.slice(binBuf.byteOffset, binBuf.byteOffset + binBuf.length);
+const weightsFor = (world) => DEFAULT_WEIGHTS[world];
 
 const topo = readJson("public", "data", "countries-50m.topo.json");
 const countries = feature(topo, topo.objects.countries).features;
@@ -60,7 +59,7 @@ const KNOWN = [
   { id: "devon", name: "Devon Island", lat: 75.38, lon: -89.68 },
   { id: "hingol", name: "Hingol, Pakistan", lat: 25.6, lon: 65.5 },
 ].map((k) => ({ ...k, radiusKm: 50 }));
-const scorer = createScorer(header, core, KNOWN);
+const scorer = createScorer(header, params, bin, KNOWN);
 
 const SHOWCASE = [
   { id: "mars-jezero", blurb: "Dry, salty, oxidised ground where Perseverance looks for signs of ancient life." },

@@ -1,32 +1,33 @@
-import type { CellResult, CoreKey, DimId, DimSpec, GridHeader, RefPoint, Target, Weights } from "./types";
-import { DIM_IDS } from "./types";
+import { earthDose, longestDaylight, ORBIT, similarity, SOURCE, UNKNOWN } from "./params";
+import type {
+  CellResult,
+  ChannelKey,
+  DimId,
+  GridHeader,
+  ParamChannel,
+  ParamsHeader,
+  RefPoint,
+  Target,
+  Weights,
+} from "./types";
+import { CHANNEL_KEYS, DIM_IDS } from "./types";
 
 /**
- * The Analog Finder maths (docs/archive/plan-v2.md §4.1, §6.1), free of DOM and React so it runs in a Web Worker.
+ * The Analog Finder maths, free of DOM and React so it runs in a Web Worker.
  *
- * Per dimension a similarity s ∈ [0, 1]:
- *   role      s = exp(−½ ((p_earth − p_target) / σ_role)²)       percentiles within each world
- *   bare      s = exp(−½ (max(0, NDVI − 0.03) / 0.10)²)          absolute: Moon and Mars have NDVI 0
- *   sun       s = exp(−½ ((E_earth − E_target) / 10°)²)          absolute: highest noon Sun of the year
- *   relief    s = exp(−½ (ln((r+20)/(r_t+20)) / ln 2.2)²)        absolute: metres of relief over ~66 km
- * Overall S = Σ w_d s_d / Σ w_d. Missing Earth data counts as no match (relief: 0.5, it is unknown
- * south of 84°S and on small islands).
- * Every similarity depends only on a quantised byte (or the row), so each one is a 256-entry lookup table.
+ * Each of the thirteen parameters gives a similarity s ∈ [0, 1] per Earth land cell (lib/finder/params.ts
+ * similarity): closeness to the target's value; where the target lies far beyond anything on Earth (no air,
+ * −220 °C), how far the cell goes toward it; for elevation, the same rank within each world.
+ * Overall S = Σ w_d s_d / Σ w_d. Missing Earth data counts as half a match (UNKNOWN).
+ * Every similarity depends only on a quantised byte, the grid row (daylight) or the cell (water), so each one is a
+ * small lookup table.
  */
 
-export const SIGMA_ROLE = 0.12;
-export const NDVI_TOL = 0.1;
-export const SUN_SIGMA = 10;
-export const RELIEF_LOG_SIGMA = Math.log(2.2);
-export const EARTH_OBLIQUITY = 23.44;
 export const CLUSTER_KM = 350;
-
-const ROLE_CHANNEL: Partial<Record<DimId, CoreKey>> = { cold: "tmean", swing: "swing", inertia: "ati", ice: "freeze" };
-export const CORE_KEYS: CoreKey[] = ["tmean", "swing", "ndvi", "ati", "freeze", "relief"];
-export const roleChannel = (d: DimId) => ROLE_CHANNEL[d];
 
 export interface Grid {
   header: GridHeader;
+  params: ParamsHeader;
   n: number;
   nx: number;
   ny: number;
@@ -39,13 +40,17 @@ export interface Grid {
   lon: Float32Array;
   area: Float32Array;
   areaTotal: number;
-  ch: Record<CoreKey, Uint8Array>;
-  pct: Partial<Record<CoreKey, Float32Array>>;
+  ch: Record<ChannelKey, Uint8Array>;
+  meta: Record<ChannelKey, ParamChannel>;
+  /** Longest-day daylight (h) of each grid row and its area-weighted percentile over Earth's land. */
+  rowDaylight: Float32Array;
+  rowDaylightPct: Float32Array;
 }
 
-export function decodeGrid(header: GridHeader, core: ArrayBuffer): Grid {
+/** `buf` is earth-params.bin: the land mask (one bit per grid point, little-endian in each byte), then the channels. */
+export function decodeGrid(header: GridHeader, params: ParamsHeader, buf: ArrayBuffer): Grid {
   const { nx, ny, cells: n, res } = header.grid;
-  const bytes = new Uint8Array(core);
+  const bytes = new Uint8Array(buf);
   const gridIndex = new Int32Array(n);
   const cellOf = new Int32Array(nx * ny).fill(-1);
   let k = 0;
@@ -60,6 +65,7 @@ export function decodeGrid(header: GridHeader, core: ArrayBuffer): Grid {
   const lat = new Float32Array(n);
   const lon = new Float32Array(n);
   const area = new Float32Array(n);
+  const rowArea = new Float64Array(ny);
   let areaTotal = 0;
   for (let i = 0; i < n; i++) {
     const r = Math.floor(gridIndex[i] / nx);
@@ -68,64 +74,79 @@ export function decodeGrid(header: GridHeader, core: ArrayBuffer): Grid {
     lat[i] = 90 - (r + 0.5) * res;
     lon[i] = -180 + (c + 0.5) * res;
     area[i] = Math.cos((lat[i] * Math.PI) / 180);
+    rowArea[r] += area[i];
     areaTotal += area[i];
   }
-  const ch = {} as Record<CoreKey, Uint8Array>;
-  const pct: Partial<Record<CoreKey, Float32Array>> = {};
-  for (const c of header.channels) {
-    if (c.file !== "core") continue;
-    ch[c.key as CoreKey] = bytes.subarray(c.byteOffset, c.byteOffset + n);
-    if (c.pct) pct[c.key as CoreKey] = Float32Array.from(c.pct);
+  const ch = {} as Record<ChannelKey, Uint8Array>;
+  const meta = {} as Record<ChannelKey, ParamChannel>;
+  for (const c of params.channels) {
+    ch[c.key] = bytes.subarray(c.byteOffset, c.byteOffset + n);
+    meta[c.key] = c;
   }
-  return { header, n, nx, ny, gridIndex, cellOf, row, lat, lon, area, areaTotal, ch, pct };
+  // Daylight grows with |latitude|: its percentile is the land area with less daylight, plus half of its own level.
+  const rowDaylight = new Float32Array(ny);
+  const rowDaylightPct = new Float32Array(ny);
+  for (let r = 0; r < ny; r++)
+    rowDaylight[r] = longestDaylight(90 - (r + 0.5) * res, ORBIT.earth.obliquity, ORBIT.earth.day);
+  const order = Array.from({ length: ny }, (_, r) => r).sort((a, b) => rowDaylight[a] - rowDaylight[b]);
+  let below = 0;
+  for (let j = 0; j < ny; ) {
+    let m = j;
+    let tie = 0;
+    while (m < ny && rowDaylight[order[m]] === rowDaylight[order[j]]) tie += rowArea[order[m++]];
+    for (let t = j; t < m; t++) rowDaylightPct[order[t]] = (below + tie / 2) / areaTotal;
+    below += tie;
+    j = m;
+  }
+  return { header, params, n, nx, ny, gridIndex, cellOf, row, lat, lon, area, areaTotal, ch, meta, rowDaylight, rowDaylightPct };
 }
 
 /** Decoded physical value of a quantised byte (NaN for 0 = no data). */
-export function valueOf(header: GridHeader, key: string, q: number) {
-  const c = header.channels.find((x) => x.key === key);
+export function channelValue(c: ParamChannel | undefined, q: number) {
   if (!c || q === 0) return NaN;
   const v = c.offset + (q - 1) * c.scale;
-  if (!c.log) return v;
-  return key === "relief" ? 10 ** v - 1 : 10 ** v;
+  return c.log ? 10 ** v - 1 : v;
 }
 
-export const maxSun = (lat: number, obliquity: number) => Math.min(90, 90 - Math.abs(lat) + obliquity);
+/** Physical Earth values of one cell, keyed by channel. */
+export function cellValues(params: ParamsHeader, q: Record<ChannelKey, number>) {
+  const out = {} as Record<ChannelKey, number>;
+  for (const c of params.channels) out[c.key] = channelValue(c, q[c.key]);
+  return out;
+}
 
-/** Lookup tables: per dimension, similarity for each of the 256 quantised levels (sun: per grid row). */
-export function buildLuts(grid: Grid, target: Target) {
-  const luts: Partial<Record<DimId, Float32Array>> = {};
+export type Luts = Partial<Record<DimId, Float32Array>>;
+export type RefCells = { ref: RefPoint; cells: number[] }[];
+
+/**
+ * Lookup tables: per parameter, the similarity for each of the 256 quantised levels of its channel (daylight: per
+ * grid row; water: per cell, set around the catalogued sites in `refCells`, unknown elsewhere).
+ */
+export function buildLuts(grid: Grid, target: Target, refCells: RefCells): Luts {
+  const luts: Luts = {};
   for (const d of DIM_IDS) {
-    const spec: DimSpec | undefined = target.dims[d];
+    const spec = target.params[d];
     if (!spec) continue;
-    const roleKey = ROLE_CHANNEL[d];
-    if (roleKey) {
-      const pct = grid.pct[roleKey]!;
-      const t = spec.earthPct ?? 0.5;
-      const lut = new Float32Array(256);
-      for (let q = 1; q < 256; q++) lut[q] = Math.exp(-0.5 * ((pct[q] - t) / SIGMA_ROLE) ** 2);
-      luts[d] = lut;
-    } else if (d === "bare") {
-      const lut = new Float32Array(256);
-      for (let q = 1; q < 256; q++) {
-        const v = valueOf(grid.header, "ndvi", q);
-        lut[q] = Math.exp(-0.5 * (Math.max(0, v - 0.03) / NDVI_TOL) ** 2);
-      }
-      luts[d] = lut;
-    } else if (d === "relief") {
-      const rt = spec.earthTarget ?? 100;
-      const lut = new Float32Array(256);
-      lut[0] = 0.5;
-      for (let q = 1; q < 256; q++) {
-        const v = valueOf(grid.header, "relief", q);
-        lut[q] = Math.exp(-0.5 * (Math.log((v + 20) / (rt + 20)) / RELIEF_LOG_SIGMA) ** 2);
-      }
-      luts[d] = lut;
-    } else if (d === "sun") {
-      const et = spec.earthTarget ?? 45;
+    const src = SOURCE[d];
+    if (src === "row") {
       const lut = new Float32Array(grid.ny);
-      for (let r = 0; r < grid.ny; r++) {
-        const la = 90 - (r + 0.5) * grid.header.grid.res;
-        lut[r] = Math.exp(-0.5 * ((maxSun(la, EARTH_OBLIQUITY) - et) / SUN_SIGMA) ** 2);
+      for (let r = 0; r < grid.ny; r++) lut[r] = similarity(d, spec, grid.rowDaylight[r], grid.rowDaylightPct[r]);
+      luts[d] = lut;
+    } else if (src === "cell") {
+      const lut = new Float32Array(grid.n).fill(UNKNOWN);
+      for (const { ref, cells } of refCells) {
+        if (ref.water === undefined) continue;
+        const s = ref.water === (spec.v === 1) ? 1 : 0;
+        for (const i of cells) lut[i] = s;
+      }
+      luts[d] = lut;
+    } else {
+      const c = grid.meta[src];
+      const lut = new Float32Array(256);
+      lut[0] = UNKNOWN;
+      for (let q = 1; q < 256; q++) {
+        const v = channelValue(c, q);
+        lut[q] = similarity(d, spec, d === "radiation" ? earthDose(v) : v, c.pct[q]);
       }
       luts[d] = lut;
     }
@@ -133,36 +154,31 @@ export function buildLuts(grid: Grid, target: Target) {
   return luts;
 }
 
-const CHANNEL_FOR: Record<DimId, CoreKey | "row"> = {
-  cold: "tmean",
-  swing: "swing",
-  bare: "ndvi",
-  inertia: "ati",
-  ice: "freeze",
-  relief: "relief",
-  sun: "row",
-};
+function simAt(grid: Grid, d: DimId, lut: Float32Array, i: number) {
+  const src = SOURCE[d];
+  return src === "row" ? lut[grid.row[i]] : src === "cell" ? lut[i] : lut[grid.ch[src][i]];
+}
 
-export function scoreAll(grid: Grid, target: Target, weights: Weights, out: Float32Array) {
-  const luts = buildLuts(grid, target);
-  const active = DIM_IDS.filter((d) => luts[d] && weights[d] > 0);
+export function scoreAll(grid: Grid, luts: Luts, weights: Weights, out: Float32Array) {
   out.fill(0);
   let wsum = 0;
-  for (const d of active) {
-    const w = weights[d];
+  for (const d of DIM_IDS) {
+    const lut = luts[d];
+    const w = weights[d] ?? 0;
+    if (!lut || w <= 0) continue;
     wsum += w;
-    const lut = luts[d]!;
-    const src = CHANNEL_FOR[d];
+    const src = SOURCE[d];
     if (src === "row") {
       const row = grid.row;
       for (let i = 0; i < grid.n; i++) out[i] += w * lut[row[i]];
+    } else if (src === "cell") {
+      for (let i = 0; i < grid.n; i++) out[i] += w * lut[i];
     } else {
       const q = grid.ch[src];
       for (let i = 0; i < grid.n; i++) out[i] += w * lut[q[i]];
     }
   }
   if (wsum > 0) for (let i = 0; i < grid.n; i++) out[i] /= wsum;
-  return luts;
 }
 
 /** Area-weighted histogram of scores, to turn any score into "top x % of Earth's land". */
@@ -198,22 +214,15 @@ export function haversine(lat1: number, lon1: number, lat2: number, lon2: number
   return 2 * 6371 * Math.asin(Math.min(1, Math.sqrt(a)));
 }
 
-export function cellResult(grid: Grid, target: Target, luts: Partial<Record<DimId, Float32Array>>, scores: Float32Array, rank: (s: number) => number, i: number): CellResult {
+export function cellResult(grid: Grid, target: Target, luts: Luts, scores: Float32Array, rank: (s: number) => number, i: number): CellResult {
   const sims: Partial<Record<DimId, number>> = {};
   for (const d of DIM_IDS) {
     const lut = luts[d];
-    if (!lut || !target.dims[d]) continue;
-    const src = CHANNEL_FOR[d];
-    sims[d] = src === "row" ? lut[grid.row[i]] : lut[grid.ch[src][i]];
+    if (lut && target.params[d]) sims[d] = simAt(grid, d, lut, i);
   }
-  const q = {} as Record<CoreKey, number>;
-  const pct: Partial<Record<CoreKey, number>> = {};
-  for (const k of CORE_KEYS) {
-    q[k] = grid.ch[k][i];
-    const table = grid.pct[k];
-    if (table && q[k] > 0) pct[k] = table[q[k]];
-  }
-  return { cell: i, lat: grid.lat[i], lon: grid.lon[i], score: scores[i], topPct: rank(scores[i]), sims, q, pct };
+  const q = {} as Record<ChannelKey, number>;
+  for (const k of CHANNEL_KEYS) q[k] = grid.ch[k]?.[i] ?? 0;
+  return { cell: i, lat: grid.lat[i], lon: grid.lon[i], score: scores[i], topPct: rank(scores[i]), sims, q };
 }
 
 /**
@@ -338,6 +347,7 @@ export interface ProbeRequest {
 export interface InitRequest {
   type: "init";
   header: GridHeader;
-  core: ArrayBuffer;
+  params: ParamsHeader;
+  buf: ArrayBuffer;
   refs: RefPoint[];
 }

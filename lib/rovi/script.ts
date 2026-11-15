@@ -4,7 +4,8 @@ import { NAV_ITEMS } from "@/components/shell/nav";
 import { LANDINGS } from "@/lib/data/landings";
 import { STATIC_PLACES } from "@/lib/data/globePlaces";
 import { SITES } from "@/lib/data/sites";
-import type { DimId } from "@/lib/finder/types";
+import { DIM_LABEL } from "@/lib/finder/params";
+import { DIM_IDS, type DimId } from "@/lib/finder/types";
 import { legendUrl, layersFor } from "@/lib/layers";
 import { ARTEMIS_REGIONS } from "@/lib/moonbase/regions";
 import type { World } from "@/lib/worlds";
@@ -78,10 +79,10 @@ const EXPLAINERS: Record<"analogue" | "finder" | "radar" | "moonbase", Explainer
       { from: "weights", to: "map", label: "" },
     ],
     steps: [
-      { title: "Measure Earth", text: "Every land cell gets surface temperature, day-night swing and plant cover from NASA MODIS, and terrain relief from JAXA ALOS.", nodes: ["modis"] },
+      { title: "Measure Earth", text: "Every land cell gets 13 parameters: temperature, rain, humidity, air pressure and dust from NASA POWER, sand from SoilGrids, slope and height from JAXA ALOS, and how remote it is.", nodes: ["modis"] },
       { title: "Describe the target", text: "The Moon or Mars site is described the same way, from orbiter data.", nodes: ["target"] },
-      { title: "Compare fairly", text: "Cold is judged by rank within each world (Earth's coldest versus the Moon's coldest), so Earth never has to reach lunar temperatures.", nodes: ["modis", "target", "sim"] },
-      { title: "Weigh what matters", text: "Each dimension gives a 0 to 1 match; your sliders decide how much each one counts in the final 0 to 100 score.", nodes: ["sim", "weights"] },
+      { title: "Compare fairly", text: "Where the target is beyond anything on Earth, like the Moon's vacuum or -220 °C, land is ranked by how far it goes toward it, so Earth never has to reach lunar values.", nodes: ["modis", "target", "sim"] },
+      { title: "Weigh what matters", text: "Each parameter gives a 0 to 1 match; your sliders decide how much each one counts in the final 0 to 100 score.", nodes: ["sim", "weights"] },
       { title: "Rank the planet", text: "The brightest cells on the map are the closest matches, and the list shows the best distinct places.", nodes: ["weights", "map"] },
     ],
   },
@@ -173,12 +174,26 @@ export const SUGGESTIONS: Suggestion[] = [
     q: "Rank Earth for a Moon base, ice first",
     match: /\b(moon base|lunar)\b.*\b(ice|frozen)\b.*\b(first|matter|most|priority|weight)|\bice first\b/,
     reply: () => ({
-      text: "Done. The target is the Shackleton crater rim at the lunar south pole. I turned the ice and cold sliders all the way up and the rest down, so the ranking leans toward frozen, cold ground. Drag any slider to make it your own.",
+      text: "Done. The target is the Shackleton crater rim at the lunar south pole. I turned the water-ice and temperature sliders all the way up and the rest down, so the ranking leans toward frozen, icy ground. Drag any slider to make it your own.",
       actions: [
         {
           type: "setFinder",
           targetId: "moon-shackleton-rim",
-          weights: { ice: 1, cold: 1, bare: 0.3, sun: 0.3, relief: 0.2, swing: 0.2, inertia: 0.2 },
+          weights: {
+            water: 1,
+            tmean: 1,
+            trange: 0.3,
+            radiation: 0.3,
+            pressure: 0.3,
+            daylight: 0.3,
+            precip: 0.3,
+            rh: 0.2,
+            aod: 0.2,
+            sand: 0.2,
+            slope: 0.2,
+            isolation: 0.2,
+            elev: 0.2,
+          },
         },
       ],
       next: ["Where would you build a Moon base?", "What is an Earth analogue?"],
@@ -328,13 +343,19 @@ const MISSION_WORDS: [RegExp, MissionId][] = [
 ];
 
 const DIM_WORDS: [RegExp, DimId][] = [
-  [/\b(ice|frozen|freez\w*)\b/, "ice"],
-  [/\b(cold|temperature)\b/, "cold"],
-  [/\b(bare|plants?|vegetation)\b/, "bare"],
-  [/\b(sun|sunlight|light)\b/, "sun"],
-  [/\b(relief|rough|terrain|slope)\b/, "relief"],
-  [/\b(swing|day night)\b/, "swing"],
-  [/\b(inertia|rock(s|y)?|loose)\b/, "inertia"],
+  [/\b(ice|frozen|freez\w*|water|minerals?|clays?|salts?|geochem\w*|aqueous)\b/, "water"],
+  [/\b(cold|temperature)\b/, "tmean"],
+  [/\b(swing|temperature range|day night)\b/, "trange"],
+  [/\b(radiation|dose|cosmic)\b/, "radiation"],
+  [/\b(slope|steep|flat|terrain)\b/, "slope"],
+  [/\b(soil|sand|sandy|regolith)\b/, "sand"],
+  [/\b(pressure|atmosphere|vacuum|thin air)\b/, "pressure"],
+  [/\b(daylight|sun|sunlight)\b/, "daylight"],
+  [/\b(rain|precipitation|dry|dryness|arid)\b/, "precip"],
+  [/\b(humidity|humid)\b/, "rh"],
+  [/\b(dust|dusty|aerosol)\b/, "aod"],
+  [/\b(isolat\w*|remote)\b/, "isolation"],
+  [/\b(elevation|altitude|height)\b/, "elev"],
 ];
 
 const LAYER_WORDS: Record<World, [RegExp, string][]> = {
@@ -420,11 +441,11 @@ function parse(t: string): RoviReply | Promise<RoviReply> | null {
   const weighty = /\b(weight|matter|priority|first|care)\b/.test(t);
   if ((target && finderish) || (dims.length && (finderish || (weighty && location.pathname === "/finder")))) {
     const weights = dims.length
-      ? (Object.fromEntries((["cold", "swing", "bare", "inertia", "ice", "sun", "relief"] as DimId[]).map((d) => [d, dims.includes(d) ? 1 : 0.3])) as Record<DimId, number>)
+      ? (Object.fromEntries(DIM_IDS.map((d) => [d, dims.includes(d) ? 1 : 0.3])) as Record<DimId, number>)
       : undefined;
     const name = target?.name;
     return {
-      text: `${name ? `Ranking every land cell on Earth against ${name}.` : "Re-weighting the ranking."}${dims.length ? ` I put ${dims.join(" and ")} first and turned the rest down.` : ""} Brightest cells are the closest matches.`,
+      text: `${name ? `Ranking every land cell on Earth against ${name}.` : "Re-weighting the ranking."}${dims.length ? ` I put ${dims.map((d) => DIM_LABEL[d].toLowerCase()).join(" and ")} first and turned the rest down.` : ""} Brightest cells are the closest matches.`,
       actions: [{ type: "setFinder", targetId: target?.id, weights }],
       next: ["Where would you build a Moon base?"],
     };

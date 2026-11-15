@@ -1,84 +1,90 @@
 {
  "id": "learned-weights",
  "name": "Learned weights",
- "version": "1.0",
- "trained": "2026-11-14",
- "task": "Supervised: learn how much each Finder dimension matters for a real NASA analogue pair.",
+ "version": "2.0",
+ "trained": "2026-11-15",
+ "task": "Supervised: learn how much each Finder parameter matters for a real NASA analogue pair.",
  "data": {
   "positives": "23 NASA-recognised Earth–Moon/Mars analogue pairs (each with a source URL in pairs.json); every land cell within 50 km of the Earth site, weighted so each pair counts once.",
   "negatives": "400 random land cells per pair (area-weighted), scored against the same target.",
-  "features": "The Finder's 7 per-dimension similarities (cold, day–night swing, bare ground, thermal inertia, frozen ground, Sun angle, relief), computed exactly as in the browser."
+  "features": "The Finder's per-parameter similarities (mean temperature, temperature range, radiation dose, terrain slope, soil sand, air pressure, daylight, precipitation, humidity, dust, isolation, elevation), computed exactly as in the browser. Aqueous geochemistry is left out: only catalogued sites carry it, and those are the positives."
  },
  "method": [
   "Logistic regression with non-negative weights (more similarity can never count against a place) and an L2 penalty, fitted by projected gradient descent.",
-  "λ chosen from [0.01, 0.03, 0.1, 0.3] by leave-one-pair-out recall; chosen λ = 0.01.",
+  "λ chosen from [0.01, 0.03, 0.1, 0.3] by leave-one-pair-out recall; chosen λ = 0.3.",
   "The learned weights are plugged into the Finder's own score, S = Σ w·s / Σ w, so they mean exactly what the sliders mean.",
   "Validation: leave one pair out, train on the rest, then check whether the held-out Earth site's best cell within 50 km lands in Earth's top 5 % for its target. The same check is run for the hand-set weights."
  ],
  "metrics": {
   "recall5": {
    "learnedLOPO": 0.1739,
-   "learnedLeaveOneSiteOut": 0.2174,
-   "handSet": 0.2174,
-   "equalWeights": 0.1304
+   "learnedLeaveOneSiteOut": 0.1304,
+   "handSet": 0.087,
+   "equalWeights": 0.087
   },
   "meanTopPct": {
-   "learnedLOPO": 17.761,
-   "handSet": 17.764
+   "learnedLOPO": 23.783,
+   "handSet": 33.867
   },
   "byWorld": {
    "moon": {
     "pairs": 8,
     "learned": 0.0,
-    "hand": 0.125
+    "hand": 0.0
    },
    "mars": {
     "pairs": 15,
     "learned": 0.2667,
-    "hand": 0.2667
+    "hand": 0.1333
    }
   },
   "lambdaScan": [
    {
     "lambda": 0.01,
-    "recall5": 0.1739,
-    "meanTopPct": 17.761
+    "recall5": 0.087,
+    "meanTopPct": 25.029
    },
    {
     "lambda": 0.03,
     "recall5": 0.1739,
-    "meanTopPct": 18.474
+    "meanTopPct": 24.199
    },
    {
     "lambda": 0.1,
     "recall5": 0.1739,
-    "meanTopPct": 19.032
+    "meanTopPct": 23.81
    },
    {
     "lambda": 0.3,
     "recall5": 0.1739,
-    "meanTopPct": 19.407
+    "meanTopPct": 23.783
    }
   ]
  },
  "score": {
   "label": "Recall at top 5 %",
   "value": 0.1739,
-  "baseline": 0.2174,
-  "text": "Held-out NASA analogue in Earth's top 5 %: 17 % of pairs with learned weights (leave-one-pair-out) vs 22 % with the hand-set weights."
+  "baseline": 0.087,
+  "text": "Held-out NASA analogue in Earth's top 5 %: 17 % of pairs with learned weights (leave-one-pair-out) vs 9 % with the hand-set weights."
  },
  "weights": {
-  "cold": 0.068,
-  "swing": 0.186,
-  "bare": 1.0,
-  "inertia": 0.0,
-  "ice": 0.523,
-  "sun": 0.038,
-  "relief": 0.439
+  "tmean": 0.081,
+  "trange": 0.0,
+  "radiation": 0.74,
+  "slope": 0.0,
+  "sand": 0.057,
+  "pressure": 1.0,
+  "daylight": 0.308,
+  "precip": 0.0,
+  "rh": 0.085,
+  "aod": 0.0,
+  "isolation": 0.0,
+  "elev": 0.0,
+  "water": null
  },
  "limits": [
-  "Only 23 positive pairs, several sharing an Earth site, so scores move a lot with one pair; leave-one-site-out (22 %) is the stricter number.",
-  "NASA picked many sites for chemistry, geology or logistics, which the 7 climate-and-terrain dimensions cannot see; those pairs are hard for any weights.",
+  "Only 23 positive pairs, several sharing an Earth site, so scores move a lot with one pair; leave-one-site-out (13 %) is the stricter number.",
+  "NASA picked many sites for chemistry, geology or logistics, which climate and terrain parameters cannot see; those pairs are hard for any weights.",
   "One weight set is learned for both worlds; Moon pairs are few.",
   "Random cells are not true negatives: some may be good analogues nobody has tested."
  ],

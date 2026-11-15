@@ -61,7 +61,7 @@ export const PAKISTAN: SpotlightSite[] = [
     region: "Punjab, Pakistan",
     approx: false,
     blurb: "Hot sandy desert with dune fields and dry riverbeds of the old Hakra.",
-    note: "Very hot by day with a wide day-night swing. Monsoon greening and irrigated edges lower its 'bare' score; dunes are a wind analogue the grid cannot measure.",
+    note: "Very hot by day with a wide yearly temperature range. Monsoon rain and humid summer air lower its dryness match; dunes are a wind analogue the grid cannot measure.",
   },
   {
     id: "pk-thar",
@@ -71,7 +71,7 @@ export const PAKISTAN: SpotlightSite[] = [
     region: "Sindh, Pakistan",
     approx: false,
     blurb: "Pakistan's share of the Thar: stabilised dunes and scrub in Tharparkar.",
-    note: "The Thar is one of the most densely populated deserts; monsoon grass and scrub show up in NDVI, so it is less bare than the Atacama or the Namib.",
+    note: "The Thar is one of the most densely populated deserts, and monsoon rain makes it far wetter than the Atacama or the Namib, which lowers its dryness and isolation match.",
   },
   {
     id: "pk-khewra",
@@ -81,7 +81,7 @@ export const PAKISTAN: SpotlightSite[] = [
     region: "Punjab, Pakistan",
     approx: false,
     blurb: "Thick Precambrian salt (evaporite) beds, mined at Khewra for centuries.",
-    note: "Evaporites like these record drying water, as sulfate and chloride deposits do at Gale and Meridiani. Salt mineralogy is not in our dimensions, and the farmland around the range keeps its score low.",
+    note: "Evaporites like these record drying water, as sulfate and chloride deposits do at Gale and Meridiani, so the site matches on aqueous geochemistry; monsoon rain and the farmland around the range keep its score lower.",
   },
 ];
 
@@ -152,12 +152,29 @@ export const NAMED_SITES: NamedSite[] = [
   { ...site("earth-ladakh"), group: "agency", radiusKm: 50, why: "Cold, high, dry plateau with salt lakes; ISRO analogue mission" },
   { ...site("earth-pilbara"), group: "agency", radiusKm: 80, why: "3.5-billion-year-old stromatolites; ancient life analogue" },
   { ...site("earth-wadi-rum"), group: "known", radiusKm: 40, why: "Red sand valleys; nicknamed the Valley of the Moon" },
-  { ...site("earth-victoria-land"), group: "finder", radiusKm: 60, why: "Top Finder match for the lunar south pole; ice-covered mountains" },
+  { ...site("earth-victoria-land"), group: "finder", radiusKm: 60, why: "A top Finder match for the lunar south pole; ice-covered mountains" },
   { ...site("earth-deception"), group: "known", radiusKm: 30, why: "Active volcano in polar ice; proposed Mars analogue" },
   ...PAKISTAN.map((p): NamedSite => ({ id: p.id, name: p.name, lat: p.lat, lon: p.lon, region: p.region, group: "pakistan", radiusKm: 50, why: p.blurb })),
 ];
 
-export const REF_POINTS: RefPoint[] = NAMED_SITES.map((p) => ({ id: p.id, lat: p.lat, lon: p.lon, radiusKm: p.radiusKm }));
+const WATER_WORDS =
+  /salt|evaporit|clay|lake|hydrotherm|sulfat|carbonat|nitrate|ice|permafrost|sinter|spring|gypsum|brine|perchlorat/i;
+
+/**
+ * Water-formed minerals or ice at a catalogued Earth site, from its geology notes in lib/data/sites.ts: up to two
+ * notes, "None recorded", or null when the site has no notes. Takes a globe site id or a Finder place id.
+ */
+export function siteWater(id: string) {
+  const geo = siteById(PAKISTAN.find((p) => p.id === id)?.siteId ?? id)?.geology;
+  if (!geo) return null;
+  const hits = geo.filter((g) => WATER_WORDS.test(g));
+  return hits.length ? hits.slice(0, 2).join("; ") : "None recorded";
+}
+
+export const REF_POINTS: RefPoint[] = NAMED_SITES.map((p) => {
+  const w = siteWater(p.id);
+  return { id: p.id, lat: p.lat, lon: p.lon, radiusKm: p.radiusKm, water: w === null ? undefined : w !== "None recorded" };
+});
 
 /** Coarse gazetteer: [name, lat, lon, radius km]. */
 const REGIONS: [string, number, number, number][] = [

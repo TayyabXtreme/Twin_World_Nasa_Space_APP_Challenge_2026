@@ -1,16 +1,47 @@
 import type { World } from "@/lib/worlds";
 
-/** Shapes of the files written by scripts/build-finder.py into public/data/finder. */
+/** Shapes of the Finder data files (scripts/build-finder.py, build-finder-params.py) in public/data/finder. */
 
-export type DimId = "cold" | "swing" | "bare" | "inertia" | "ice" | "sun" | "relief";
-export const DIM_IDS: DimId[] = ["cold", "swing", "bare", "inertia", "ice", "sun", "relief"];
+/** The thirteen site-vs-target parameters the Finder ranks on, in the order the sliders and the breakdown use. */
+export type DimId =
+  | "tmean"
+  | "trange"
+  | "radiation"
+  | "slope"
+  | "sand"
+  | "pressure"
+  | "daylight"
+  | "precip"
+  | "rh"
+  | "aod"
+  | "isolation"
+  | "elev"
+  | "water";
+export const DIM_IDS: DimId[] = [
+  "tmean",
+  "trange",
+  "radiation",
+  "slope",
+  "sand",
+  "pressure",
+  "daylight",
+  "precip",
+  "rh",
+  "aod",
+  "isolation",
+  "elev",
+  "water",
+];
 
-/** Scoring channels in earth-core.bin, in file order. */
-export type CoreKey = "tmean" | "swing" | "ndvi" | "ati" | "freeze" | "relief";
+/** Earth channels in earth-params.bin, in file order. */
+export type ChannelKey = "tmean" | "trange" | "precip" | "rh" | "ps" | "aod" | "sand" | "slope" | "isolation" | "elev";
+export const CHANNEL_KEYS: ChannelKey[] = ["tmean", "trange", "precip", "rh", "ps", "aod", "sand", "slope", "isolation", "elev"];
+
+/** Display-only channels in earth-detail.bin (earth-grid.json describes them). */
 export type DetailKey = "tday" | "tnight" | "tcold" | "seasonal" | "albedo" | "elev" | "flags";
 
 export interface GridChannel {
-  key: CoreKey | DetailKey;
+  key: string;
   units: string;
   label: string;
   source: string;
@@ -19,12 +50,11 @@ export interface GridChannel {
   offset: number;
   scale: number;
   byteOffset: number;
-  /** Area-weighted mid-rank percentile of each quantised level (core channels only). */
   pct?: number[];
-  pctRef?: string;
   coverage?: number;
 }
 
+/** earth-grid.json: the 0.25° grid, the MODIS channels and the display-only detail channels. */
 export interface GridHeader {
   version: number;
   grid: { res: number; nx: number; ny: number; cells: number; origin: string };
@@ -34,30 +64,45 @@ export interface GridHeader {
   sources: { id: string; title: string; url: string }[];
 }
 
-export interface DimValue {
-  v: number | null;
+export interface ParamChannel {
+  key: ChannelKey;
   units: string;
-  source: string;
-}
-
-export interface DimSpec {
-  mode: "role" | "absolute";
-  /** Role: percentile of the target within its own world (0 = coldest / lowest). */
-  worldPct?: number;
-  /** Role: the Earth percentile with the same rank (snapped to Earth's quantised levels). */
-  earthPct?: number;
-  /** Absolute: target value in the Earth channel's units (NDVI, degrees of Sun, metres of relief). */
-  earthTarget?: number;
-  note: string;
-  value?: DimValue;
-}
-
-export interface DimMeta {
-  id: DimId;
   label: string;
-  mode: "role" | "absolute";
-  earth: CoreKey | "lat";
-  blurb: string;
+  source: string;
+  /** Stored as log10(value + 1). */
+  log: boolean;
+  offset: number;
+  scale: number;
+  byteOffset: number;
+  /** Area-weighted percentile of each quantised level over Earth's land. */
+  pct: number[];
+  coverage: number;
+}
+
+/** earth-params.json: the land mask and the Earth side of every parameter, one byte per land cell. */
+export interface ParamsHeader {
+  version: number;
+  cells: number;
+  maskBytes: number;
+  channels: ParamChannel[];
+  notes: string[];
+  sources: { id: string; title: string; url: string }[];
+}
+
+/**
+ * What a target asks of Earth on one parameter (lib/finder/params.generated.json):
+ *  near    closeness to the target value v (`min`: v is a lower bound, anything above it matches)
+ *  toward  v lies far beyond anything on Earth, so land is ranked by how far it goes toward it (dir +1 = higher)
+ *  rank    v's percentile within its own world (`pct`) against the Earth cell's percentile
+ *  match   v = 1 if the target has water-formed minerals or ice, 0 if not; compared with catalogued Earth sites
+ */
+export interface ParamSpec {
+  v: number | null;
+  mode: "near" | "toward" | "rank" | "match";
+  dir?: 1 | -1;
+  min?: boolean;
+  unreachable?: boolean;
+  pct?: number;
 }
 
 export interface Fact {
@@ -73,7 +118,8 @@ export interface Target {
   name: string;
   lat: number;
   lon: number;
-  dims: Partial<Record<DimId, DimSpec>>;
+  /** Merged in from params.generated.json when the targets load (lib/finder/params.ts withParams). */
+  params: Partial<Record<DimId, ParamSpec>>;
   facts: Fact[];
   temps: string;
   refs?: string[];
@@ -82,7 +128,6 @@ export interface Target {
 
 export interface TargetsDoc {
   version: number;
-  dimensions: DimMeta[];
   obliquity: Record<World, number>;
   targets: Target[];
   sources: { id: string; title: string; url: string }[];
@@ -100,12 +145,10 @@ export interface CellResult {
   score: number;
   /** Share of Earth's land area (%) that scores higher than this cell. */
   topPct: number;
-  /** Per-dimension similarity 0..1; null when the target has no such dimension. */
+  /** Per-parameter similarity 0..1; absent when the target has no value for it. */
   sims: Partial<Record<DimId, number>>;
-  /** Raw quantised core values (0 = no data), for display. */
-  q: Record<CoreKey, number>;
-  /** Earth percentile (0..1) of each role channel, for display. */
-  pct: Partial<Record<CoreKey, number>>;
+  /** Raw quantised channel values (0 = no data), for display. */
+  q: Record<ChannelKey, number>;
 }
 
 export interface RefPoint {
@@ -113,6 +156,8 @@ export interface RefPoint {
   lat: number;
   lon: number;
   radiusKm: number;
+  /** Water-formed minerals or ice recorded at the site (lib/data/sites.ts geology); undefined = not catalogued. */
+  water?: boolean;
 }
 
 export interface ScoreResult {

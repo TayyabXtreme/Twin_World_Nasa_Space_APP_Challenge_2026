@@ -749,8 +749,8 @@ function AnalogFinderCard({ b }: { b: Site }) {
           </h2>
           <p className="mt-3 max-w-[46ch] text-[15px] leading-relaxed text-muted-foreground">
             Shared labels only go so far. The Analog Finder scores all {landing.earthCells.toLocaleString("en-US")} land
-            cells on Earth against {b.name} with measured NASA data (temperature, dryness, ground type, ice, sunlight
-            and relief) and shows where each match breaks down.
+            cells on Earth against {b.name} on 13 measured conditions (temperature, rain, air pressure, radiation, soil,
+            slope, daylight and more) and shows where each match breaks down.
           </p>
           {exact && (
             <ol className="mt-5 grid gap-1.5 text-sm">

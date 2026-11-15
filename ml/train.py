@@ -43,7 +43,8 @@ def main():
     if a.only in (None, "m2"):
         print("\n== M2 Learned weights ==")
         pairs = json.loads((HERE / "pairs.json").read_text(encoding="utf-8"))["pairs"]
-        m2 = tw.train_learned_weights(grid, targets, pairs)
+        pg = tw.load_params(a.data, grid, ROOT / "lib" / "finder" / "params.generated.json")
+        m2 = tw.train_learned_weights(grid, pg, targets, pairs)
         tw.export_learned_weights(m2, pairs, targets, Path(a.out) / "learned-weights")
 
     print(f"\nDone in {time.time() - t0:.0f} s -> {a.out}")

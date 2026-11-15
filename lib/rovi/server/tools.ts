@@ -51,8 +51,9 @@ export const TOOLS: Anthropic.Tool[] = [
       target_id: str("Finder target", TARGET_IDS),
       weights: {
         type: "array",
-        description: "Optional weight overrides, 0 to 1. Empty = defaults.",
-        items: obj({ dim: str("Dimension", DIM_IDS), weight: num("0 to 1") }),
+        description:
+          "Optional weight overrides, 0 to 1. Empty = defaults. Parameters: tmean mean temperature, trange temperature range, radiation dose, slope, sand soil composition, pressure, daylight, precip precipitation, rh humidity, aod dust, isolation, elev elevation, water aqueous geochemistry.",
+        items: obj({ dim: str("Parameter", DIM_IDS), weight: num("0 to 1") }),
       },
       top: num("How many places, 1-8 (default 5)"),
     }),
@@ -89,7 +90,7 @@ export const TOOLS: Anthropic.Tool[] = [
     "Point the Analog Finder page at a target and/or set its weight sliders.",
     obj({
       target_id: str("Target, or 'current' to keep it", [...TARGET_IDS, "current"]),
-      weights: { type: "array", description: "Slider changes, 0 to 1; empty for none", items: obj({ dim: str("Dimension", DIM_IDS), weight: num("0 to 1") }) },
+      weights: { type: "array", description: "Slider changes, 0 to 1; empty for none", items: obj({ dim: str("Parameter", DIM_IDS), weight: num("0 to 1") }) },
     }),
   ),
   tool("place_moon_base", "Pin a Moon base at an Artemis III region on the south-pole map.", obj({ region_id: str("Region", REGION_IDS) })),

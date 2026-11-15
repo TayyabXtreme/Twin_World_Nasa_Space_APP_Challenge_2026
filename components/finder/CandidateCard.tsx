@@ -7,7 +7,7 @@ import { AnimatedNumber } from "@/components/motion/AnimatedNumber";
 import { SatelliteView } from "@/components/satellite/SatelliteView";
 import type { PlaceLabel } from "@/lib/finder/places";
 import { WORLD_LIMITS, fieldTests, strengths, weaknesses } from "@/lib/finder/text";
-import type { CellResult, GridHeader, Target } from "@/lib/finder/types";
+import type { CellResult, ParamsHeader, Target } from "@/lib/finder/types";
 import { ScoreSteps } from "./FinderNotes";
 import { FinderTabs } from "./FinderTabs";
 import { SiteConditions } from "./SiteConditions";
@@ -97,7 +97,7 @@ function Measured({ detail }: { detail: Record<string, number> | null }) {
 }
 
 /**
- * One candidate place: name, the score ring, and the details in four tabs (how each dimension matches, what to
+ * One candidate place: name, the score ring, and the details in four tabs (how each parameter matches, what to
  * test there, satellite imagery, raw data) so only one part is on screen at a time.
  */
 export function CandidateCard({
@@ -105,7 +105,7 @@ export function CandidateCard({
   label,
   rank,
   target,
-  header,
+  params,
   detail,
   confidence,
 }: {
@@ -113,13 +113,13 @@ export function CandidateCard({
   label: PlaceLabel;
   rank: number | null;
   target: Target;
-  header: GridHeader;
+  params: ParamsHeader;
   detail: Record<string, number> | null;
   /** Data confidence 0–100 (lib/finder/text.ts confidence()). */
   confidence: number;
 }) {
   const strong = strengths(cell);
-  const weak = weaknesses(cell, target, header);
+  const weak = weaknesses(cell, target, params);
   const tests = fieldTests(cell);
   const limits = WORLD_LIMITS[target.world];
   const score = Math.round(cell.score * 100);
@@ -178,7 +178,7 @@ export function CandidateCard({
                     cell={cell}
                     target={target}
                     known={label.known}
-                    detail={detail}
+                    params={params}
                     siteName={label.title}
                   />
                   <div className="mt-6 grid gap-4 md:grid-cols-2">
@@ -196,7 +196,7 @@ export function CandidateCard({
                             </li>
                           ))
                         ) : (
-                          <li className="text-sm text-muted-foreground">No dimension scores 75 or more here.</li>
+                          <li className="text-sm text-muted-foreground">No parameter scores 75 or more here.</li>
                         )}
                       </ul>
                     </div>
@@ -242,7 +242,7 @@ export function CandidateCard({
                     {(tests.length
                       ? tests
                       : [
-                          "Use it as a contrast site: the dimensions that score low show what this place cannot stand in for.",
+                          "Use it as a contrast site: the parameters that score low show what this place cannot stand in for.",
                         ]
                     ).map((t, i) => (
                       <li

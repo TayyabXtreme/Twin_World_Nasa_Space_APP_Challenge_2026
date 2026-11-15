@@ -18,7 +18,7 @@ import { CandidateCard } from "./CandidateCard";
 import { CandidateSummary } from "./CandidateSummary";
 import { AnalogueSpace } from "./AnalogueSpace";
 import { FinderTabs } from "./FinderTabs";
-import type { LearnedWeights } from "./WeightPanel";
+import { learnedFits, type LearnedWeights } from "./WeightPanel";
 import type { FlyRequest, MapPin } from "./FinderMap";
 import { MethodPanel, TargetProfile } from "./MethodPanel";
 import { SiteTable, type SiteRow } from "./SiteTable";
@@ -135,11 +135,16 @@ export function FinderView() {
     if (!targets) return null;
     return targets.find((t) => t.id === params.get("t")) ?? targets.find((t) => t.id === "mars-jezero") ?? targets[0];
   }, [targets, params]);
-  const weights = target
-    ? mode === "learned" && learned
-      ? (learned.weights as Weights)
-      : (weightsByTarget[target.id] ?? DEFAULT_WEIGHTS[target.world])
-    : null;
+  const weights = useMemo(() => {
+    if (!target) return null;
+    if (mode === "learned" && learnedFits(learned)) {
+      // Parameters the model did not learn (null) keep their hand-set weight.
+      const w = { ...DEFAULT_WEIGHTS[target.world] };
+      for (const [d, v] of Object.entries(learned.weights)) if (v !== null) w[d as DimId] = v;
+      return w;
+    }
+    return weightsByTarget[target.id] ?? DEFAULT_WEIGHTS[target.world];
+  }, [target, mode, learned, weightsByTarget]);
 
   // Score whenever target or weights change. The engine keeps one job in flight, so results stream in.
   useEffect(() => {
@@ -206,12 +211,6 @@ export function FinderView() {
 
   const labels = useMemo(() => (result ? distinctLabels(result.top, lookup) : []), [result, lookup]);
 
-  // Per-cell data-quality flags (earth-detail.bin) sharpen the confidence once they have loaded.
-  const flagsOf = useCallback(
-    (c: CellResult) => (detailBuf && engine ? detailValues(engine.data.header, detailBuf, c.cell).flags : undefined),
-    [detailBuf, engine],
-  );
-
   // The two ranked lists: named analogue sites (each scored by its best cell nearby) and new places found anywhere.
   const namedRows: SiteRow[] = useMemo(() => {
     if (!result || !target || !weights) return [];
@@ -225,14 +224,14 @@ export function FinderView() {
           region: s.region,
           group: s.group,
           score: c.score * 100,
-          confidence: confidence(c, target, weights, flagsOf(c)),
+          confidence: confidence(c, target, weights),
           lat: c.lat,
           lon: c.lon,
           sims: c.sims,
         },
       ];
     }).sort((a, b) => b.score - a.score);
-  }, [result, target, weights, flagsOf]);
+  }, [result, target, weights]);
   const newRows: SiteRow[] = useMemo(() => {
     if (!result || !target || !weights) return [];
     return result.top.map((c, i) => ({
@@ -240,12 +239,12 @@ export function FinderView() {
       name: labels[i]?.title ?? "…",
       region: labels[i]?.subtitle ?? "",
       score: c.score * 100,
-      confidence: confidence(c, target, weights, flagsOf(c)),
+      confidence: confidence(c, target, weights),
       lat: c.lat,
       lon: c.lon,
       sims: c.sims,
     }));
-  }, [result, target, weights, labels, flagsOf]);
+  }, [result, target, weights, labels]);
 
   const bestNamed = namedRows[0]?.id;
   const effective: Selection = useMemo(
@@ -398,7 +397,7 @@ export function FinderView() {
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-background/60 text-center">
                 <span className="finder-pulse size-10 rounded-full border border-primary/50" aria-hidden />
                 <p className="text-sm text-muted-foreground">
-                  {error ?? "Loading the NASA Earth feature grid (2.3 MB)…"}
+                  {error ?? "Loading the NASA Earth parameter grid (3.7 MB)…"}
                 </p>
               </div>
             )}
@@ -465,7 +464,7 @@ export function FinderView() {
                     label={currentLabel}
                     rank={currentRank}
                     target={target}
-                    confidence={confidence(current, target, weights ?? DEFAULT_WEIGHTS[target.world], detail?.flags)}
+                    confidence={confidence(current, target, weights ?? DEFAULT_WEIGHTS[target.world])}
                     onFull={() => {
                       const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
                       document
@@ -511,7 +510,7 @@ export function FinderView() {
             <SheetHeader className="border-b border-white/[0.07] px-6 pt-6 pb-5">
               <SheetTitle className="font-heading text-lg">Adjust what matters</SheetTitle>
               <SheetDescription>
-                Weigh each factor for {target.name}. The map and the ranking update as you drag.
+                Weigh each of the 13 parameters for {target.name}. The map and the ranking update as you drag.
               </SheetDescription>
             </SheetHeader>
             <div className="px-6 pt-5 pb-8">
@@ -556,9 +555,9 @@ export function FinderView() {
             label={currentLabel}
             rank={currentRank}
             target={target}
-            header={engine.data.header}
+            params={engine.data.params}
             detail={detail}
-            confidence={confidence(current, target, weights ?? DEFAULT_WEIGHTS[target.world], detail?.flags)}
+            confidence={confidence(current, target, weights ?? DEFAULT_WEIGHTS[target.world])}
           />
         </section>
       )}
@@ -642,7 +641,7 @@ export function FinderView() {
                     id: "method",
                     label: "Full method",
                     icon: BookOpenText,
-                    render: () => <MethodPanel header={engine.data.header} targets={engine.data.targets} />,
+                    render: () => <MethodPanel header={engine.data.header} params={engine.data.params} targets={engine.data.targets} />,
                   },
                 ]}
               />

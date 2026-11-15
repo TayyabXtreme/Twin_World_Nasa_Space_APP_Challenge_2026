@@ -10,10 +10,10 @@ import { landingById } from "@/lib/data/landings";
 import { measured, METRIC_INFO, metricsFor, type MetricKey } from "@/lib/data/metrics";
 import { siteById, SITES } from "@/lib/data/sites";
 import { twinsForSite } from "@/lib/data/twins";
-import { cellResult, decodeGrid, scoreAll, scoreRanker, topPlaces, type Grid } from "@/lib/finder/model";
-import { distinctLabels } from "@/lib/finder/places";
-import { DEFAULT_WEIGHTS } from "@/lib/finder/text";
-import { DIM_IDS, type DimId, type GridHeader, type TargetsDoc, type Weights } from "@/lib/finder/types";
+import { buildLuts, cellResult, cellsNear, decodeGrid, scoreAll, scoreRanker, topPlaces, type Grid, type RefCells } from "@/lib/finder/model";
+import { DEFAULT_WEIGHTS, withParams } from "@/lib/finder/params";
+import { distinctLabels, REF_POINTS } from "@/lib/finder/places";
+import { DIM_IDS, type DimId, type GridHeader, type ParamsHeader, type TargetsDoc, type Weights } from "@/lib/finder/types";
 import type { Lookup } from "@/lib/lookup";
 import { valueAtLatLon } from "@/lib/moonbase/grids";
 import { decodeGreyPng } from "@/lib/moonbase/png";
@@ -52,15 +52,17 @@ export function listSites(world?: World) {
 
 /* ---------- find_analogues: the Analog Finder, server side ---------- */
 
-let finder: Promise<{ header: GridHeader; targets: TargetsDoc; grid: Grid; scores: Float32Array }> | null = null;
+let finder: Promise<{ header: GridHeader; targets: TargetsDoc; grid: Grid; refCells: RefCells; scores: Float32Array }> | null = null;
 function loadFinder() {
   finder ??= Promise.all([
     json<GridHeader>("data/finder/earth-grid.json"),
+    json<ParamsHeader>("data/finder/earth-params.json"),
     json<TargetsDoc>("data/finder/targets.json"),
-    read("data/finder/earth-core.bin"),
-  ]).then(([header, targets, core]) => {
-    const grid = decodeGrid(header, core.buffer.slice(core.byteOffset, core.byteOffset + core.byteLength) as ArrayBuffer);
-    return { header, targets, grid, scores: new Float32Array(grid.n) };
+    read("data/finder/earth-params.bin"),
+  ]).then(([header, params, targets, bin]) => {
+    const grid = decodeGrid(header, params, bin.buffer.slice(bin.byteOffset, bin.byteOffset + bin.byteLength) as ArrayBuffer);
+    const refCells = REF_POINTS.map((ref) => ({ ref, cells: cellsNear(grid, ref.lat, ref.lon, ref.radiusKm) }));
+    return { header, targets: withParams(targets), grid, refCells, scores: new Float32Array(grid.n) };
   });
   return finder;
 }
@@ -84,11 +86,12 @@ function loadCountries() {
 }
 
 export async function findAnalogues(targetId: string, weights?: Partial<Record<DimId, number>>, top = 5) {
-  const [{ header, targets, grid, scores }, lookup] = await Promise.all([loadFinder(), loadCountries()]);
+  const [{ header, targets, grid, refCells, scores }, lookup] = await Promise.all([loadFinder(), loadCountries()]);
   const target = targets.targets.find((t) => t.id === targetId);
   if (!target) throw new ToolInputError(`Unknown target "${targetId}". Valid: ${targets.targets.map((t) => t.id).join(", ")}`);
   const w: Weights = { ...DEFAULT_WEIGHTS[target.world], ...weights };
-  const luts = scoreAll(grid, target, w, scores);
+  const luts = buildLuts(grid, target, refCells);
+  scoreAll(grid, luts, w, scores);
   const { topPct, scoreAtTop } = scoreRanker(grid, scores);
   const picks = topPlaces(grid, scores, scoreAtTop(0.04)).slice(0, Math.min(8, Math.max(1, top)));
   const cells = picks.map((i) => cellResult(grid, target, luts, scores, topPct, i));
@@ -97,7 +100,7 @@ export async function findAnalogues(targetId: string, weights?: Partial<Record<D
     target: { id: target.id, name: target.name, world: target.world },
     cellsScored: header.grid.cells,
     gridDeg: header.grid.res,
-    weights: Object.fromEntries(DIM_IDS.filter((d) => target.dims[d]).map((d) => [d, w[d]])),
+    weights: Object.fromEntries(DIM_IDS.filter((d) => target.params[d]).map((d) => [d, w[d]])),
     matches: cells.map((c, i) => ({
       rank: i + 1,
       place: labels[i].title,

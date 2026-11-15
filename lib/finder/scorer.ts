@@ -1,20 +1,21 @@
-import { cellResult, cellsNear, decodeGrid, paintHeat, scoreAll, scoreRanker, topPlaces, type Grid } from "./model";
-import type { CellResult, DimId, GridHeader, RefPoint, ScoreResult, Target, Weights } from "./types";
+import { buildLuts, cellResult, cellsNear, decodeGrid, paintHeat, scoreAll, scoreRanker, topPlaces, type Grid, type Luts } from "./model";
+import type { CellResult, GridHeader, ParamsHeader, RefPoint, ScoreResult, Target, Weights } from "./types";
 
 /**
  * The scoring session shared by the Web Worker and the main-thread fallback: holds the decoded grid, scores
  * every land cell, ranks distinct places, scores the reference sites and paints the heat image.
  */
-export function createScorer(header: GridHeader, core: ArrayBuffer, refs: RefPoint[]) {
-  const grid: Grid = decodeGrid(header, core);
+export function createScorer(header: GridHeader, params: ParamsHeader, buf: ArrayBuffer, refs: RefPoint[]) {
+  const grid: Grid = decodeGrid(header, params, buf);
   const refCells = refs.map((ref) => ({ ref, cells: cellsNear(grid, ref.lat, ref.lon, ref.radiusKm) }));
   const scores = new Float32Array(grid.n);
   const rgba = new Uint8ClampedArray(grid.nx * grid.ny * 4);
-  let last: { target: Target; luts: Partial<Record<DimId, Float32Array>>; rank: (s: number) => number } | null = null;
+  let last: { target: Target; luts: Luts; rank: (s: number) => number } | null = null;
 
   async function score(id: number, target: Target, weights: Weights): Promise<ScoreResult> {
     const t0 = performance.now();
-    const luts = scoreAll(grid, target, weights, scores);
+    const luts = buildLuts(grid, target, refCells);
+    scoreAll(grid, luts, weights, scores);
     const { topPct, scoreAtTop } = scoreRanker(grid, scores);
     last = { target, luts, rank: topPct };
 

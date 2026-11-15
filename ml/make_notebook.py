@@ -18,20 +18,21 @@ def py(t):
 cells = [
     md("""
 # TwinWorlds ML: Analogue Space + Learned Weights
-Run all cells (Runtime → Run all). About 10 to 15 minutes on a free Colab CPU. The last cell downloads `twinworlds-ml-results.zip`; unzip it into the project's `public/data/ml/` folder.
+Run all cells (Runtime → Run all). About 10 to 15 minutes on a free Colab CPU. The last cell downloads `twinworlds-ml-results.zip`; unzip it into the project's `public/data/ml/` folder (it replaces `analogue-space/` and `learned-weights/`).
 
 **Models**
 1. **M1 Analogue Space**: standardise every Earth land cell's MODIS-derived environment, PCA, k-means into ~8 environment types, and place the 16 Moon/Mars targets in the same space.
-2. **M2 Learned weights**: non-negative, L2-regularised logistic regression on 23 NASA-recognised analogue pairs, validated leave-one-pair-out against the hand-set weights.
+2. **M2 Learned weights**: non-negative, L2-regularised logistic regression on 23 NASA-recognised analogue pairs that learns one weight per Finder slider (mean temperature, temperature range, radiation dose, terrain slope, soil composition, atmospheric pressure, daylight, precipitation, relative humidity, dust activity, isolation, elevation), validated leave-one-pair-out against the hand-set weights. Aqueous geochemistry keeps its hand-set weight.
 
-**Data used** (all already in the Finder grid, built by `scripts/build-finder.py`)
-- Earth: NASA MODIS MOD11C3 land surface temperature, MOD13C2 NDVI, MCD43C3 albedo (2024) via NASA Earthdata; JAXA AW3D30 elevation.
+**Data used** (all already in the Finder grids, built by `scripts/build-finder.py` and `scripts/build-finder-params.py`)
+- Earth (M1): NASA MODIS MOD11C3 land surface temperature, MOD13C2 NDVI, MCD43C3 albedo (2024) via NASA Earthdata; JAXA AW3D30 elevation.
+- Earth (M2): NASA POWER climatology (MERRA-2 and CERES SYN1deg, AWS Open Data), ISRIC SoilGrids sand, JAXA AW3D30 slope and elevation, Natural Earth places.
 - Moon: LRO Diviner polar/resource products and LOLA (NASA PDS). Mars: Mars Odyssey GRS/NS, MGS TES and MOLA (NASA PDS).
 - Analogue pairs: NASA's Planetary Analog Explorer, NASA Astrobiology research locations, NASA NTRS, with a source URL for each pair.
 """),
     py("""
-# 1. Get the Finder data. The repo is private, so upload finder-data.zip (made by `python -I ml/zip_data.py`, 4.7 MB):
-#    it holds earth-grid.json, earth-core.bin and targets.json. (If the repo is public you can git clone it instead.)
+# 1. Get the Finder data: upload finder-data.zip (made by `python -I ml/zip_data.py`, about 3 MB). It holds
+#    earth-grid.json, earth-core.bin, targets.json (M1) and earth-params.json, earth-params.bin, params.generated.json (M2).
 import os, zipfile
 from google.colab import files
 if not os.path.exists('finder'):
@@ -46,6 +47,7 @@ print(os.listdir(DATA))
 import json, numpy as np, matplotlib.pyplot as plt
 import twinworlds_ml as tw
 grid, targets = tw.load_grid(DATA)
+pg = tw.load_params(DATA, grid)
 pairs = json.load(open('pairs.json', encoding='utf-8'))['pairs']
 print(f'{grid.n:,} Earth land cells, {len(targets["targets"])} Moon/Mars targets, {len(pairs)} analogue pairs')
 """),
@@ -66,10 +68,10 @@ fig.patch.set_facecolor('#0b0f1a'); plt.show()
 print('Stability (adjusted Rand):', round(np.mean(m1['stability']), 3), '+/-', round(np.std(m1['stability']), 3))
 """),
     md("## M2 · Learned weights (takes the longest: it re-trains once per held-out pair)"),
-    py("m2 = tw.train_learned_weights(grid, targets, pairs)"),
+    py("m2 = tw.train_learned_weights(grid, pg, targets, pairs)"),
     py("""
-fig, ax = plt.subplots(1, 2, figsize=(14, 4.5))
-ax[0].bar(tw.DIMS, m2['weights']); ax[0].set_title('Learned weights (0-1)')
+fig, ax = plt.subplots(1, 2, figsize=(16, 4.5))
+ax[0].bar(tw.PARAMS, m2['weights']); ax[0].set_title('Learned weights (0-1)'); ax[0].tick_params(axis='x', rotation=60)
 x = np.arange(len(pairs)); ax[1].bar(x - 0.2, m2['hand'], 0.4, label='hand-set'); ax[1].bar(x + 0.2, m2['lopo'], 0.4, label='learned (held out)')
 ax[1].axhline(5, color='r', ls='--'); ax[1].set_yscale('log'); ax[1].set_title('Held-out analogue: top-% of Earth land (lower is better, red line = 5 %)'); ax[1].legend()
 plt.show()

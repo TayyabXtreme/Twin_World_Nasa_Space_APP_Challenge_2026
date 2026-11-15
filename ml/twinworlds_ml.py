@@ -4,12 +4,15 @@ TwinWorlds ML: the two models behind the Analog Finder, in numpy only.
   M1 Analogue Space  standardise every Earth land cell's MODIS-derived environment -> PCA -> k-means into named
                      environment types, and place the 16 Moon/Mars Finder targets in the same space.
   M2 Learned weights a non-negative, L2-regularised logistic regression that learns how much each of the Finder's
-                     seven similarity dimensions matters, from NASA-recognised Earth-Moon/Mars analogue pairs,
-                     validated leave-one-pair-out against the hand-set weights.
+                     thirteen parameters (the sliders: temperature, range, radiation, slope, sand, pressure, daylight,
+                     rain, humidity, dust, isolation, elevation; aqueous geochemistry keeps its hand-set weight)
+                     matters, from NASA-recognised Earth-Moon/Mars analogue pairs, validated leave-one-pair-out
+                     against the hand-set weights.
 
-Input: the Finder's own data (public/data/finder: earth-grid.json, earth-core.bin, targets.json), built by
-scripts/build-finder.py from NASA MODIS (MOD11C3, MOD13C2, MCD43C3), JAXA AW3D30, LRO Diviner/LOLA and Mars
-Odyssey/TES/MOLA. The similarity maths below mirrors lib/finder/model.ts line for line, so a weight learned here
+Input: the Finder's own data (public/data/finder: earth-grid.json, earth-core.bin, targets.json for M1, built by
+scripts/build-finder.py from NASA MODIS, JAXA AW3D30, LRO and Mars Odyssey/TES/MOLA; earth-params.json,
+earth-params.bin and lib/finder/params.generated.json for M2, built by scripts/build-finder-params.py from NASA POWER,
+SoilGrids and AW3D30). The similarity maths below mirrors lib/finder/params.ts and model.ts, so a weight learned here
 means exactly the same thing in the browser.
 
 The same file runs locally (python -I ml/train.py) and inside the Colab notebook (ml/TwinWorlds_ML.ipynb, which
@@ -28,31 +31,8 @@ from pathlib import Path
 
 import numpy as np
 
-DIMS = ["cold", "swing", "bare", "inertia", "ice", "sun", "relief"]
-DIM_LABEL = {
-    "cold": "Cold",
-    "swing": "Day–night swing",
-    "bare": "Bare ground",
-    "inertia": "Thermal inertia",
-    "ice": "Frozen ground",
-    "sun": "Sun angle",
-    "relief": "Relief",
-}
-CORE = ["tmean", "swing", "ndvi", "ati", "freeze", "relief"]
-ROLE_CHANNEL = {"cold": "tmean", "swing": "swing", "inertia": "ati", "ice": "freeze"}
-
-# lib/finder/model.ts constants
-SIGMA_ROLE = 0.12
-NDVI_TOL = 0.10
-SUN_SIGMA = 10.0
-RELIEF_LOG_SIGMA = math.log(2.2)
+CORE = ["tmean", "swing", "ndvi", "ati", "freeze", "relief"]  # MODIS channels of earth-core.bin (M1)
 EARTH_OBLIQUITY = 23.44
-
-# lib/finder/text.ts DEFAULT_WEIGHTS (the hand-set weights the learned ones are compared with)
-DEFAULT_WEIGHTS = {
-    "moon": {"cold": 1, "ice": 1, "bare": 0.8, "sun": 0.6, "relief": 0.5, "swing": 0.4, "inertia": 0.4},
-    "mars": {"bare": 1, "inertia": 0.8, "ice": 0.8, "cold": 0.6, "sun": 0.5, "relief": 0.5, "swing": 0.4},
-}
 
 
 # --------------------------------------------------------------------------------------------- data
@@ -118,56 +98,8 @@ def max_sun(lat, obliquity=EARTH_OBLIQUITY):
     return np.minimum(90.0, 90.0 - np.abs(lat) + obliquity)
 
 
-# ------------------------------------------------------------------------- Finder similarity (model.ts)
-
-
-def similarity_luts(grid: Grid, target: dict) -> dict:
-    """Per dimension: similarity for each of the 256 quantised levels (sun: per grid row)."""
-    luts = {}
-    levels = np.arange(256)
-    for d in DIMS:
-        spec = target["dims"].get(d)
-        if not spec:
-            continue
-        if d in ROLE_CHANNEL:
-            pct = grid.pct[ROLE_CHANNEL[d]]
-            t = spec.get("earthPct", 0.5)
-            lut = np.exp(-0.5 * ((pct - t) / SIGMA_ROLE) ** 2)
-            lut[0] = 0.0
-        elif d == "bare":
-            v = value_of(grid, "ndvi", levels)
-            lut = np.exp(-0.5 * (np.maximum(0, v - 0.03) / NDVI_TOL) ** 2)
-            lut[0] = 0.0
-        elif d == "relief":
-            rt = spec.get("earthTarget", 100)
-            v = value_of(grid, "relief", levels)
-            lut = np.exp(-0.5 * (np.log((v + 20) / (rt + 20)) / RELIEF_LOG_SIGMA) ** 2)
-            lut[0] = 0.5
-        else:  # sun, per row
-            et = spec.get("earthTarget", 45)
-            la = 90 - (np.arange(grid.ny) + 0.5) * grid.res
-            lut = np.exp(-0.5 * ((max_sun(la) - et) / SUN_SIGMA) ** 2)
-        luts[d] = np.nan_to_num(lut, nan=0.0)
-    return luts
-
-
-CHANNEL_FOR = {"cold": "tmean", "swing": "swing", "bare": "ndvi", "inertia": "ati", "ice": "freeze", "relief": "relief"}
-
-
-def similarities(grid: Grid, target: dict, cells=None) -> np.ndarray:
-    """(cells, 7) per-dimension similarities; NaN where the target has no such dimension."""
-    idx = np.arange(grid.n) if cells is None else np.asarray(cells)
-    luts = similarity_luts(grid, target)
-    out = np.full((idx.size, len(DIMS)), np.nan)
-    for j, d in enumerate(DIMS):
-        if d not in luts:
-            continue
-        out[:, j] = luts[d][grid.row[idx]] if d == "sun" else luts[d][grid.q[CHANNEL_FOR[d]][idx]]
-    return out
-
-
 def finder_score(sims: np.ndarray, w: np.ndarray) -> np.ndarray:
-    """S = Σ w_d s_d / Σ w_d over the dimensions the target has (missing dims drop out)."""
+    """S = Σ w_d s_d / Σ w_d over the parameters the target has (missing ones drop out)."""
     has = ~np.isnan(sims)
     ww = np.where(has, w[None, :], 0.0)
     return (np.nan_to_num(sims) * ww).sum(1) / np.maximum(ww.sum(1), 1e-12)
@@ -189,6 +121,107 @@ def cells_near(grid: Grid, lat: float, lon: float, km: float = 50) -> np.ndarray
     dist = haversine(lat, lon, grid.lat, grid.lon)
     near = np.flatnonzero(dist <= km)
     return near if near.size else np.array([int(np.argmin(dist))])
+
+
+# ------------------------------------------------------------- Finder parameters (lib/finder/params.ts, model.ts)
+
+# The slider parameters, in the browser's order. Aqueous geochemistry ("water") is known only at catalogued sites,
+# which are exactly the training positives, so learning its weight would leak the answer: it is left out of M2.
+PARAMS = ["tmean", "trange", "radiation", "slope", "sand", "pressure", "daylight", "precip", "rh", "aod", "isolation", "elev"]
+SOURCE = {"tmean": "tmean", "trange": "trange", "radiation": "elev", "slope": "slope", "sand": "sand", "pressure": "ps",
+          "daylight": "row", "precip": "precip", "rh": "rh", "aod": "aod", "isolation": "isolation", "elev": "elev"}
+UNKNOWN = 0.5  # similarity of a cell with no Earth data
+
+# lib/finder/params.ts DEFAULT_WEIGHTS (water included: it is part of the hand-set score M2 is compared with)
+PARAM_WEIGHTS = {
+    "moon": {"tmean": 1, "water": 1, "radiation": 0.7, "trange": 0.6, "pressure": 0.6, "daylight": 0.6, "precip": 0.5,
+             "sand": 0.5, "slope": 0.5, "rh": 0.4, "isolation": 0.4, "aod": 0.3, "elev": 0.3},
+    "mars": {"precip": 1, "water": 0.9, "rh": 0.8, "tmean": 0.7, "trange": 0.6, "sand": 0.6, "aod": 0.5, "pressure": 0.5,
+             "slope": 0.5, "radiation": 0.4, "daylight": 0.4, "isolation": 0.4, "elev": 0.3},
+}
+
+
+@dataclass
+class ParamGrid:
+    q: dict  # channel -> uint8 per land cell (0 = no data)
+    value: dict  # channel -> float[256] physical value of each level
+    pct: dict  # channel -> float[256] area-weighted percentile of each level
+    row_daylight: np.ndarray  # per grid row, hours on the longest day
+    row_daylight_pct: np.ndarray
+    curves: dict
+    targets: dict  # target id -> parameter specs
+
+
+def earth_dose(elev):
+    """lib/finder/params.ts earthDose: UNSCEAR 2000 cosmic + terrestrial background, µSv/day."""
+    z = np.maximum(0, np.nan_to_num(elev)) / 1000
+    return ((36.5 * 2 ** (z / 1.5) + 41) * 24) / 1000
+
+
+def longest_daylight(lat, obliquity=EARTH_OBLIQUITY, day=24.0):
+    x = -np.tan(np.radians(np.abs(lat))) * np.tan(np.radians(obliquity))
+    return np.where(x <= -1, day, np.where(x >= 1, 0.0, np.arccos(np.clip(x, -1, 1)) / np.pi * day))
+
+
+def load_params(data_dir: str | Path, grid: Grid, generated: str | Path | None = None) -> ParamGrid:
+    """earth-params.json/.bin from data_dir; params.generated.json from `generated` or data_dir."""
+    d = Path(data_dir)
+    meta = json.loads((d / "earth-params.json").read_text(encoding="utf-8"))
+    gen = json.loads(Path(generated or d / "params.generated.json").read_text(encoding="utf-8"))
+    raw = np.frombuffer((d / "earth-params.bin").read_bytes(), dtype=np.uint8)
+    q, value, pct = {}, {}, {}
+    levels = np.arange(256, dtype=np.float64)
+    for c in meta["channels"]:
+        q[c["key"]] = raw[c["byteOffset"] : c["byteOffset"] + grid.n]
+        v = c["offset"] + (levels - 1) * c["scale"]
+        value[c["key"]] = np.where(levels == 0, np.nan, 10**v - 1 if c["log"] else v)
+        pct[c["key"]] = np.asarray(c["pct"], dtype=np.float64)
+    # Daylight per row and its area percentile over Earth's land (as decodeGrid in model.ts).
+    rows = 90 - (np.arange(grid.ny) + 0.5) * grid.res
+    day = longest_daylight(rows)
+    row_area = np.bincount(grid.row, weights=grid.area, minlength=grid.ny)
+    tot = row_area.sum()
+    day_pct = np.array([(row_area[day < x].sum() + 0.5 * row_area[day == x].sum()) / tot for x in day])
+    return ParamGrid(q, value, pct, day, day_pct, gen["curves"], gen["targets"])
+
+
+def param_similarity(pid: str, spec: dict, curve: dict, x: np.ndarray, p: np.ndarray) -> np.ndarray:
+    """lib/finder/params.ts similarity: near (Gaussian on the curve's scale), toward (percentile), rank."""
+    if spec["mode"] == "toward":
+        return p if spec.get("dir", 1) > 0 else 1 - p
+    if spec["mode"] == "rank":
+        return np.exp(-0.5 * ((p - spec.get("pct", 0.5)) / curve["sigma"]) ** 2)
+    tf = (lambda v: np.log10(np.maximum(0, v) + curve["log"])) if "log" in curve else (lambda v: v)  # noqa: E731
+    with np.errstate(invalid="ignore", divide="ignore"):
+        delta = tf(x) - tf(np.float64(spec["v"]))
+        s = np.exp(-0.5 * (delta / curve["sigma"]) ** 2)
+        if spec.get("min"):
+            s = np.where(delta >= 0, 1.0, s)
+    return np.where(np.isfinite(x), s, UNKNOWN)
+
+
+def param_similarities(grid: Grid, pg: ParamGrid, target_id: str, cells=None) -> np.ndarray:
+    """(cells, len(PARAMS)) per-parameter similarities, as the browser's lookup tables; NaN where the target has no
+    value for the parameter."""
+    idx = np.arange(grid.n) if cells is None else np.asarray(cells)
+    specs = pg.targets.get(target_id, {})
+    out = np.full((idx.size, len(PARAMS)), np.nan)
+    for j, pid in enumerate(PARAMS):
+        spec = specs.get(pid)
+        if not spec:
+            continue
+        src = SOURCE[pid]
+        if src == "row":
+            lut = param_similarity(pid, spec, pg.curves[pid], pg.row_daylight, pg.row_daylight_pct)
+            out[:, j] = lut[grid.row[idx]]
+            continue
+        x = pg.value[src]
+        if pid == "radiation":
+            x = np.where(np.isfinite(x), earth_dose(x), np.nan)
+        lut = param_similarity(pid, spec, pg.curves[pid], x, pg.pct[src])
+        lut[0] = UNKNOWN
+        out[:, j] = lut[pg.q[src][idx]]
+    return out
 
 
 # --------------------------------------------------------------------------------------- M1 helpers
@@ -613,25 +646,23 @@ def pair_cells(grid: Grid, pair: dict, km: float = 50) -> np.ndarray:
     return cells_near(grid, pair["lat"], pair["lon"], km)
 
 
-def build_training_set(grid: Grid, targets: dict, pairs: list[dict], negatives: int = 400, seed: int = 11):
+def build_training_set(grid: Grid, pg: ParamGrid, pairs: list[dict], negatives: int = 400, seed: int = 11):
     """For each pair: positives = land cells within 50 km of the Earth site (each pair weighs 1 in total),
     negatives = random land cells (area-weighted) scored against the same target."""
     rng = np.random.default_rng(seed)
-    tmap = {t["id"]: t for t in targets["targets"]}
     rows = []
     for pi, p in enumerate(pairs):
-        t = tmap[p["target"]]
         pos = pair_cells(grid, p)
         neg = rng.choice(grid.n, size=negatives, replace=False, p=grid.area / grid.area.sum())
-        sp = similarities(grid, t, pos)
-        sn = similarities(grid, t, neg)
+        sp = param_similarities(grid, pg, p["target"], pos)
+        sn = param_similarities(grid, pg, p["target"], neg)
         rows.append((pi, sp, np.full(len(pos), 1.0 / len(pos)), 1))
         rows.append((pi, sn, np.full(negatives, 1.0 / negatives), 0))
     return rows
 
 
 def features_from_sims(s: np.ndarray) -> np.ndarray:
-    """Logistic-regression input: each similarity centred on 0.5, missing dims (target has none) = 0 contribution."""
+    """Logistic-regression input: each similarity centred on 0.5, missing parameters (target has none) = 0."""
     return np.nan_to_num(s - 0.5, nan=0.0)
 
 
@@ -664,20 +695,19 @@ def fit_pairs(rows, use: list[int], lam: float):
     return fit_nonneg_logreg(np.vstack(X), np.concatenate(y).astype(float), np.concatenate(sw), lam=lam)
 
 
-def pair_rank(grid: Grid, target: dict, pair: dict, w: np.ndarray, sims_all: np.ndarray | None = None) -> float:
+def pair_rank(grid: Grid, pair: dict, w: np.ndarray, sims_all: np.ndarray) -> float:
     """The Finder's own sanity-check rule: best cell within 50 km of the site, ranked against all Earth land."""
-    s = similarities(grid, target) if sims_all is None else sims_all
-    scores = finder_score(s, w)
+    scores = finder_score(sims_all, w)
     near = pair_cells(grid, pair)
     best = near[np.argmax(scores[near])]
     return top_pct(scores, grid.area, scores[best])
 
 
-def train_learned_weights(grid: Grid, targets: dict, pairs: list[dict], lams=(0.01, 0.03, 0.1, 0.3), log=print) -> dict:
+def train_learned_weights(grid: Grid, pg: ParamGrid, targets: dict, pairs: list[dict], lams=(0.01, 0.03, 0.1, 0.3), log=print) -> dict:
     tmap = {t["id"]: t for t in targets["targets"]}
-    rows = build_training_set(grid, targets, pairs)
-    sims_cache = {tid: similarities(grid, tmap[tid]) for tid in {p["target"] for p in pairs}}
-    default_w = {wd: np.array([DEFAULT_WEIGHTS[wd][d] for d in DIMS], dtype=float) for wd in DEFAULT_WEIGHTS}
+    rows = build_training_set(grid, pg, pairs)
+    sims_cache = {tid: param_similarities(grid, pg, tid) for tid in {p["target"] for p in pairs}}
+    default_w = {wd: np.array([PARAM_WEIGHTS[wd][d] for d in PARAMS], dtype=float) for wd in PARAM_WEIGHTS}
     groups_site = {}
     for i, p in enumerate(pairs):
         groups_site.setdefault(p["earth"], []).append(i)
@@ -688,8 +718,8 @@ def train_learned_weights(grid: Grid, targets: dict, pairs: list[dict], lams=(0.
             held = groups_site[p["earth"]] if scheme == "site" else [i]
             w, _ = fit_pairs(rows, [j for j in range(len(pairs)) if j not in held], lam)
             if w.sum() <= 0:
-                w = np.ones(len(DIMS))
-            ranks.append(pair_rank(grid, tmap[p["target"]], p, w, sims_cache[p["target"]]))
+                w = np.ones(len(PARAMS))
+            ranks.append(pair_rank(grid, p, w, sims_cache[p["target"]]))
         return np.array(ranks)
 
     # Choose λ by leave-one-pair-out recall@5 % (ties: mean rank).
@@ -702,11 +732,11 @@ def train_learned_weights(grid: Grid, targets: dict, pairs: list[dict], lams=(0.
     lam = best["lambda"]
     lopo = evaluate(lam, "pair")
     loso = evaluate(lam, "site")
-    hand = np.array([pair_rank(grid, tmap[p["target"]], p, default_w[tmap[p["target"]]["world"]], sims_cache[p["target"]]) for p in pairs])
-    equal = np.array([pair_rank(grid, tmap[p["target"]], p, np.ones(len(DIMS)), sims_cache[p["target"]]) for p in pairs])
+    hand = np.array([pair_rank(grid, p, default_w[tmap[p["target"]]["world"]], sims_cache[p["target"]]) for p in pairs])
+    equal = np.array([pair_rank(grid, p, np.ones(len(PARAMS)), sims_cache[p["target"]]) for p in pairs])
     w_full, b_full = fit_pairs(rows, list(range(len(pairs))), lam)
     w_norm = w_full / max(w_full.max(), 1e-12)
-    log(f"Learned weights (λ={lam}): " + ", ".join(f"{d}={v:.2f}" for d, v in zip(DIMS, w_norm)))
+    log(f"Learned weights (λ={lam}): " + ", ".join(f"{d}={v:.2f}" for d, v in zip(PARAMS, w_norm)))
     log(f"Recall@top-5 %: learned LOPO {(lopo <= 5).mean() * 100:.0f} % · leave-one-site-out {(loso <= 5).mean() * 100:.0f} % · hand-set {(hand <= 5).mean() * 100:.0f} % · equal {(equal <= 5).mean() * 100:.0f} %")
     return {
         "weights": w_norm,
@@ -726,7 +756,8 @@ def export_learned_weights(m2: dict, pairs: list[dict], targets: dict, out_dir: 
     out.mkdir(parents=True, exist_ok=True)
     tmap = {t["id"]: t for t in targets["targets"]}
     r5 = lambda r: round(float((r <= 5).mean()), 4)  # noqa: E731
-    weights = {d: round(float(v), 3) for d, v in zip(DIMS, m2["weights"])}
+    weights = {d: round(float(v), 3) for d, v in zip(PARAMS, m2["weights"])}
+    weights["water"] = None  # not learned: the browser keeps the hand-set weight
     per_pair = [
         {
             "earth": p["earth"],
@@ -759,13 +790,13 @@ def export_learned_weights(m2: dict, pairs: list[dict], targets: dict, out_dir: 
     card = {
         "id": "learned-weights",
         "name": "Learned weights",
-        "version": "1.0",
+        "version": "2.0",
         "trained": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
-        "task": "Supervised: learn how much each Finder dimension matters for a real NASA analogue pair.",
+        "task": "Supervised: learn how much each Finder parameter matters for a real NASA analogue pair.",
         "data": {
             "positives": f"{len(pairs)} NASA-recognised Earth–Moon/Mars analogue pairs (each with a source URL in pairs.json); every land cell within 50 km of the Earth site, weighted so each pair counts once.",
             "negatives": "400 random land cells per pair (area-weighted), scored against the same target.",
-            "features": "The Finder's 7 per-dimension similarities (cold, day–night swing, bare ground, thermal inertia, frozen ground, Sun angle, relief), computed exactly as in the browser.",
+            "features": "The Finder's per-parameter similarities (mean temperature, temperature range, radiation dose, terrain slope, soil sand, air pressure, daylight, precipitation, humidity, dust, isolation, elevation), computed exactly as in the browser. Aqueous geochemistry is left out: only catalogued sites carry it, and those are the positives.",
         },
         "method": [
             "Logistic regression with non-negative weights (more similarity can never count against a place) and an L2 penalty, fitted by projected gradient descent.",
@@ -788,7 +819,7 @@ def export_learned_weights(m2: dict, pairs: list[dict], targets: dict, out_dir: 
         "weights": weights,
         "limits": [
             f"Only {len(pairs)} positive pairs, several sharing an Earth site, so scores move a lot with one pair; leave-one-site-out ({r5(m2['loso']) * 100:.0f} %) is the stricter number.",
-            "NASA picked many sites for chemistry, geology or logistics, which the 7 climate-and-terrain dimensions cannot see; those pairs are hard for any weights.",
+            "NASA picked many sites for chemistry, geology or logistics, which climate and terrain parameters cannot see; those pairs are hard for any weights.",
             "One weight set is learned for both worlds; Moon pairs are few.",
             "Random cells are not true negatives: some may be good analogues nobody has tested.",
         ],

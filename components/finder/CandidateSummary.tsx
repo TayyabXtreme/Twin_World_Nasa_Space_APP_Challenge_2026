@@ -3,7 +3,7 @@
 import { ArrowDown } from "lucide-react";
 import { AnimatedNumber } from "@/components/motion/AnimatedNumber";
 import type { PlaceLabel } from "@/lib/finder/places";
-import { DIM_LABEL, WORLD_LIMITS, fieldTests, strengths } from "@/lib/finder/text";
+import { DIM_LABEL, DIM_SHORT, WORLD_LIMITS, fieldTests, strengths } from "@/lib/finder/text";
 import { DIM_IDS, type CellResult, type Target } from "@/lib/finder/types";
 import { cn } from "@/lib/utils";
 
@@ -27,7 +27,7 @@ const list = (xs: string[]) => (xs.length < 2 ? xs.join("") : `${xs.slice(0, -1)
 
 /**
  * The selected place at a glance, beside the map: score, three plain lines (what matches, what differs, what to test
- * there) and one bar per factor. The full breakdown sits below the map.
+ * there) and one bar per parameter. The full breakdown sits below the map.
  */
 export function CandidateSummary({
   cell,
@@ -49,11 +49,13 @@ export function CandidateSummary({
   const betterText = better >= 99.95 ? "99.9%+" : `${better.toFixed(better > 99 ? 1 : 0)}%`;
   const strong = strengths(cell)
     .slice(0, 3)
-    .map((s) => DIM_LABEL[s.dim].toLowerCase());
+    .map((s) => DIM_SHORT[s.dim].toLowerCase());
   const weakDims = DIM_IDS.filter((d) => cell.sims[d] !== undefined && cell.sims[d]! < 0.5).map((d) =>
-    DIM_LABEL[d].toLowerCase(),
+    DIM_SHORT[d].toLowerCase(),
   );
-  const limits = WORLD_LIMITS[target.world].filter((l) => l.title !== "Temperature").map((l) => l.title.toLowerCase());
+  const limits = WORLD_LIMITS[target.world]
+    .filter((l) => l.title === "Gravity" || l.title === "Chemistry")
+    .map((l) => l.title.toLowerCase());
   const test = fieldTests(cell)[0];
   const dims = DIM_IDS.filter((d) => cell.sims[d] !== undefined);
 
@@ -101,7 +103,7 @@ export function CandidateSummary({
           <Line color="ok" label="Matches on">
             {strong.length
               ? `${list(strong).replace(/^./, (c) => c.toUpperCase())}.`
-              : "No single factor matches strongly here."}
+              : "No single parameter matches strongly here."}
           </Line>
           <Line color="warn" label="Differs on">
             {weakDims.length ? `${list(weakDims).replace(/^./, (c) => c.toUpperCase())}. ` : ""}
@@ -115,13 +117,15 @@ export function CandidateSummary({
         </div>
 
         <div className="border-t border-white/[0.07] px-5 py-4">
-          <p className="text-[12px] font-semibold tracking-wide text-muted-foreground uppercase">Each factor</p>
+          <p className="text-[12px] font-semibold tracking-wide text-muted-foreground uppercase">Each parameter</p>
           <ul className="mt-3 space-y-2">
             {dims.map((d) => {
               const s = Math.round(cell.sims[d]! * 100);
               return (
                 <li key={d} className="flex items-center gap-3">
-                  <span className="w-[7.5rem] shrink-0 truncate text-[13px] text-foreground/90">{DIM_LABEL[d]}</span>
+                  <span className="w-[7.5rem] shrink-0 truncate text-[13px] text-foreground/90" title={DIM_LABEL[d]}>
+                    {DIM_SHORT[d]}
+                  </span>
                   <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/[0.08]">
                     <span
                       className={cn(

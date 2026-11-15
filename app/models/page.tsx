@@ -30,7 +30,7 @@ const CAN = [
 ];
 const CANT = [
   "Prove that any place on Earth matches the Moon or Mars. A high score means similar measured conditions, nothing more.",
-  "See chemistry, minerals, radar roughness, radiation, gravity or air pressure: none are in the seven dimensions.",
+  "See gravity, perchlorate chemistry or radar roughness: none are among the Finder’s thirteen parameters, and water-formed minerals are known only at catalogued sites.",
   "Learn much from 23 pairs. The learned weights are a hint, not a finding, and we show when they do not beat the hand-set ones.",
 ];
 

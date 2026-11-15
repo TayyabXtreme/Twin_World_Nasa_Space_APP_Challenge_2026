@@ -14,7 +14,7 @@ let scorer: Scorer | null = null;
 scope.onmessage = (e) => {
   const msg = e.data;
   if (msg.type === "init") {
-    scorer = createScorer(msg.header, msg.core, msg.refs);
+    scorer = createScorer(msg.header, msg.params, msg.buf, msg.refs);
     scope.postMessage({ type: "ready", cells: scorer.cells });
   } else if (msg.type === "score" && scorer) {
     scorer.score(msg.id, msg.target, msg.weights).then((result) => scope.postMessage({ type: "score", result }));

@@ -530,7 +530,7 @@ export const SITES: Site[] = [
     lon: 159.38,
     coordsVerified: false,
     summary:
-      "Ice-covered mountains in northern Victoria Land, where the Transantarctic Mountains meet the polar ice sheet. With the default weights the Analog Finder ranks it Earth's closest match to the Shackleton crater rim at the Moon's south pole: NASA MODIS measures the ground at about −33 °C by day and −37 °C by night, almost no day–night swing, no plants and very bright ice.",
+      "Ice-covered mountains in northern Victoria Land, where the Transantarctic Mountains meet the polar ice sheet. With the default weights the Analog Finder ranks it in the top 0.1 % of Earth's land for the Shackleton crater rim at the Moon's south pole: NASA MODIS measures the ground at about −33 °C by day and −37 °C by night, almost no day–night swing, no plants and very bright ice.",
     tags: ["cold", "polar", "ice", "dry"],
     landforms: ["Ice-sheet margin", "Mountain ranges and glaciers"],
     geology: ["Glacier ice over mountain bedrock"],

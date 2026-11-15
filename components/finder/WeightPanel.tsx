@@ -1,46 +1,36 @@
 "use client";
 
-import { Info, RotateCcw } from "lucide-react";
+import { RotateCcw } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { useState } from "react";
 import { Slider } from "@/components/ui/slider";
-import { DIM_HINT, DIM_LABEL, pctText } from "@/lib/finder/text";
+import { DIM_HINT, DIM_LABEL, describeTarget } from "@/lib/finder/text";
 import { DIM_IDS, type DimId, type Target, type Weights } from "@/lib/finder/types";
 import { cn } from "@/lib/utils";
 
-/** One line saying what the target asks of Earth on this dimension. */
-function ask(d: DimId, target: Target) {
-  const s = target.dims[d];
-  if (!s) return "No data for this target";
-  if (s.mode === "role") {
-    const ep = s.earthPct ?? 0.5;
-    if (d === "cold")
-      return ep < 0.5 ? `Earth's coldest ${pctText(ep)} % of land` : `Warmer than ${pctText(ep)} % of land`;
-    if (d === "ice") return ep < 0.3 ? "Ground that never freezes" : `Earth's most frozen ${pctText(1 - ep)} %`;
-    if (d === "swing")
-      return ep < 0.5
-        ? `Smaller swing than ${pctText(1 - ep)} % of bare land`
-        : `Larger swing than ${pctText(ep)} % of bare land`;
-    if (d === "inertia")
-      return ep < 0.5 ? `Looser than ${pctText(1 - ep)} % of bare land` : `Rockier than ${pctText(ep)} % of bare land`;
-  }
-  if (d === "bare") return "NDVI 0, no plants";
-  if (d === "sun") return `Noon Sun up to ${s.earthTarget?.toFixed(1)}° high`;
-  if (d === "relief") return `${Math.round(s.earthTarget ?? 0)} m relief`;
-  return "";
-}
-
-/**
- * The weight sliders. Each row is just a name, a value and a slider; what the target asks of Earth on that dimension
- * shows in one hint line for whichever slider you are touching, instead of seven lines of text at once.
- */
 export interface LearnedWeights {
-  weights: Record<string, number>;
+  /** One weight per parameter; null = not learned (keeps the hand-set weight). */
+  weights: Record<string, number | null>;
   recall5: { learnedLOPO: number; learnedLOSO: number; hand: number; equal: number };
   pairs?: unknown[];
 }
 
+/** Learned weights apply only when they were trained on the current thirteen parameters. */
+export const learnedFits = (l: LearnedWeights | null): l is LearnedWeights =>
+  !!l && DIM_IDS.every((d) => d in l.weights);
+
+const MODE_TAG: Record<string, { label: string; cls: string }> = {
+  near: { label: "direct", cls: "bg-primary/10 text-primary" },
+  toward: { label: "beyond Earth", cls: "bg-warn/10 text-warn" },
+  rank: { label: "rank", cls: "bg-primary/10 text-primary" },
+  match: { label: "evidence", cls: "bg-ok/10 text-ok" },
+};
+
+/**
+ * The weight sliders, one per parameter of the site-vs-target breakdown. Each row is a name, a value and a slider;
+ * what the target asks of Earth on that parameter opens under whichever slider you are touching.
+ */
 export function WeightPanel({
   target,
   weights,
@@ -60,10 +50,9 @@ export function WeightPanel({
 }) {
   const reduce = useReducedMotion();
   const [focus, setFocus] = useState<DimId | null>(null);
-  const shown = focus ?? DIM_IDS.find((d) => target.dims[d]) ?? DIM_IDS[0];
-  const shownMode = target.dims[shown]?.mode;
+  const fits = learnedFits(learned);
   return (
-    <section aria-label="Factor weights">
+    <section aria-label="Parameter weights">
       <div className="flex items-center justify-between gap-3">
         <p className="text-[13px] text-muted-foreground">Weight set</p>
         <button
@@ -75,7 +64,7 @@ export function WeightPanel({
           Reset
         </button>
       </div>
-      {learned && (
+      {fits && (
         <div
           role="group"
           aria-label="Weight set"
@@ -98,13 +87,13 @@ export function WeightPanel({
         </div>
       )}
       <div className="mt-3 rounded-xl bg-white/[0.035] p-3.5 ring-1 ring-white/[0.08]">
-        {mode === "learned" && learned ? (
+        {mode === "learned" && fits ? (
           <>
             <p className="text-[13px] font-semibold">Learned weights</p>
             <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">
               Fitted by a small model to {learned.pairs?.length ?? 23} places NASA already uses as analogues (Atacama
-              for Jezero, McMurdo for Phoenix…), so those sites rank as high as possible. One set for both worlds. With
-              so few examples it nearly ignores some factors, such as loose vs rocky ground.
+              for Jezero, McMurdo for Phoenix…), so those sites rank as high as possible. One set for both worlds;
+              aqueous geochemistry keeps its hand-set weight because only catalogued sites carry it.
             </p>
           </>
         ) : mode === "custom" ? (
@@ -120,12 +109,12 @@ export function WeightPanel({
             <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">
               Chosen by the TwinWorlds team from planetary science, with a separate set per world:{" "}
               {target.world === "moon"
-                ? "for Moon bases, extreme cold and ice count most."
-                : "for Mars sites, barren ground, loose vs rocky soil and frozen ground count most."}
+                ? "for Moon bases, extreme cold, water ice and the airless sky count most."
+                : "for Mars sites, dryness, water-formed minerals and cold count most."}
             </p>
           </>
         )}
-        {learned && (
+        {fits && (
           <p className="mt-2.5 border-t border-white/[0.07] pt-2.5 text-[12px] leading-snug text-muted-foreground">
             Test with one NASA analogue hidden: it lands in Earth&apos;s top 5 %{" "}
             <span className="hud text-foreground">{Math.round(learned.recall5.hand * 100)} %</span> of the time with
@@ -138,24 +127,26 @@ export function WeightPanel({
           </p>
         )}
       </div>
-      <ul className="mt-6 space-y-4" onMouseLeave={() => setFocus(null)}>
+      <ul className="mt-5 space-y-1" onMouseLeave={() => setFocus(null)}>
         {DIM_IDS.map((d) => {
-          const has = Boolean(target.dims[d]);
-          const w = weights[d];
+          const spec = target.params[d];
+          const has = Boolean(spec);
+          const w = weights[d] ?? 0;
+          const open = focus === d && spec;
           return (
             <li
               key={d}
               className={cn(
-                "rounded-xl px-2 py-1.5 transition-colors duration-150",
+                "rounded-xl px-2 py-2 transition-colors duration-150",
                 !has && "opacity-45",
                 focus === d && "bg-white/[0.04]",
               )}
-              onMouseEnter={() => has && setFocus(d)}
-              onFocus={() => has && setFocus(d)}
-              onPointerDown={() => has && setFocus(d)}
+              onMouseEnter={() => setFocus(d)}
+              onFocus={() => setFocus(d)}
+              onPointerDown={() => setFocus(d)}
             >
               <div className="flex items-baseline justify-between gap-2">
-                <label htmlFor={`w-${d}`} className="flex items-center gap-2 text-sm font-medium" title={DIM_HINT[d]}>
+                <label htmlFor={`w-${d}`} className="text-sm font-medium" title={DIM_HINT[d]}>
                   {DIM_LABEL[d]}
                 </label>
                 <span className="w-9 text-end hud text-xs text-muted-foreground">
@@ -173,43 +164,37 @@ export function WeightPanel({
                 aria-label={`${DIM_LABEL[d]} weight`}
                 onValueChange={([v]) => onChange({ ...weights, [d]: v })}
               />
+              {!has && <p className="mt-1.5 text-[11.5px] text-muted-foreground">No value for {target.name}</p>}
+              <AnimatePresence initial={false}>
+                {open && (
+                  <motion.div
+                    key="hint"
+                    initial={reduce ? false : { height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={reduce ? undefined : { height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                    className="overflow-hidden"
+                    aria-live="polite"
+                  >
+                    <p className="pt-2 text-[12px] leading-snug text-muted-foreground">
+                      <span
+                        className={cn(
+                          "me-1.5 rounded-full px-1.5 py-px text-[10px] tracking-wide uppercase",
+                          MODE_TAG[spec.mode].cls,
+                        )}
+                      >
+                        {MODE_TAG[spec.mode].label}
+                      </span>
+                      Target: <span className="text-foreground">{describeTarget(d, spec, target.world)}</span>
+                    </p>
+                    <p className="mt-1 text-[11.5px] leading-snug text-muted-foreground/80">{DIM_HINT[d]}</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </li>
           );
         })}
       </ul>
-      {/* What the target asks for on the dimension in focus. */}
-      <div
-        className="mt-4 min-h-[4.25rem] rounded-xl bg-primary/[0.06] px-3 py-2.5 ring-1 ring-primary/15"
-        aria-live="polite"
-      >
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={shown}
-            initial={reduce ? false : { opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={reduce ? undefined : { opacity: 0, y: -6 }}
-            transition={{ duration: 0.18 }}
-          >
-            <p className="flex items-center gap-1.5 text-xs font-medium">
-              <Info className="size-3.5 text-primary" aria-hidden />
-              {DIM_LABEL[shown]}
-              {shownMode && (
-                <span
-                  className={cn(
-                    "rounded-full px-1.5 py-px text-[10px] font-normal tracking-wide uppercase",
-                    shownMode === "role" ? "bg-primary/10 text-primary" : "bg-warn/10 text-warn",
-                  )}
-                >
-                  {shownMode === "role" ? "rank" : "absolute"}
-                </span>
-              )}
-            </p>
-            <p className="mt-1 text-[12px] leading-snug text-muted-foreground">
-              Target asks for: <span className="text-foreground">{ask(shown, target)}</span>
-            </p>
-          </motion.div>
-        </AnimatePresence>
-      </div>
     </section>
   );
 }

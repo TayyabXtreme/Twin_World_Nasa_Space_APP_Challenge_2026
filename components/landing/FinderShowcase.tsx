@@ -37,8 +37,9 @@ export function FinderShowcase() {
         lead={
           <>
             Pick a Moon base or a Mars site. TwinWorlds scores all {landing.earthCells.toLocaleString("en-US")} land
-            cells on Earth with NASA MODIS temperature, vegetation and albedo, matched against LRO, Odyssey and TES data
-            from the other world. Not by how it looks: by how it behaves.
+            cells on Earth on 13 measured conditions, from NASA POWER temperature, rain and air pressure to slope, soil
+            and isolation, matched against LRO, MGS and rover data from the other world. Not by how it looks: by how it
+            behaves.
           </>
         }
       />
@@ -131,7 +132,7 @@ export function FinderShowcase() {
               />
               Earth&apos;s best-matching quarter of land, up to the top place
             </span>
-            <span>NASA MODIS (Earth) · {t.world === "moon" ? "LRO Diviner, LOLA" : "Odyssey GRS/NS, MGS TES"}</span>
+            <span>NASA POWER, SoilGrids, AW3D30 (Earth) · {t.world === "moon" ? "LRO Diviner, LOLA" : "MGS TES, MOLA, Curiosity"}</span>
           </figcaption>
         </figure>
 

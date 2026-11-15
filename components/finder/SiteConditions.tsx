@@ -8,13 +8,11 @@ import {
   fetchClimate,
   fetchSand,
   isMissing,
-  loadSiteGrid,
   type ConditionRow,
   type EarthClimate,
-  type SiteGrid,
 } from "@/lib/finder/conditions";
 import type { KnownPlace } from "@/lib/finder/places";
-import type { CellResult, Target } from "@/lib/finder/types";
+import type { CellResult, ParamsHeader, Target } from "@/lib/finder/types";
 import { cn } from "@/lib/utils";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
@@ -26,43 +24,31 @@ interface Tagged<T> {
 }
 
 /**
- * Site vs target: thirteen physical parameters for the selected Earth place and the Moon or Mars target. Climate
- * and soil values load live from NASA POWER and SoilGrids; the rest come from our grids and the targets' data.
- * "Show sources" names the dataset behind every number; "Graph" turns the table into a match chart. Rows with no
- * value on one side are left out.
+ * Site vs target: the thirteen parameters the ranking uses, for the selected Earth place and the Moon or Mars target.
+ * Climate and soil values load live from NASA POWER and SoilGrids (falling back to the gridded values); the rest come
+ * from our grids and the targets' data. "Show sources" names the dataset behind every number; "Graph" shows each
+ * row's match, the same similarity the score is built from. Rows with no value on one side are left out.
  */
 export function SiteConditions({
   cell,
   target,
   known,
-  detail,
+  params,
   siteName,
 }: {
   cell: CellResult;
   target: Target;
   known?: KnownPlace;
-  detail: Record<string, number> | null;
+  params: ParamsHeader;
   siteName: string;
 }) {
   const reduce = useReducedMotion();
   const [sources, setSources] = useState(false);
   const [graph, setGraph] = useState(false);
-  const [site, setSite] = useState<SiteGrid | null>(null);
   const [climate, setClimate] = useState<Tagged<EarthClimate | null> | null>(null);
   const [sand, setSand] = useState<Tagged<number | null> | null>(null);
   const [attempt, setAttempt] = useState(0);
   const cellKey = `${cell.lat},${cell.lon}`;
-
-  useEffect(() => {
-    let live = true;
-    loadSiteGrid().then(
-      (g) => live && setSite(g),
-      () => undefined,
-    );
-    return () => {
-      live = false;
-    };
-  }, []);
 
   useEffect(() => {
     let live = true;
@@ -79,12 +65,11 @@ export function SiteConditions({
         cell,
         target,
         known,
-        detail,
-        site,
+        params,
         climate: climate?.key === cellKey ? climate.value : undefined,
         sand: sand?.key === cellKey ? sand.value : undefined,
       }),
-    [cell, target, known, detail, site, climate, sand, cellKey],
+    [cell, target, known, params, climate, sand, cellKey],
   ).filter((r) => !isMissing(r.site) && !isMissing(r.target));
   const unreachable = rows.filter((r) => r.unreachable).length;
   const offline = climate?.key === cellKey && climate.value === null;
@@ -130,7 +115,7 @@ export function SiteConditions({
         </div>
       </div>
       {graph ? (
-        <MatchGraph rows={rows} targetName={target.name} siteName={siteName} />
+        <MatchGraph rows={rows} targetName={target.name} siteName={siteName} score={cell.score} />
       ) : (
         <div className="mt-3 overflow-x-auto rounded-2xl ring-1 ring-white/10">
           <table className={cn("w-full text-left text-[13px]", sources && "min-w-[640px]")}>
@@ -218,7 +203,7 @@ export function SiteConditions({
       <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
         {offline ? (
           <>
-            NASA POWER is busy, so the live climate values did not load.{" "}
+            NASA POWER is busy, so the climate values come from our 0.25° grid of the same dataset.{" "}
             <button
               type="button"
               onClick={() => {
@@ -234,7 +219,7 @@ export function SiteConditions({
         ) : (
           "Climate values load live from NASA POWER for this 28 km cell. "
         )}
-        These are conditions only; the score above comes from the matched factors.
+        The score is the weighted average of these rows&apos; match; set the weights in Adjust what matters.
         {graph || sources ? "" : " Show sources for the dataset behind every number."}
       </p>
     </div>
@@ -245,15 +230,24 @@ const GRID = [0, 25, 50, 75, 100];
 const COLS = "grid-cols-[8.5rem_1fr_2.75rem] sm:grid-cols-[10.5rem_1fr_2.75rem]";
 
 /**
- * One bar per comparable parameter: how close the site's value is to the target's (0–100 %). Unreachable
- * conditions sit at 0 and say so; hovering or focusing a bar shows both values.
+ * One bar per parameter: the similarity the ranking used for this place (0–100 %). Where the target lies beyond
+ * anything on Earth the bar is amber and ranks how far this place goes toward it; hovering or focusing a bar shows
+ * both values.
  */
-function MatchGraph({ rows, targetName, siteName }: { rows: ConditionRow[]; targetName: string; siteName: string }) {
+function MatchGraph({
+  rows,
+  targetName,
+  siteName,
+  score,
+}: {
+  rows: ConditionRow[];
+  targetName: string;
+  siteName: string;
+  score: number;
+}) {
   const reduce = useReducedMotion();
   const [hover, setHover] = useState<string | null>(null);
   const plotted = rows.filter((r) => r.match !== undefined);
-  const loading = rows.some((r) => r.site === "…");
-  const avg = plotted.length ? Math.round((100 * plotted.reduce((s, r) => s + (r.match ?? 0), 0)) / plotted.length) : 0;
   const left = rows.filter((r) => r.match === undefined).map((r) => r.parameter);
 
   return (
@@ -263,9 +257,8 @@ function MatchGraph({ rows, targetName, siteName }: { rows: ConditionRow[]; targ
           How close {siteName} comes to {targetName}, condition by condition
         </span>
         <span className="text-[13px] text-muted-foreground">
-          Average match{" "}
-          <span className={cn("hud text-base font-semibold text-foreground", loading && "animate-pulse")}>{avg}</span> /
-          100
+          Weighted score <span className="hud text-base font-semibold text-foreground">{Math.round(score * 100)}</span>{" "}
+          / 100
         </span>
       </figcaption>
 
@@ -281,7 +274,7 @@ function MatchGraph({ rows, targetName, siteName }: { rows: ConditionRow[]; targ
               onMouseLeave={() => setHover((h) => (h === r.id ? null : h))}
               onFocus={() => setHover(r.id)}
               onBlur={() => setHover((h) => (h === r.id ? null : h))}
-              aria-label={`${r.parameter}: ${pct} % match. Site ${r.site}, target ${r.target}${r.unreachable ? ", unreachable on Earth" : ""}`}
+              aria-label={`${r.parameter}: ${pct} % match. Site ${r.site}, target ${r.target}${r.toward ? ", beyond Earth: ranked by how far this place goes toward it" : ""}`}
               className={cn(
                 "relative grid items-center gap-x-3 rounded-lg py-2 ps-1 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
                 COLS,
@@ -299,22 +292,16 @@ function MatchGraph({ rows, targetName, siteName }: { rows: ConditionRow[]; targ
                     style={{ left: `${g}%` }}
                   />
                 ))}
-                {r.unreachable ? (
-                  <span className="absolute inset-y-0 start-2 flex items-center text-[10.5px] whitespace-nowrap text-warn">
-                    unreachable on Earth
-                  </span>
-                ) : (
-                  <motion.span
-                    className={cn(
-                      "absolute inset-y-0 start-0 origin-left rounded-e-[4px] transition-colors",
-                      on ? "bg-primary" : "bg-primary/75",
-                    )}
-                    style={{ width: `${Math.max(pct, 1)}%` }}
-                    initial={reduce ? false : { scaleX: 0 }}
-                    animate={{ scaleX: 1 }}
-                    transition={{ duration: 0.55, delay: i * 0.04, ease: EASE }}
-                  />
-                )}
+                <motion.span
+                  className={cn(
+                    "absolute inset-y-0 start-0 origin-left rounded-e-[4px] transition-colors",
+                    r.toward ? (on ? "bg-warn" : "bg-warn/70") : on ? "bg-primary" : "bg-primary/75",
+                  )}
+                  style={{ width: `${Math.max(pct, 1)}%` }}
+                  initial={reduce ? false : { scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ duration: 0.55, delay: i * 0.04, ease: EASE }}
+                />
               </span>
               <span className="text-end hud text-[12px] text-muted-foreground">{pct}%</span>
 
@@ -330,6 +317,9 @@ function MatchGraph({ rows, targetName, siteName }: { rows: ConditionRow[]; targ
                     Site <span className="hud text-foreground">{r.site}</span> · Target{" "}
                     <span className="hud text-foreground">{r.target}</span>
                   </span>
+                  {r.toward && (
+                    <span className="mt-0.5 block text-warn">Beyond Earth: ranks how far this place goes toward it</span>
+                  )}
                 </span>
               )}
             </li>
@@ -354,9 +344,10 @@ function MatchGraph({ rows, targetName, siteName }: { rows: ConditionRow[]; targ
       </div>
 
       <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
-        100 % means the site has the target&apos;s value. One typical step away (15 °C, 20 % sand, 3 h of daylight)
-        scores 61 %, two steps 14 %. Hover a bar for both values.
-        {left.length ? ` Not plotted: ${left.join(", ")} (no like-for-like number).` : ""}
+        Teal bars: 100 % means the site has the target&apos;s value; one typical step away (15 °C, 20 % sand, 3 h of
+        daylight) scores 61 %, two steps 14 %. Amber bars: the target is beyond anything on Earth, so they show the
+        share of Earth&apos;s land this place beats in that direction. Elevation compares rank within each world.
+        {left.length ? ` Not plotted: ${left.join(", ")} (no value for this target).` : ""}
       </p>
     </figure>
   );

@@ -1,11 +1,11 @@
 const STEPS: { title: string; body: React.ReactNode; formula?: string }[] = [
   {
-    title: "Seven factors",
-    body: "Temperature, day–night swing, vegetation, thermal inertia (loose vs rocky ground), frozen ground, Sun height and terrain relief, each measured on Earth and on the target.",
+    title: "Thirteen parameters",
+    body: "Temperature and its range, radiation, slope, soil, air pressure, daylight, rain, humidity, dust, isolation, elevation and water-formed minerals, each measured on Earth and on the target.",
   },
   {
-    title: "Similarity per factor",
-    body: "0–100 %, falling off along a bell curve as the Earth value moves away from the target. Values Earth can never reach (−222 °C) are compared by rank within each world.",
+    title: "Similarity per parameter",
+    body: "0–100 %, falling off along a bell curve as the Earth value moves away from the target. Where the target is beyond anything on Earth (no air, −222 °C), land is ranked by how far it goes toward it.",
   },
   {
     title: "Weighted score",
@@ -14,7 +14,7 @@ const STEPS: { title: string; body: React.ReactNode; formula?: string }[] = [
   },
   {
     title: "Confidence",
-    body: "The share of the score resting on direct measurements. Proxies and gaps at the site (missing months, polar night, no albedo) count less.",
+    body: "The share of the score resting on direct measurements. Proxies (Mars sand from thermal inertia, radiation from elevation) and gaps at the site count less.",
   },
 ];
 

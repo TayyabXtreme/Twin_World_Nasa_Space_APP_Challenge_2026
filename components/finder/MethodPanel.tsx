@@ -1,11 +1,14 @@
 "use client";
 
 import { ExternalLink, TriangleAlert } from "lucide-react";
-import { CLUSTER_KM, NDVI_TOL, RELIEF_LOG_SIGMA, SIGMA_ROLE, SUN_SIGMA } from "@/lib/finder/model";
-import { DIM_LABEL } from "@/lib/finder/text";
-import { DIM_IDS, type GridHeader, type Target, type TargetsDoc } from "@/lib/finder/types";
+import { CLUSTER_KM } from "@/lib/finder/model";
+import { CURVES } from "@/lib/finder/params";
+import { DIM_HINT, DIM_LABEL, describeTarget } from "@/lib/finder/text";
+import { DIM_IDS, type GridHeader, type ParamsHeader, type Target, type TargetsDoc } from "@/lib/finder/types";
 
-/** What the target looks like in numbers, and how each dimension was translated to Earth. */
+const MODE_LABEL = { near: "direct", toward: "beyond Earth", rank: "rank", match: "evidence" } as const;
+
+/** What the target looks like in numbers, and what it asks of Earth on each parameter. */
 export function TargetProfile({ target }: { target: Target }) {
   return (
     <section aria-labelledby="profile-title">
@@ -28,15 +31,17 @@ export function TargetProfile({ target }: { target: Target }) {
       </dl>
       <ul className="mt-6 grid gap-x-8 gap-y-4 md:grid-cols-2">
         {DIM_IDS.map((d) => {
-          const s = target.dims[d];
+          const s = target.params[d];
           if (!s) return null;
           return (
             <li key={d} className="text-sm leading-relaxed">
               <span className="font-medium">{DIM_LABEL[d]}</span>
               <span className="ms-2 rounded-full bg-white/[0.06] px-1.5 py-px text-[10px] tracking-wide text-muted-foreground uppercase">
-                {s.mode === "role" ? "rank" : "absolute"}
+                {MODE_LABEL[s.mode]}
               </span>
-              <p className="mt-0.5 text-muted-foreground">{s.note}</p>
+              <p className="mt-0.5 text-muted-foreground">
+                {describeTarget(d, s, target.world)}. <span className="text-muted-foreground/75">{DIM_HINT[d]}.</span>
+              </p>
             </li>
           );
         })}
@@ -87,35 +92,43 @@ function DatasetLinks({ items }: { items: { id: string; title: string; url: stri
   );
 }
 
-export function MethodPanel({ header, targets }: { header: GridHeader; targets: TargetsDoc }) {
+export function MethodPanel({
+  header,
+  params,
+  targets,
+}: {
+  header: GridHeader;
+  params: ParamsHeader;
+  targets: TargetsDoc;
+}) {
   const steps: { title: string; body: React.ReactNode }[] = [
     {
       title: "Describe all of Earth",
       body: (
         <>
-          {header.grid.cells.toLocaleString("en-US")} land cells of 0.25° (≈ 28 km), each with temperatures, day–night
-          swing, frozen months, vegetation, albedo, apparent thermal inertia and terrain relief from NASA MODIS (2024)
-          and JAXA AW3D30.
+          {header.grid.cells.toLocaleString("en-US")} land cells of 0.25° (≈ 28 km), each with air temperature and its
+          range, rain, humidity, pressure and dust from NASA POWER, topsoil sand from SoilGrids, slope and elevation
+          from JAXA AW3D30, and distance to the nearest town.
         </>
       ),
     },
     {
       title: "Describe the target",
-      body: "From LRO (Diviner, LOLA) or Mars Odyssey, MGS TES and MOLA, as measured at the site.",
+      body: "From LRO (Diviner, LOLA), MGS (TES, MOLA), rover measurements (Curiosity RAD and REMS) and published mission results, as measured at the site.",
     },
     {
       title: "Compare like with like",
       body: (
         <>
-          Where a quantity means the same on both worlds (no plants, Sun height, metres of relief) values are compared
-          directly. Where it cannot match (no Earth ground is −200 °C) we compare <em>rank</em>: colder than 99.9 % of
-          the Moon means colder than 99.9 % of Earth.
+          Where Earth can come close (rain, humidity, dust, slope, sand) values are compared directly. Where the target
+          is beyond anything on Earth (vacuum, −200 °C, 384,000 km from home) land is ranked by how far it goes{" "}
+          <em>toward</em> it. Elevation is compared by rank within each world, since each has its own zero level.
         </>
       ),
     },
     {
       title: "Score and weigh",
-      body: "Each factor gives a similarity from 0 to 1. Your weights decide how much each counts; the score is their weighted mean.",
+      body: "Each parameter gives a similarity from 0 to 1. Your weights decide how much each counts; the score is their weighted mean.",
     },
     {
       title: "Rank distinct places",
@@ -128,20 +141,20 @@ export function MethodPanel({ header, targets }: { header: GridHeader; targets: 
     },
   ];
   const formulas: [string, string][] = [
-    ["Rank", `exp(−½ ((p_earth − p_target) / ${SIGMA_ROLE})²)`],
-    ["Plants", `exp(−½ (max(0, NDVI − 0.03) / ${NDVI_TOL})²)`],
-    ["Sun", `exp(−½ ((E_earth − E_target) / ${SUN_SIGMA}°)²)`],
-    ["Relief", `exp(−½ (ln((r+20)/(r_t+20)) / ${RELIEF_LOG_SIGMA.toFixed(2)})²)`],
+    ["Direct", "exp(−½ ((x_earth − x_target) / σ)²)"],
+    ["Toward", "p_earth  (or 1 − p_earth below Earth's range)"],
+    ["Rank", `exp(−½ ((p_earth − p_target) / ${CURVES.elev.sigma})²)`],
     ["Score", "Σ wᵢ sᵢ / Σ wᵢ"],
   ];
   const limits = [
-    ...header.notes,
-    "MODIS Terra observes at about 10:30 and 22:30 local time, so the day–night swing understates the true daily range.",
-    "Not yet in the score: surface chemistry (salts, perchlorate, clays), radar roughness, dust, and slopes finer than ~22 km. A high score means similar physical conditions, not identical geology.",
+    ...params.notes,
+    "Aqueous geochemistry is known only at catalogued analogue sites; everywhere else it counts as half a match.",
+    "Mars mean temperature is the planet-wide mean, and Mars sand share is a grain-size class from TES thermal inertia.",
+    "Not in the score: gravity, perchlorate and salt chemistry, radar roughness, and slopes finer than ~28 km. A high score means similar physical conditions, not identical geology.",
     targets.built.diviner_prp
       ? "Moon site temperatures come from the Diviner polar resource product, sampled within 3 km of each site."
-      : "The Diviner polar resource product was still downloading at build time, so Moon temperatures are published Diviner values; the ranks use latitude, which Diviner shows controls lunar temperature.",
-    "Hand-set weights are the default. Learned weights, fitted to 23 known NASA analogue pairs, are offered as an alternative.",
+      : "Moon temperatures are published Diviner values.",
+    "Hand-set weights are the default. Learned weights, fitted to 23 known NASA analogue pairs, appear once the model is retrained on these parameters.",
   ];
 
   return (
@@ -193,8 +206,9 @@ export function MethodPanel({ header, targets }: { header: GridHeader; targets: 
               ))}
             </dl>
             <p className="mt-2 text-[12px] leading-snug text-muted-foreground">
-              p = area-weighted percentile within each world · E = highest noon Sun (90° − |lat| + tilt) · r = relief in
-              metres
+              p = area-weighted percentile of Earth&apos;s land (elevation: within each world) · σ = {CURVES.tmean.sigma}{" "}
+              °C, {CURVES.sand.sigma} % sand, {CURVES.daylight.sigma} h, {CURVES.precip.sigma} mm/yr; pressure, radiation
+              and isolation in decades
             </p>
           </Card>
         </div>
@@ -212,7 +226,7 @@ export function MethodPanel({ header, targets }: { header: GridHeader; targets: 
           </Card>
           <Card title="Datasets">
             <p className="mt-3 text-[12px] font-semibold tracking-wide text-muted-foreground uppercase">Earth</p>
-            <DatasetLinks items={header.sources} />
+            <DatasetLinks items={params.sources} />
             <p className="mt-4 text-[12px] font-semibold tracking-wide text-muted-foreground uppercase">
               Moon &amp; Mars
             </p>

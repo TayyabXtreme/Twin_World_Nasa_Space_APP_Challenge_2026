@@ -1,7 +1,7 @@
 "use client";
 
 import type { PlaceLabel } from "@/lib/finder/places";
-import { DIM_LABEL } from "@/lib/finder/text";
+import { DIM_SHORT } from "@/lib/finder/text";
 import type { CellResult, DimId } from "@/lib/finder/types";
 import { cn } from "@/lib/utils";
 
@@ -9,7 +9,7 @@ function bestDims(c: CellResult) {
   return (Object.entries(c.sims) as [DimId, number][])
     .sort((a, b) => b[1] - a[1])
     .slice(0, 2)
-    .map(([d]) => DIM_LABEL[d]);
+    .map(([d]) => DIM_SHORT[d]);
 }
 
 export function RankedList({
